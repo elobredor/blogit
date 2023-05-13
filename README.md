@@ -1,3 +1,3 @@
-# Bloggit
+# bloggit
 
-Blog Site App orientada al sector IT
+Blog Site App orientada al sector IT.
