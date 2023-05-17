@@ -12,13 +12,7 @@ async function bootstrap() {
   app.use(morgan('dev'));
 
   // Validation pipe for all requests
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
-    }),
-  );
+  app.useGlobalPipes(new ValidationPipe());
 
   /* The `Reflector` class is used
   to retrieve metadata associated with classes, methods, and properties in a NestJS application. */
