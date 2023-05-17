@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { MONGODB_URI } from './config/data.source';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MONGODB_URI } from './config/data.source';
-import { BlogSchema } from './schemas/blog.schema';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { BlogSchema } from './schemas/blog.schema';
       isGlobal: true,
     }),
     MongooseModule.forRoot(MONGODB_URI),
-    MongooseModule.forFeature([{ name: 'blogs', schema: BlogSchema }]),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
