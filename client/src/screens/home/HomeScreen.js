@@ -4,7 +4,7 @@ import { styles } from './homeScreen.styles';
 const HomeScreen = () => {
   return (
     <View>
-      <Text>HomeScreen</Text>
+      <Text>Home</Text>
     </View>
   );
 };
