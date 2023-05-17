@@ -1,4 +1,4 @@
-import { Blog } from './blog.interface';
+import { BlogInterface } from './blog.interface';
 import { Document } from 'mongoose';
 
 export interface UserInterface extends Document {
@@ -9,5 +9,5 @@ export interface UserInterface extends Document {
   readonly role: string;
   readonly status: number;
   readonly createdAt: Date;
-  readonly blog: Blog[];
+  readonly blog: BlogInterface;
 }
