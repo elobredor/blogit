@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema } from 'mongoose';
-import { Blog } from 'src/interfaces/blog.interface';
+import { BlogInterface } from 'src/interfaces/blog.interface';
 
 @Schema()
 export class User {
@@ -26,7 +26,7 @@ export class User {
   createdAt: Date;
 
   @Prop({ type: MongooseSchema.Types.Mixed })
-  blog: Blog;
+  blog: BlogInterface;
 }
 
 export const BlogSchema = SchemaFactory.createForClass(User);
