@@ -21,8 +21,19 @@ export class UsersService {
 
   //This function finds and returns a user by their ID.
   async findOne(userId: string): Promise<UserInterface> {
-    const existUser = await this.userModel.findById(userId).exec();
+    try {
+      const existUser = await this.userModel.findOne({ userId }).exec();
 
-    return existUser;
+      if (!existUser) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'User not found',
+        });
+      }
+
+      return existUser;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 }
