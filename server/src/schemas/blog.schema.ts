@@ -1,11 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
 import { Blog } from 'src/interfaces/blog.interface';
-import { User } from 'src/interfaces/user.interface';
 
 @Schema()
-export class UserDocument extends Document implements User {
-  @Prop({ type: MongooseSchema.Types.ObjectId })
+export class User {
+  @Prop({ required: true })
   userId: string;
 
   @Prop({ required: true })
@@ -20,7 +19,7 @@ export class UserDocument extends Document implements User {
   @Prop({ required: true })
   role: string;
 
-  @Prop({ required: true })
+  @Prop({ default: 1 })
   status: number;
 
   @Prop({ default: Date.now })
@@ -30,4 +29,4 @@ export class UserDocument extends Document implements User {
   blog: Blog;
 }
 
-export const BlogSchema = SchemaFactory.createForClass(UserDocument);
+export const BlogSchema = SchemaFactory.createForClass(User);
