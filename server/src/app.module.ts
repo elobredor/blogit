@@ -5,6 +5,7 @@ import { MONGODB_URI } from './config/data.source';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
+import { BlogsModule } from './blogs/blogs.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UsersModule } from './users/users.module';
     }),
     MongooseModule.forRoot(MONGODB_URI),
     UsersModule,
+    BlogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
