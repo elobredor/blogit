@@ -1,4 +1,9 @@
-import { Entypo, AntDesign, Ionicons } from '@expo/vector-icons';
+import {
+  Entypo,
+  AntDesign,
+  Ionicons,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
 
 export const iconOptions = {
   home: {
@@ -6,10 +11,16 @@ export const iconOptions = {
     focused: <Entypo color='black' size={24} name='home' />,
   },
   saved: {
-    default: <Ionicons color={'grey'} size={24} name='notifications-outline' />,
-    focused: <Ionicons color='black' size={24} name='notifications' />,
+    default: (
+      <MaterialCommunityIcons
+        color={'grey'}
+        size={24}
+        name='bookmark-outline'
+      />
+    ),
+    focused: <MaterialCommunityIcons color='black' size={24} name='bookmark' />,
   },
-  profile: {
+  account: {
     default: <Ionicons color={'grey'} size={24} name='person-outline' />,
     focused: <Ionicons color='black' size={24} name='person' />,
   },
