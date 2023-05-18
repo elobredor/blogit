@@ -65,3 +65,22 @@ export const iconsArticle = {
   plus: <Entypo name="plus" size={24} color="white" />,
   cross: <Entypo name="cross" size={24} color="white" />
 }
+
+export const iconsComments = {
+  account: {
+    default: <MaterialCommunityIcons color={"black"} size={30} name="account-circle-outline" />,
+    focused: <MaterialCommunityIcons color={"black"} size={30} name="account-circle" />,
+  },
+  heart: {
+    empty: <Ionicons name="heart-outline" size={24} color="black" />,
+    filled: <Ionicons name="heart" size={24} color="black" />,
+  },
+  comment: <Fontisto name="comment" size={20} color="black" style={{ marginTop: 3 }}/>,
+  saved: {
+    default: <MaterialCommunityIcons color="white" size={24} name="bookmark-outline" />,
+    focused: <MaterialCommunityIcons color="white" size={24} name="bookmark" />,
+  },
+  commentModal: <Fontisto name="comment" size={20} color="white" style={{ marginTop: 3 }}/>,
+  plus: <Entypo name="plus" size={24} color="white" />,
+  cross: <Entypo name="cross" size={24} color="white" />
+}

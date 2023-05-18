@@ -1,6 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/home/HomeScreen";
 import ArticleScreen from "../screens/article/ArticleScreen";
+import ArticleHeader from "../component/article/articleHeader";
+import CommentsScreen from "../screens/article/comments/CommentsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +17,18 @@ const HomeStack = () => {
       <Stack.Screen
         name="article"
         component={ArticleScreen}
-        options={{ headerShown: true }}
+        options={{
+          headerTitle: () => null,
+          headerLeft: () => <ArticleHeader />
+        }}
+      />
+      <Stack.Screen
+        name="comments"
+        component={CommentsScreen}
+        options={{
+          headerTitle: () => null,
+          headerLeft: () => <ArticleHeader />
+        }}
       />
     </Stack.Navigator>
   );

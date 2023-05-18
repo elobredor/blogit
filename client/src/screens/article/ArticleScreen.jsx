@@ -2,13 +2,20 @@ import { useState } from 'react';
 import { ScrollView, View, Text, ImageBackground, TouchableWithoutFeedback, Modal, TouchableOpacity } from 'react-native';
 import { iconsArticle } from "client/src/utils/iconOptions.js";
 import { styles } from './ArticleScreen.styles';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ArticleScreen ({ route }) {
+  const navigation = useNavigation();
   const [favorite, setFavorite] = useState(false);
   const [saved, setSaved] = useState(false);
   const [modalVisibility, setModalVisibility] = useState(false)
 
   const item = route.params;
+
+  const handleNavigateToComments = () => {
+    navigation.navigate('comments', item);
+    setModalVisibility(false);
+  }
 
   return (
     <>
@@ -54,7 +61,7 @@ export default function ArticleScreen ({ route }) {
           <View
             style={styles.footModals}
           >
-            <TouchableWithoutFeedback onPress={() => console.log('navigate to comments')}>
+            <TouchableWithoutFeedback onPress={handleNavigateToComments}>
               <View style={styles.modalButtons}>
                 {iconsArticle.commentModal}
               </View>
