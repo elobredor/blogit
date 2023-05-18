@@ -1,39 +1,48 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { iconOptions } from "../utils/iconOptions";
-import AccountStack from "./AccountStack";
-import HomeStack from "./HomeStack";
-import SavedStack from "./SavedStack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { iconOptions } from '../utils/iconOptions';
+import HomeStack from './HomeStack';
+import NotificationStack from './NotificationStack';
+import SavedStack from './SavedStack';
 
 const Tab = createBottomTabNavigator();
 
 const AppNavigation = () => {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: 'grey',
+        headerShown: false,
+        tabBarStyle: { backgroundColor: 'white' },
+      })}
+    >
       <Tab.Screen
-        name="homeTab"
+        name='homeTab'
         component={HomeStack}
         options={{
-          title: "Home",
+          title: 'Home',
           tabBarIcon: ({ focused }) =>
             focused ? iconOptions.home.focused : iconOptions.home.default,
         }}
       />
       <Tab.Screen
-        name="savedTab"
+        name='savedTab'
         component={SavedStack}
         options={{
-          title: "Saved",
+          title: 'Guardados',
           tabBarIcon: ({ focused }) =>
             focused ? iconOptions.saved.focused : iconOptions.saved.default,
         }}
       />
       <Tab.Screen
-        name="accountTab"
-        component={AccountStack}
+        name='notificationTab'
+        component={NotificationStack}
         options={{
-          title: "Account",
+          title: 'Notificaciones',
           tabBarIcon: ({ focused }) =>
-            focused ? iconOptions.account.focused : iconOptions.account.default,
+            focused
+              ? iconOptions.notifications.focused
+              : iconOptions.notifications.default,
         }}
       />
     </Tab.Navigator>

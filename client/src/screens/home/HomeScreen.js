@@ -1,14 +1,8 @@
-import { View, Modal, Text, Button, FlatList } from "react-native";
-import { styles } from "./homeScreen.styles";
-import Filters from "../../component/home/filtersHome/FiltersHome";
-import SearchBar from "../../component/home/searchBar/SearchBar";
-import CardArticle from "../../component/home/cardArticle/CardArticle";
-import { useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { loadHCData } from "client/src/redux/actions.js";
+import { View, Text, StatusBar } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadHCData } from '../../redux/actions';
+import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -65,6 +59,7 @@ const HomeScreen = () => {
         </View>
       </View>
     </>
+
   );
 };
 
