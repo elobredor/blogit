@@ -1,8 +1,19 @@
-import { View, Text, StatusBar } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { loadHCData } from '../../redux/actions';
-import { useNavigation } from '@react-navigation/native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Modal,
+  Button,
+  FlatList,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loadHCData } from "../../redux/actions";
+import { useNavigation } from "@react-navigation/native";
+import Filters from "../../component/home/filtersHome/FiltersHome";
+import SearchBar from "../../component/home/searchBar/SearchBar";
+import { styles } from "./homeScreen.styles";
+import CardArticle from "../../component/home/cardArticle/CardArticle";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -16,7 +27,7 @@ const HomeScreen = () => {
     setVisible(!visible);
   };
   return (
-    <>
+    <SafeAreaView>
       <Modal visible={visible} animationType="slide" transparent>
         <View
           style={{
@@ -58,8 +69,7 @@ const HomeScreen = () => {
           />
         </View>
       </View>
-    </>
-
+    </SafeAreaView>
   );
 };
 
