@@ -12,11 +12,9 @@ import { loadHCData } from "client/src/redux/actions.js";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(loadHCData());
   }, []);
-
   const articles = useSelector((state) => state.articles);
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
@@ -42,7 +40,7 @@ const HomeScreen = () => {
             }}
           >
             <Text style={{ fontSize: 25 }}>Tienes que loguearte primero</Text>
-            <Button title="cierra" onPress={() => setVisible(!visible)} />
+            <Button title="cierra modal" onPress={() => setVisible(!visible)} />
             <Button
               title="log in"
               onPress={() => navigation.navigate("accountTab")}
