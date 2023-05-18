@@ -10,6 +10,12 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
+  row: {
+    flexDirection: 'row',
+    gap: 5,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
   content: {
     width: 320,
     height: 500,
