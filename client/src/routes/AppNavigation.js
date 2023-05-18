@@ -3,10 +3,19 @@ import { iconOptions } from '../utils/iconOptions';
 import AccountStack from './AccountStack';
 import HomeStack from './HomeStack';
 import SavedStack from './SavedStack';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { loadHCData } from '../redux/actions';
 
 const Tab = createBottomTabNavigator();
 
 const AppNavigation = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadHCData());
+  }, []);
+  
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen
