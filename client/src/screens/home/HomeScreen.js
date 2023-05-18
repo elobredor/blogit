@@ -6,8 +6,17 @@ import CardArticle from "../../component/home/cardArticle/CardArticle";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { loadHCData } from "client/src/redux/actions.js";
 
 const HomeScreen = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadHCData());
+  }, []);
+
   const articles = useSelector((state) => state.articles);
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);

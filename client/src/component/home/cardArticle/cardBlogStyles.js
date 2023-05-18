@@ -17,6 +17,7 @@ export const styles = StyleSheet.create({
     fontSize: 22,
     marginBottom: 6,
     color: "white",
+    fontWeight: "bold",
   },
   content: {
     padding: 10,
