@@ -7,8 +7,8 @@ import {
 
 export const iconOptions = {
   home: {
-    default: <AntDesign color={'grey'} size={24} name='home' />,
-    focused: <Entypo color='black' size={24} name='home' />,
+    default: <Ionicons color={'grey'} size={24} name='home-outline' />,
+    focused: <Ionicons color='black' size={24} name='home' />,
   },
   saved: {
     default: (
@@ -20,8 +20,12 @@ export const iconOptions = {
     ),
     focused: <MaterialCommunityIcons color='black' size={24} name='bookmark' />,
   },
-  account: {
-    default: <Ionicons color={'grey'} size={24} name='person-outline' />,
-    focused: <Ionicons color='black' size={24} name='person' />,
+  notifications: {
+    default: <Ionicons color={'grey'} size={24} name='notifications-outline' />,
+    focused: <Ionicons color='black' size={24} name='notifications' />,
   },
+  // account: {
+  //   default: <Ionicons color={'grey'} size={24} name='person-outline' />,
+  //   focused: <Ionicons color='black' size={24} name='person' />,
+  // },
 };
