@@ -1,17 +1,27 @@
 import { useState } from "react";
-import { Text, View, TouchableOpacity, ImageBackground, TouchableWithoutFeedback } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  ImageBackground,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { styles } from "./cardBlogStyles";
 import { iconsCard } from "client/src/utils/iconOptions.js";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
-const CardArticle = ({ item }) => {
+const CardArticle = ({ item, toggleModal }) => {
   const [isSaved, setIsSaved] = useState(item.saved);
   const [favorite, setFavorite] = useState(item.favorite);
+  const hasLogged = useSelector((state) => state.logged);
 
   const navigation = useNavigation();
 
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate('article', item)}>
+    <TouchableWithoutFeedback
+      onPress={() => navigation.navigate("article", item)}
+    >
       <View
         style={{
           marginBottom: 10,
@@ -35,11 +45,19 @@ const CardArticle = ({ item }) => {
                 marginBottom: 40,
               }}
             >
-              <TouchableOpacity onPress={() => setFavorite(!favorite)}>
+              <TouchableOpacity
+                onPress={() =>
+                  hasLogged ? setFavorite(!favorite) : toggleModal()
+                }
+              >
                 {favorite ? iconsCard.heart.empty : iconsCard.heart.filled}
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => setIsSaved(!isSaved)}>
+              <TouchableOpacity
+                onPress={() =>
+                  hasLogged ? setIsSaved(!isSaved) : toggleModal()
+                }
+              >
                 {isSaved ? iconsCard.saved.empty : iconsCard.saved.filled}
               </TouchableOpacity>
             </View>
