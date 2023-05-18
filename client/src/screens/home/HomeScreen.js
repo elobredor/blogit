@@ -1,10 +1,22 @@
-import { View, Text } from 'react-native';
-import { styles } from './homeScreen.styles';
+import { View, Text, StatusBar } from 'react-native';
+import React from 'react';
 
 const HomeScreen = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadHCData());
+  }, []);
+
+  const articles = useSelector((state) => state.articles);
+  const navigation = useNavigation();
+  const [visible, setVisible] = useState(false);
+  const toggleModal = () => {
+    setVisible(!visible);
+  };
   return (
     <View>
-      <Text>Home</Text>
+      <Text>HomeScreen</Text>
     </View>
   );
 };
