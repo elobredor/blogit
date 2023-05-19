@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Blog } from './blogs.schema';
-import { User } from './users.schema';
+import { User, UserSchema } from './users.schema';
 
 @Schema()
 export class Post {
@@ -26,7 +26,7 @@ export class Post {
   @Prop({ default: 1 })
   status: number;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Blog' }])
   postLikes: User[];
 }
 
