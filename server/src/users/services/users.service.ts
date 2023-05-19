@@ -18,20 +18,82 @@ export class UsersService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
-
   //This function finds and returns a user by their ID.
   async findOne(userId: string): Promise<UserInterface> {
     try {
-      const existUser = await this.userModel.findOne({ userId }).exec();
+      const user = await this.userModel.aggregate([
+        {
+          $match: {
+            userId: userId,
+          },
+        },
+        {
+          $unwind: '$userId',
+        },
+        {
+          $lookup: {
+            from: 'blogs',
+            localField: '_id',
+            foreignField: 'userId',
+            as: 'blogs',
+          },
+        },
+        {
+          $unwind: '$blogs',
+        },
+        {
+          $lookup: {
+            from: 'posts',
+            localField: 'blogs._id',
+            foreignField: 'blogId',
+            as: 'posts',
+          },
+        },
+        {
+          $unwind: '$posts',
+        },
+        {
+          $sort: {
+            'posts.createdAt': -1,
+          },
+        },
+        {
+          $group: {
+            _id: '$_id',
+            userId: { $first: '$userId' },
+            userName: { $first: '$userName' },
+            email: { $first: '$email' },
+            profilePicture: { $first: '$profilePicture' },
+            role: { $first: '$role' },
+            status: { $first: '$status' },
+            blogs: {
+              $push: {
+                _id: '$blogs._id',
+                category: '$blogs.category',
+                posts: '$posts',
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            createdAt: 0,
+            updatedAt: 0,
+            __v: 0,
+            'blogs.userId': 0,
+            'blogs.__v': 0,
+            'posts.__v': 0,
+          },
+        },
+      ]);
 
-      if (!existUser) {
+      if (!user[0]) {
         throw new ErrorManager({
           type: 'NOT_FOUND',
           message: 'User not found',
         });
       }
-
-      return existUser;
+      return user[0];
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
