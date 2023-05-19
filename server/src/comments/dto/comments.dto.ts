@@ -15,5 +15,5 @@ export class CreateCommentDTO {
 
   @IsString()
   @MaxLength(200)
-  readonly comment: string;
+  comment: string;
 }
