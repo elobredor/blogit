@@ -25,5 +25,8 @@ export class Comment {
 
   @Prop({ default: 1 })
   status: number;
+
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }])
+  commentLikes: User[];
 }
 export const CommentSchema = SchemaFactory.createForClass(Comment);
