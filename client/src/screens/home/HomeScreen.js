@@ -26,6 +26,9 @@ const HomeScreen = () => {
   const toggleModal = () => {
     setVisible(!visible);
   };
+
+  const goToHome = () => navigation.navigate("account")
+
   return (
     <SafeAreaView>
       <Modal visible={visible} animationType="slide" transparent>
@@ -42,13 +45,17 @@ const HomeScreen = () => {
               padding: 20,
               justifyContent: "center",
               alignItems: "center",
+              borderRadius: 15,
+              backgroundColor: '#eee',
+              gap: 10,
+              elevation: 5
             }}
           >
             <Text style={{ fontSize: 25 }}>Tienes que loguearte primero</Text>
-            <Button title="cierra modal" onPress={() => setVisible(!visible)} />
+            <Button title="Cerrar" onPress={() => setVisible(!visible)} />
             <Button
               title="log in"
-              onPress={() => navigation.navigate("accountTab")}
+              onPress={goToHome}
             />
           </View>
         </View>
