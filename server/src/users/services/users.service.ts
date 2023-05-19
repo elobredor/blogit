@@ -7,7 +7,7 @@ import { ErrorManager } from 'src/utils/error.manager';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('blogs') private readonly userModel: Model<UserInterface>) {}
+  constructor(@InjectModel('users') private readonly userModel: Model<UserInterface>) {}
 
   //This function creates a new user in a database using the provided data and returns the created user.
   async create(body: CreateUserDto): Promise<UserInterface> {
