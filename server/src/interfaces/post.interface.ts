@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { CommentInterface } from './comment.interface';
 
 export interface PostsInterface extends Document {
   readonly postId: string;
@@ -10,4 +11,5 @@ export interface PostsInterface extends Document {
   readonly updatedAt: Date;
   readonly status: number;
   readonly postLikes: string[];
+  comments: CommentInterface[];
 }
