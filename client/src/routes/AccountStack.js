@@ -6,7 +6,7 @@ const Stack = createNativeStackNavigator();
 const AccountStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='account' component={AccountScreen} />
+      <Stack.Screen name='accountStack' component={AccountScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };

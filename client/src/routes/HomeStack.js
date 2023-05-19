@@ -3,6 +3,7 @@ import HomeScreen from "../screens/home/HomeScreen";
 import ArticleScreen from "../screens/article/ArticleScreen";
 import ArticleHeader from "../component/article/ArticleHeader";
 import CommentsScreen from "../screens/article/comments/CommentsScreen";
+import AccountStack from "./AccountStack";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,13 @@ const HomeStack = () => {
         options={{
           headerTitle: () => null,
           headerLeft: () => <ArticleHeader />
+        }}
+      />
+      <Stack.Screen
+        name="account"
+        component={AccountStack}
+        options={{
+          title: 'Log In'
         }}
       />
     </Stack.Navigator>
