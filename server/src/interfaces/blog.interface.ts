@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
-import { Post } from './post.interface';
 
 export interface BlogInterface extends Document {
+  readonly blogId: string;
+  readonly userId: string;
   readonly category: string;
-  readonly posts: Post[];
 }
