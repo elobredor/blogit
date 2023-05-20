@@ -6,6 +6,7 @@ import { CreateBlogsDTO } from '../dto/blogs.dto';
 export class BlogsController {
   constructor(private readonly blogsService: BlogsService) {}
 
+  //create blogs
   @Post('create')
   public async createBlog(@Res() response, @Body() body: CreateBlogsDTO) {
     const blog = await this.blogsService.createBlog(body);
@@ -13,5 +14,11 @@ export class BlogsController {
       message: 'Blog has been created successfully',
       blog,
     });
+  }
+  //get blogs by category
+  @Get('category/:category')
+  public async getBlogsByCategory(@Res() response, @Param('category') category: string) {
+    const blogs = await this.blogsService.getBlogsByCategory(category);
+    return response.status(HttpStatus.OK).json(blogs);
   }
 }
