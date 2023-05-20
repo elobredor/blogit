@@ -3,16 +3,16 @@ import { IsString, MaxLength, IsNumber } from 'class-validator';
 export class CreatePostsDTO {
   @IsString()
   @MaxLength(30)
-  readonly blogId: string;
+  blogId: string;
 
   @IsString()
-  @MaxLength(50)
-  readonly title: string;
+  @MaxLength(100)
+  title: string;
 
   @IsString()
-  @MaxLength(500)
-  readonly content: string;
+  @MaxLength(1000)
+  content: string;
 
   @IsNumber()
-  readonly status: number;
+  status: number;
 }
