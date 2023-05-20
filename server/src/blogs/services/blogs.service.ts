@@ -47,7 +47,7 @@ export class BlogsService {
   //function to get blogs by category
   public async getBlogsByCategory(category: string): Promise<BlogInterface[]> {
     try {
-      const blogs = await this.blogModel.find({ category });
+      const blogs = await this.blogModel.find({ category }).select('-__v');
       return blogs;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
