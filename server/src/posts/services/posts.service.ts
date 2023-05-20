@@ -35,12 +35,15 @@ export class PostsService {
   }
   //This function returns all the posts in a database ordered by the date of creation.
   public async getAllPosts(page: number): Promise<PostsInterface[]> {
-    //const page: number = 1;
     const limit: number = 10;
     const skip: number = (page - 1) * limit;
-    const sortBy: object = { createdAt: -1 };
     try {
-      return await this.postsModel.find({}, null, { skip, limit, sort: sortBy });
+      return await this.postsModel
+        .find()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .select('-__v -comments.postId');
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
@@ -48,7 +51,7 @@ export class PostsService {
   //This function returns a post with the provided ID.
   public async getPostById(postId: string): Promise<PostsInterface> {
     try {
-      const post = await this.postsModel.findById(postId);
+      const post = await this.postsModel.findById(postId).select('-__v -comments.postId');
       //If the post is not found, throw an error.
       if (!post) {
         throw new ErrorManager({
@@ -90,7 +93,7 @@ export class PostsService {
   public async getPostsByKeyword(keyword: string): Promise<PostsInterface[]> {
     try {
       //find posts by title and keyword
-      return await this.postsModel.find({ title: { $regex: keyword, $options: 'i' } });
+      return await this.postsModel.find({ title: { $regex: keyword, $options: 'i' } }).select('-__v -comments.postId');
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

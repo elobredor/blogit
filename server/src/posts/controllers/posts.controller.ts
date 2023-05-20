@@ -17,7 +17,7 @@ export class PostsController {
     });
   }
   //function to get all posts order by date
-  @Get('all')
+  @Get('all/:page')
   public async getAllPosts(@Res() response, @Param('page') page: number) {
     const posts = await this.postsService.getAllPosts(page);
     return response.status(HttpStatus.OK).json({
