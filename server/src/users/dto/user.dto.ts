@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString, MaxLength, IsEnum } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, MaxLength, IsEnum, IsOptional, IsEmpty } from 'class-validator';
 import { ROLES } from 'src/constants/roles';
 export class CreateUserDto {
   @IsString()
@@ -21,13 +21,13 @@ export class CreateUserDto {
   @IsNotEmpty()
   profileImage: string;
 
+  @IsOptional()
   @IsEnum(ROLES)
-  @IsNotEmpty()
+  @IsEmpty({ message: 'El campo no debe tener valor cuando se envía como predeterminado.' })
   role: ROLES;
 
+  @IsOptional()
+  @IsEmpty({ message: 'El campo no debe tener valor cuando se envía como predeterminado.' })
   @IsNumber()
-  @IsNotEmpty()
   status: number;
-
-  //continue here
 }
