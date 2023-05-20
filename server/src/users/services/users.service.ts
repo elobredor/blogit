@@ -82,7 +82,7 @@ export class UsersService {
             __v: 0,
             'blogs.userId': 0,
             'blogs.__v': 0,
-            'posts.__v': 0,
+            'blogs.posts.__v': 0,
           },
         },
       ]);
