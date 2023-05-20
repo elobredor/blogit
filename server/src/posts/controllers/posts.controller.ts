@@ -44,4 +44,12 @@ export class PostsController {
       message: 'Post has been updated successfully',
     });
   }
+  //function to get posts by category
+  @Get('keyword/:keyword')
+  public async getPostsByCategory(@Res() response, @Param('keyword') keyword: string) {
+    const posts = await this.postsService.getPostsByKeyword(keyword);
+    return response.status(HttpStatus.OK).json({
+      posts,
+    });
+  }
 }

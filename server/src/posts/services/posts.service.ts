@@ -86,4 +86,13 @@ export class PostsService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+  //Get posts by keyword
+  public async getPostsByKeyword(keyword: string): Promise<PostsInterface[]> {
+    try {
+      //find posts by title and keyword
+      return await this.postsModel.find({ title: { $regex: keyword, $options: 'i' } });
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
 }
