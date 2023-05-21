@@ -1,4 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
+import { Post } from './posts.schema';
 
 @Schema()
 export class User {
@@ -22,6 +24,32 @@ export class User {
 
   @Prop({ default: Date.now })
   createdAt: Date;
+
+  @Prop({ type: String })
+  about: string;
+
+  @Prop({ type: String })
+  socialNetwork1: string;
+
+  @Prop({ type: String })
+  socialNetwork2: string;
+
+  @Prop({
+    type: {
+      postId: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
+      categoria: String,
+    },
+  })
+  fieldName: {
+    postId: mongoose.Types.ObjectId;
+    categoria: string;
+  };
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+// Asignar valores al campo fieldName
+// createUserDto.fieldName = {
+//   postId: 'post_id',
+//   categoria: 'categoria',
+// };
