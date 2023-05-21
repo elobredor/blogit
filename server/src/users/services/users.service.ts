@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserInterface } from 'src/interfaces/user.interface';
-import { CreateUserDto } from '../dto/user.dto';
+import { CreateUserDto, UserUpdateDTO } from '../dto/user.dto';
 import { ErrorManager } from 'src/utils/error.manager';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class UsersService {
     }
   }
   //This function finds and returns a user by their ID.
-  async findOne(userId: string): Promise<UserInterface> {
+  public async findOne(userId: string): Promise<UserInterface> {
     try {
       const user = await this.userModel.aggregate([
         {
@@ -94,6 +94,36 @@ export class UsersService {
         });
       }
       return user[0];
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //function to get userProfile
+  public async getUserProfile(userId: string): Promise<UserInterface> {
+    try {
+      const user = await this.userModel.findOne({ userId: userId }).select('-__v');
+      if (!user) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'User not found',
+        });
+      }
+      return user;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //function to update user
+  public async updateUser(userId: string, body: UserUpdateDTO): Promise<UserInterface> {
+    try {
+      const user = await this.userModel.findOneAndUpdate({ userId: userId }, body, { new: true });
+      if (!user) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'User not found',
+        });
+      }
+      return user;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
