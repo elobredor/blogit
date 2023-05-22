@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString, MaxLength, IsEnum, IsOptional, IsEmpty } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, MaxLength, IsEnum, IsOptional, IsEmpty, IsEmail } from 'class-validator';
 import { ROLES } from 'src/constants/roles';
 export class CreateUserDto {
   @IsString()
@@ -11,7 +11,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   userName: string;
 
-  @IsString()
+  @IsEmail()
   @MaxLength(40)
   @IsNotEmpty()
   email: string;
