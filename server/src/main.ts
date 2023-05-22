@@ -14,6 +14,12 @@ async function bootstrap() {
   // Validation pipe for all requests
   app.useGlobalPipes(new ValidationPipe());
 
+  /* The `Reflector` class is used
+  to retrieve metadata associated with classes, methods, and properties in a NestJS application. */
+  const reflector = app.get(Reflector);
+
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
+
   // Get config service
   const configService = app.get(ConfigService);
 
