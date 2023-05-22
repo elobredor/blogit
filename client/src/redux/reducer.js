@@ -1,4 +1,5 @@
-import { GET_ARTICLES, LOAD_HC_DATA, TOGGLE_LOGGED } from "./actions";
+import { GET_ARTICLES, LOAD_HC_DATA, TOGGLE_LOGGED } from './actions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
   articles: [],
@@ -13,7 +14,12 @@ export default function rootReducer(state = initialState, action) {
     case LOAD_HC_DATA:
       return { ...state, articles: action.payload };
     case TOGGLE_LOGGED:
-      return { ...state, logged: !state.logged };
+      if (!state.logged) {
+        AsyncStorage.setItem('@hasLogged', 'true');
+      } else {
+        AsyncStorage.removeItem('@hasLogged');
+      }
+      return { ...state, logged: !state.logged, users: action.payload };
     default:
       return { ...state };
   }
