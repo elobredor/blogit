@@ -1,4 +1,5 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res, Put } from '@nestjs/common';
+import { Response } from 'express';
 import { CommentsService } from '../services/comments.service';
 import { CreateCommentDTO } from '../dto/comments.dto';
 import { ParseObjectIdPipe } from 'src/utils/parse-object-id-pipe.pipe';
@@ -9,7 +10,7 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
   //function to create a comment
   @Post('create')
-  public async createBlog(@Res() response, @Body() body: CreateCommentDTO) {
+  public async createBlog(@Res() response: Response, @Body() body: CreateCommentDTO) {
     const newComment = await this.commentsService.createComment(body);
     return response.status(HttpStatus.CREATED).json({
       message: 'Comment has been created successfully',
@@ -18,7 +19,7 @@ export class CommentsController {
   }
   //function to get all comments by postID
   @Get('all/:postId')
-  public async getAllComments(@Res() response, @Param('postId', ParseObjectIdPipe) postId: string) {
+  public async getAllComments(@Res() response: Response, @Param('postId', ParseObjectIdPipe) postId: string) {
     const comments = await this.commentsService.getComments(postId);
     return response.status(HttpStatus.OK).json({
       comments,
@@ -27,7 +28,7 @@ export class CommentsController {
   //add Likes to comments
   @Put('like/:postId')
   public async addLike(
-    @Res() response,
+    @Res() response: Response,
     @Body() body: CreateCommentLikesDTO,
     @Param('postId', ParseObjectIdPipe) postId: string,
   ) {

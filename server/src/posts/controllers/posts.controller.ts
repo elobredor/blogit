@@ -1,4 +1,5 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { PostsService } from '../services/posts.service';
 import { CreatePostsDTO } from '../dto/posts.dto';
 import { ParseObjectIdPipe } from 'src/utils/parse-object-id-pipe.pipe';
@@ -10,7 +11,7 @@ export class PostsController {
 
   //function to register a new post
   @Post('create')
-  public async createPost(@Res() response, @Body() body: CreatePostsDTO) {
+  public async createPost(@Res() response: Response, @Body() body: CreatePostsDTO) {
     await this.postsService.createPost(body);
     return response.status(HttpStatus.CREATED).json({
       message: 'Post has been created successfully',
@@ -18,7 +19,7 @@ export class PostsController {
   }
   //function to get all posts order by date
   @Get('all/:page')
-  public async getAllPosts(@Res() response, @Param('page') page: number) {
+  public async getAllPosts(@Res() response: Response, @Param('page') page: number) {
     const posts = await this.postsService.getAllPosts(page);
     return response.status(HttpStatus.OK).json({
       posts,
@@ -26,7 +27,7 @@ export class PostsController {
   }
   //function to get a single post
   @Get(':postId')
-  public async getSinglePost(@Res() response, @Param('postId', ParseObjectIdPipe) postId: string) {
+  public async getSinglePost(@Res() response: Response, @Param('postId', ParseObjectIdPipe) postId: string) {
     const post = await this.postsService.getPostById(postId);
     return response.status(HttpStatus.OK).json({
       post,
@@ -35,7 +36,7 @@ export class PostsController {
   //Like/disLike a post
   @Put('like/:postId')
   public async likePost(
-    @Res() response,
+    @Res() response: Response,
     @Body() body: CreatePostsLikesDTO,
     @Param('postId', ParseObjectIdPipe) postId: string,
   ) {
@@ -46,7 +47,7 @@ export class PostsController {
   }
   //function to get posts by category
   @Get('keyword/:keyword')
-  public async getPostsByCategory(@Res() response, @Param('keyword') keyword: string) {
+  public async getPostsByCategory(@Res() response: Response, @Param('keyword') keyword: string) {
     const posts = await this.postsService.getPostsByKeyword(keyword);
     return response.status(HttpStatus.OK).json({
       posts,
