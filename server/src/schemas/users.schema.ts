@@ -1,10 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ROLES } from 'src/constants/roles';
 
 @Schema()
 export class User {
-  @Prop()
-  _id: string;
-
   @Prop({ required: true })
   userId: string;
 
@@ -18,7 +16,7 @@ export class User {
   profileImage: string;
 
   @Prop({ default: 'BASIC' })
-  role: string;
+  role: ROLES;
 
   @Prop({ default: 1 })
   status: number;
