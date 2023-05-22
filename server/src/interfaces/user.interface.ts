@@ -2,7 +2,6 @@ import { Document } from 'mongoose';
 import { ROLES } from 'src/constants/roles';
 
 export interface UserInterface extends Document {
-  _id: string;
   userId: string;
   userName: string;
   email: string;
