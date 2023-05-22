@@ -11,7 +11,16 @@ export class UsersService {
 
   //This function creates a new user in a database using the provided data and returns the created user.
   async create(body: CreateUserDto): Promise<UserInterface> {
+    const { email } = body;
     try {
+      //check if user already exist
+      const userExist = await this.userModel.findOne({ email });
+      if (userExist) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'User already exist',
+        });
+      }
       const newUser = new this.userModel(body);
       return await newUser.save();
     } catch (error) {
