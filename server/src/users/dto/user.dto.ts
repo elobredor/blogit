@@ -1,5 +1,16 @@
-import { IsNotEmpty, IsNumber, IsString, MaxLength, IsEnum, IsOptional, IsEmpty, IsEmail } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  MaxLength,
+  IsEnum,
+  IsOptional,
+  IsEmpty,
+  IsEmail,
+  IsArray,
+} from 'class-validator';
 import { ROLES } from 'src/constants/roles';
+import { SavedPost } from 'src/interfaces/user.interface';
 export class CreateUserDto {
   @IsString()
   @MaxLength(16)
@@ -45,6 +56,10 @@ export class CreateUserDto {
   @MaxLength(75)
   @IsString()
   socialNetwork2: string;
+
+  @IsOptional()
+  @IsArray()
+  saved: SavedPost[];
 }
 
 export class UserUpdateDTO {
@@ -92,4 +107,8 @@ export class UserUpdateDTO {
   @MaxLength(75)
   @IsString()
   socialNetwork2: string;
+
+  @IsOptional()
+  @IsArray()
+  saved: SavedPost[];
 }

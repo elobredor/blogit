@@ -9,7 +9,14 @@ export interface UserInterface extends Document {
   role: ROLES;
   status: number;
   createdAt: Date;
-  about: string;
-  socialNetwork1: string;
-  socialNetwork2: string;
+  about?: string;
+  socialNetwork1?: string;
+  socialNetwork2?: string;
+  saved?: SavedPost[];
+}
+
+export interface SavedPost {
+  postNId: string;
+  title: string;
+  images: string[];
 }
