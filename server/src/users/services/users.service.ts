@@ -137,4 +137,19 @@ export class UsersService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+  //function to save posts
+  public async savePosts(userId: string, body: UserUpdateDTO): Promise<UserInterface> {
+    try {
+      const user = await this.userModel.findOneAndUpdate({ userId: userId }, { $push: { saved: body } }, { new: true });
+      if (!user) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'User not found',
+        });
+      }
+      return user;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
 }

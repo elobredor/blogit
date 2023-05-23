@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Put, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from '../services/users.service';
-import { CreateUserDto } from '../dto/user.dto';
+import { CreateUserDto, UserUpdateDTO } from '../dto/user.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { PublicAccess } from 'src/auth/decorators/public.decorator';
@@ -40,11 +40,20 @@ export class UsersController {
   }
   //this is a method in NestJs controller that update a user
   @Put('update/:userId')
-  public async updateUser(@Res() response: Response, @Param('userId') userId: string, @Body() body: CreateUserDto) {
+  public async updateUser(@Res() response: Response, @Param('userId') userId: string, @Body() body: UserUpdateDTO) {
     const updatedUser = await this.usersService.updateUser(userId, body);
     return response.status(HttpStatus.OK).json({
       message: 'User has been successfully updated',
       updatedUser,
+    });
+  }
+  //method to save posts
+  @Put('saved/:userId')
+  public async savePost(@Res() response: Response, @Param('userId') userId: string, @Body() body: UserUpdateDTO) {
+    const savedPost = await this.usersService.savePosts(userId, body);
+    return response.status(HttpStatus.OK).json({
+      message: 'Post has been successfully saved',
+      savedPost,
     });
   }
 }
