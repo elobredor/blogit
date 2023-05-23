@@ -6,6 +6,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { useState, useEffect } from 'react';
 import * as Google from 'expo-auth-session/providers/google';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -66,12 +67,13 @@ const UserGuestScreen = () => {
       const user = await response.json();
       await AsyncStorage.setItem('@user', JSON.stringify(user));
       setUserInfo(user);
+      await axios.post('http://localhost:4000/api/users/create', user);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleFakeLogin = () => {
+  const handleFakeLogin = async () => {
     const fakeUser = {
       picture:
         'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
@@ -82,6 +84,7 @@ const UserGuestScreen = () => {
 
     dispatch(toggleLogged(fakeUser));
     setUserInfo(fakeUser);
+    await axios.post('http://localhost:4000/api/users/create', fakeUser);
   };
 
   return (
