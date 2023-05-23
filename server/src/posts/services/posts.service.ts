@@ -82,6 +82,7 @@ export class PostsService {
               userName: { $first: '$users.userName' },
               profilePicture: { $first: '$users.profileImage' },
               blogId: { $first: '$blogId' },
+              category: { $first: '$blogs.category' },
               title: { $first: '$title' },
               content: { $first: '$content' },
               images: { $first: '$images' },
