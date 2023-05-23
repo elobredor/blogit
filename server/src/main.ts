@@ -16,9 +16,9 @@ async function bootstrap() {
 
   /* The `Reflector` class is used
   to retrieve metadata associated with classes, methods, and properties in a NestJS application. */
-  const reflector = app.get(Reflector);
+  // const reflector = app.get(Reflector);
 
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
+  // app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
   // Get config service
   const configService = app.get(ConfigService);

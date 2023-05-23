@@ -8,12 +8,12 @@ import { PublicAccess } from 'src/auth/decorators/public.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('users')
-@UseGuards(AuthGuard, RolesGuard)
+//@UseGuards(AuthGuard, RolesGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   /* This is a method in a NestJS controller that handles a POST request to create a new user. */
-  @PublicAccess()
+  //@PublicAccess()
   @Post('create')
   public async create(@Res() response: Response, @Body() body: CreateUserDto) {
     const newUser = await this.usersService.create(body);
@@ -31,7 +31,6 @@ export class UsersController {
     });
   }
   /* This is a method in a NestJS controller that handles a GET request to retrieve usersProfile.*/
-  @Roles('BASIC')
   @Get('profile/:userId')
   public async getProfile(@Res() response: Response, @Param('userId') userId: string) {
     const usersProfile = await this.usersService.getUserProfile(userId);
