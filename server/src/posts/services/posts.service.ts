@@ -38,12 +38,61 @@ export class PostsService {
     const limit: number = 10;
     const skip: number = (page - 1) * limit;
     try {
-      return await this.postsModel
-        .find()
-        .sort({ createdAt: -1 })
+      const posts = await this.postsModel
+        .aggregate([
+          {
+            $match: {
+              status: 1,
+            },
+          },
+          {
+            $unwind: '$status',
+          },
+          {
+            $lookup: {
+              from: 'blogs',
+              localField: 'blogId',
+              foreignField: '_id',
+              as: 'blogs',
+            },
+          },
+          {
+            $unwind: '$blogs',
+          },
+          {
+            $sort: {
+              createdAt: -1,
+            },
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'blogs.userId',
+              foreignField: '_id',
+              as: 'users',
+            },
+          },
+          {
+            $unwind: '$users',
+          },
+          {
+            $group: {
+              _id: '$_id',
+              userId: { $first: '$users.userId' },
+              userName: { $first: '$users.userName' },
+              profilePicture: { $first: '$users.profileImage' },
+              blogId: { $first: '$blogId' },
+              title: { $first: '$title' },
+              content: { $first: '$content' },
+              images: { $first: '$images' },
+              postLikes: { $first: '$postLikes' },
+              createdAt: { $first: '$createdAt' },
+            },
+          },
+        ])
         .skip(skip)
-        .limit(limit)
-        .select('-__v -comments.postId');
+        .limit(limit);
+      return posts;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
