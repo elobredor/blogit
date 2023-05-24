@@ -135,12 +135,22 @@ export class UsersService {
   //function to save posts
   public async savePosts(userId: string, body: UserUpdateDTO): Promise<UserInterface> {
     try {
-      const user = await this.userModel.findOneAndUpdate({ userId }, { $push: { saved: body } }, { new: true });
+      const user = await this.userModel.findOne({ userId });
       if (!user) {
         throw new ErrorManager({
           type: 'NOT_FOUND',
           message: 'User not found',
         });
+      }
+      if (user) {
+        const savedPost = user.saved.find((post) => post.title === body.title);
+        if (!savedPost.posts.includes(body.postId)) {
+          savedPost.posts.push(body.postId);
+          await user.save();
+        } else {
+          savedPost.posts = savedPost.posts.filter((id) => id.toString() !== body.postId);
+          await user.save();
+        }
       }
       return user;
     } catch (error) {
