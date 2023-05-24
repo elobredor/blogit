@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsNotEmpty,
   IsNumber,
@@ -8,22 +9,38 @@ import {
   IsEmpty,
   IsEmail,
   IsArray,
+  ValidateNested,
 } from 'class-validator';
 import { ROLES } from 'src/constants/roles';
-import { SavedItem } from 'src/interfaces/user.interface';
+
+class SavedPostDto {
+  @IsOptional()
+  @IsString()
+  title: string;
+
+  @IsOptional()
+  @IsString()
+  postId: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  posts: string[];
+}
+
 export class CreateUserDto {
   @IsString()
-  @MaxLength(16)
+  @MaxLength(25)
   @IsNotEmpty()
   userId: string;
 
   @IsString()
-  @MaxLength(50)
+  @MaxLength(70)
   @IsNotEmpty()
   userName: string;
 
   @IsEmail()
-  @MaxLength(40)
+  @MaxLength(70)
   @IsNotEmpty()
   email: string;
 
@@ -43,23 +60,25 @@ export class CreateUserDto {
   status: number;
 
   @IsOptional()
-  @MaxLength(150)
+  @MaxLength(300)
   @IsOptional()
   about: string;
 
   @IsOptional()
-  @MaxLength(75)
+  @MaxLength(200)
   @IsString()
   socialNetwork1: string;
 
   @IsOptional()
-  @MaxLength(75)
+  @MaxLength(200)
   @IsString()
   socialNetwork2: string;
 
   @IsOptional()
   @IsArray()
-  saved: SavedItem[];
+  @ValidateNested({ each: true })
+  @Type(() => SavedPostDto)
+  saved: SavedPostDto[];
 }
 
 export class UserUpdateDTO {
@@ -108,7 +127,19 @@ export class UserUpdateDTO {
   @IsString()
   socialNetwork2: string;
 
+  @IsString()
+  @MaxLength(30)
+  @IsOptional()
+  postId: string;
+
+  @IsString()
+  @MaxLength(300)
+  @IsOptional()
+  title: string;
+
   @IsOptional()
   @IsArray()
-  saved: SavedItem[];
+  @ValidateNested({ each: true })
+  @Type(() => SavedPostDto)
+  saved: SavedPostDto[];
 }

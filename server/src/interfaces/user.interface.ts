@@ -12,10 +12,10 @@ export interface UserInterface extends Document {
   about?: string;
   socialNetwork1?: string;
   socialNetwork2?: string;
-  saved: SavedItem[];
+  saved: SavedPost[];
 }
 
-export interface SavedItem {
+interface SavedPost {
   title: string;
   posts: string[];
 }

@@ -150,3 +150,13 @@ Blog Site App orientada al sector IT.
     "userId": "6466cd0e1c52a27142360a67", //el _id de un usuario
     "replyCommentId": "646d865e00c46f7e25652bda" //el _id de una respuesta a un comentario
     }
+
+## Guardar un post dentro de usuario
+
+#### PUT
+
+    http://localhost:4000/api/users/saved/:userId //el id de Auth0
+    {
+    "postId": "646ce9c7146cdcdbe236531b", //_id del post
+    "title": "test 404" //nombre de la carpeta
+    }
