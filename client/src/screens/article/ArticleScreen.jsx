@@ -1,92 +1,180 @@
-import { useState } from 'react';
-import { ScrollView, View, Text, ImageBackground, TouchableWithoutFeedback, Modal, TouchableOpacity } from 'react-native';
-import { iconsArticle } from "client/src/utils/iconOptions.js";
+import { useEffect, useState } from 'react';
+import {
+  ScrollView,
+  View,
+  Text,
+  ImageBackground,
+  TouchableWithoutFeedback,
+  Modal,
+  Dimensions,
+  Button,
+} from 'react-native';
+import { iconsArticle } from 'client/src/utils/iconOptions.js';
 import { styles } from './ArticleScreen.styles';
 import { useNavigation } from '@react-navigation/native';
+import RenderHtml from 'react-native-render-html';
+import { formatDate, setReadingTime } from '../../utils/formatData';
+import { useSelector, useDispatch } from 'react-redux';
+import { getDetails, setArticleLike } from '../../redux/actions';
 
-export default function ArticleScreen ({ route }) {
+export default function ArticleScreen({ route }) {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [favorite, setFavorite] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [modalVisibility, setModalVisibility] = useState(false)
+  const [modalVisibility, setModalVisibility] = useState(false);
+  const article = useSelector((state) => state.details);
+  const fetchStatus = useSelector((state) => state.details_fetch);
+  const loggedUser = useSelector((state) => {
+    return state.logged ? state.loggedUser : null;
+  });
 
-  const item = route.params;
+  useEffect(() => {
+    dispatch(getDetails(route.params));
+  }, []);
 
   const handleNavigateToComments = () => {
-    navigation.navigate('comments', item);
-    setModalVisibility(false);
-  }
+    if (!loggedUser) {
+      setModalVisibility(true);
+    } else {
+      navigation.navigate('comments');
+    }
+  };
 
-  return (
-    <>
-      <ScrollView style={styles.container}>
+  useEffect(() => {
+    if (fetchStatus.status === 'success' && loggedUser) {
+      if (article.postLikes.includes(loggedUser._id)) {
+        setFavorite(true);
+      } else {
+        setFavorite(false);
+      }
+    }
+  }, [loggedUser, article]);
+
+  const handleFavorite = () => {
+    if (!loggedUser) {
+      setModalVisibility(true);
+    } else {
+      const body = { userId: loggedUser._id };
+      fetch(`http://192.168.1.8:4000/api/posts/like/${article._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      }).then((res) => {
+        if (res.ok) dispatch(setArticleLike(loggedUser._id));
+      });
+    }
+  };
+
+  const goToLogin = () => {
+    setModalVisibility(false);
+    navigation.navigate('account');
+  };
+
+  if (fetchStatus.status === 'loading')
+    return (
+      <View
+        style={{
+          paddingTop: 150,
+          backgroundColor: '#eee',
+          alignItems: 'center',
+          flex: 1,
+        }}
+      ></View>
+    );
+  if (fetchStatus.status === 'rejected')
+    return (
+      <View
+        style={{
+          backgroundColor: '#eee',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flex: 1,
+        }}
+      >
+        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Error:</Text>
+        <Text style={{ fontSize: 30 }}>{fetchStatus.error}</Text>
+      </View>
+    );
+  if (fetchStatus.status === 'success')
+    return (
+      <>
         <View style={styles.headerView}>
           <View style={styles.authorView}>
             {iconsArticle.account.default}
             <View>
-              <Text style={styles.authorName}>{item.user}</Text>
-              <Text style={styles.timeDate}>{item.date}</Text>
-              <Text style={styles.timeDate}>{item.time}</Text>
+              <Text style={styles.authorName}>{article.status}</Text>
+              <Text style={styles.timeDate}>
+                {formatDate(article.createdAt)}
+              </Text>
+              <Text style={styles.timeDate}>
+                {setReadingTime(article.content)}
+              </Text>
             </View>
           </View>
           <View style={styles.icons}>
-            <TouchableWithoutFeedback onPress={() => setFavorite(!favorite)}>
-              {!favorite ? iconsArticle.heart.empty : iconsArticle.heart.filled}
+            <View style={{ flexDirection: 'row', gap: 2 }}>
+              <TouchableWithoutFeedback onPress={handleNavigateToComments}>
+                {iconsArticle.comment}
+              </TouchableWithoutFeedback>
+              <Text>{article.comments.length}</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableWithoutFeedback onPress={handleFavorite}>
+                {!favorite
+                  ? iconsArticle.heart.empty
+                  : iconsArticle.heart.filled}
+              </TouchableWithoutFeedback>
+              <Text>{article.postLikes.length}</Text>
+            </View>
+            <TouchableWithoutFeedback onPress={() => setSaved(!saved)}>
+              {saved ? iconsArticle.saved.focused : iconsArticle.saved.default}
             </TouchableWithoutFeedback>
-            <Text style={{ marginRight: 10 }}>{item.likes}</Text>
-            {iconsArticle.comment}
-            <Text style={{ marginLeft: 2 }}>{item.comments.length}</Text>
           </View>
         </View>
-        
-        <View style={styles.imageView}>
-          <ImageBackground
-            source={{ uri: item.image }}
-            imageStyle={{ borderRadius: 10, height: 180 }}
-          >
-            <View style={styles.imageIcon}>
-              <TouchableWithoutFeedback onPress={() => setSaved(!saved)}>
-                {!saved ? iconsArticle.saved.default : iconsArticle.saved.focused}
-              </TouchableWithoutFeedback>
-            </View>
-          </ImageBackground>
-        </View>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.content}>{item.content}</Text>
-        <Modal
-          animationType='fade'
-          transparent
-          visible={modalVisibility}
-        >
+        <ScrollView style={styles.container}>
+          <View style={styles.imageView}>
+            <ImageBackground
+              source={{ uri: article.images[0] }}
+              imageStyle={{ borderRadius: 10, height: 180 }}
+            ></ImageBackground>
+          </View>
+          <RenderHtml
+            contentWidth={Dimensions.get('window').width}
+            source={{ html: article.content }}
+          />
+        </ScrollView>
+        <Modal visible={modalVisibility} animationType='slide' transparent>
           <View
-            style={styles.footModals}
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1,
+            }}
           >
-            <TouchableWithoutFeedback onPress={handleNavigateToComments}>
-              <View style={styles.modalButtons}>
-                {iconsArticle.commentModal}
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => console.log('navigate to saved')}>
-              <View style={styles.modalButtons}>
-                {iconsArticle.saved.default}
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => setModalVisibility(false)}>
-              <View style={styles.modalButtons}>
-                {iconsArticle.cross}
-              </View>
-            </TouchableWithoutFeedback>
+            <View
+              style={{
+                padding: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: 15,
+                backgroundColor: '#eee',
+                gap: 10,
+                elevation: 5,
+              }}
+            >
+              <Text style={{ fontSize: 25 }}>Tienes que loguearte primero</Text>
+              <Button
+                title='Cerrar'
+                onPress={() => setModalVisibility(false)}
+              />
+              <Button title='log in' onPress={goToLogin} />
+            </View>
           </View>
         </Modal>
-      </ScrollView>
-      {!modalVisibility
-        ? 
-        <View style={styles.plusButton}>
-          <TouchableOpacity onPress={() => setModalVisibility(true)}>
-            {iconsArticle.plus}
-          </TouchableOpacity>
-        </View>
-        : null}
-    </>
-  );
+      </>
+    );
 }

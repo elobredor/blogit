@@ -20,7 +20,7 @@ const CardArticle = ({ item, toggleModal }) => {
 
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("article", item)}
+      onPress={() => navigation.navigate("article", item._id)}
     >
       <View
         style={{

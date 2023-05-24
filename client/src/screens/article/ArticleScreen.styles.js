@@ -23,7 +23,9 @@ export const styles = StyleSheet.create({
     fontSize: 10
   },
   icons: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    gap: 20,
+    paddingRight: 10
   },
   title: {
     fontSize: 25,

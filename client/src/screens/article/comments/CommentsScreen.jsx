@@ -1,47 +1,286 @@
-import { useState } from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { useState, useEffect, useRef } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard
+} from 'react-native';
 import { iconsComments } from '../../../utils/iconOptions';
+import { useSelector, useDispatch } from 'react-redux';
+import { getDetails } from '../../../redux/actions';
+import { timeLapse } from '../../../utils/timeLapse';
 
-export default function CommentsScreen ({ route }) {
-  const { comments } = route.params;
-  const [responsesVisibility, setResponsesVisibility] = useState(true);
+const replyInitialState = {
+  status: false,
+  receiver: '',
+  commentId: '',
+};
 
-  // console.log(comments)
+export default function CommentsScreen() {
+  const dispatch = useDispatch();
+  const { comments, _id } = useSelector((state) => state.details);
+  const loggedUser = useSelector((state) => {
+    return state.logged ? state.loggedUser : null;
+  });
+  const inputRef = useRef(null);
+  const commentListRef = useRef(null);
+  const replyListRef = useRef(null);
+  const [replying, setReplying] = useState(replyInitialState);
+  const [articleComment, setArticleComment] = useState('');
+  const [reply, setReply] = useState('');
+  const [repliesVisibility, setRepliesVisibility] = useState('');
+
+  useEffect(() => {
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 100);
+  }, []);
+
+  useEffect(() => {
+    if (!repliesVisibility && comments.length > 0) {
+      commentListRef.current.scrollToEnd({ animated: true });
+    }
+  }, [comments]);
+
+  const handleArticleCommentChange = (text) => {
+    setArticleComment(text);
+  };
+
+  const handleArticleCommentSubmit = () => {
+    Keyboard.dismiss();
+    const commentBody = {
+      postId: _id,
+      userId: loggedUser._id,
+      userName: loggedUser.userName,
+      comment: articleComment,
+    };
+    setArticleComment('');
+    fetch('http://192.168.1.8:4000/api/comments/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(commentBody),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Something went wrong');
+        dispatch(getDetails(_id));
+      })
+      .catch(() => dispatch(getDetails(_id)));
+  };
+
+  const handleLikeComment = (commentId) => {
+    const likeCommentBody = {
+      userId: loggedUser._id,
+      commentId
+    }
+    fetch(`http://192.168.1.8:4000/api/comments/like/${_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify(likeCommentBody)
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Something went wrong');
+        dispatch(getDetails(_id))
+      })
+      .catch(() => dispatch(getDetails(_id)));
+  };
+
+  const handleLikeReply = (commentId, replyCommentId) => {
+    const likeReplyBody = {
+      userId: loggedUser._id,
+      replyCommentId
+    };
+
+    fetch(`http://192.168.1.8:4000/api/comments/reply/like/${commentId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify(likeReplyBody)
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Something went wrong');
+        dispatch(getDetails(_id))
+      })
+      .catch(() => dispatch(getDetails(_id)));
+  };
+
+  const handleRepliesVisibility = (id) => {
+    setRepliesVisibility(id);
+  };
+
+  const handleReply = (comment) => {
+    setReplying({
+      status: true,
+      receiver: comment.userName,
+      commentId: comment._id,
+    });
+    setReply(`@${comment.userName} `);
+    inputRef.current.focus();
+  };
+
+  const handleReplyReply = (reply) => {
+    setReplying({
+      status: true,
+      receiver: reply.userName,
+      commentId: reply.commentId,
+    });
+    setReply(`@${reply.userName} `);
+    inputRef.current.focus();
+  };
+
+  const handleReplyChange = (text) => {
+    setReply(text);
+  };
+
+  const handleReplySubmit = () => {
+    Keyboard.dismiss();
+    const replyBody = {
+      userId: loggedUser._id,
+      userName: loggedUser.userName,
+      comment: reply,
+    };
+    setReplying(replyInitialState);
+    fetch(`http://192.168.1.8:4000/api/comments/reply/${replying.commentId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(replyBody),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Something went wrong');
+        dispatch(getDetails(_id));
+      })
+      .catch(() => dispatch(getDetails(_id)));
+  };
 
   return (
     <View style={styles.container}>
       <FlatList
+        ref={commentListRef}
         data={comments}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item._id.toString()}
         renderItem={({ item }) => {
           return (
             <View style={styles.commentView}>
               <View style={styles.authorView}>
                 {iconsComments.account.default}
-                <Text style={styles.authorName}>{item.author}</Text>
+                <View>
+                  <Text style={styles.authorName}>{item.userName}</Text>
+                  <Text style={styles.timeLapse}>
+                    {timeLapse(item.createdAt)}
+                  </Text>
+                </View>
               </View>
-              <Text>{item.content}</Text>
+              <Text>{item.comment}</Text>
               <View style={styles.footerIcons}>
                 <View style={styles.likeResIcons}>
                   <View style={{ flexDirection: 'row' }}>
-                    {iconsComments.heart.empty}
-                    <Text>{item.likes}</Text>
+                    <TouchableOpacity onPress={() => handleLikeComment(item._id)}>
+                      {item.commentLikes.includes(loggedUser._id) ? iconsComments.heart.filled : iconsComments.heart.empty}
+                    </TouchableOpacity>
+                    <Text>{item.commentLikes.length}</Text>
                   </View>
                   <View style={{ flexDirection: 'row', gap: 2 }}>
-                    {iconsComments.comment}
-                    <Text>{item.responses.length}</Text>
+                    <TouchableOpacity onPress={() => handleRepliesVisibility(item._id)}>
+                      {iconsComments.comment}
+                    </TouchableOpacity>
+                    <Text>{item.replyComment.length}</Text>
                   </View>
                 </View>
                 <View style={styles.responseBtn}>
-                  <TouchableOpacity onPress={() => console.log('Response pressed')}>
+                  <TouchableOpacity onPress={() => handleReply(item)}>
                     <Text>Responder</Text>
                   </TouchableOpacity>
                 </View>
               </View>
+              {repliesVisibility === item._id && item.replyComment.length > 0 && (
+                <View style={styles.repliesView}>
+                  <FlatList
+                    ref={replyListRef}
+                    data={item.replyComment.map(r => {return{...r, commentId: item._id}})}
+                    keyExtractor={(reply) => reply._id.toString()}
+                    renderItem={({ item }) => {
+                      return (
+                        <View style={{ marginVertical: '3%' }}>
+                          <View style={styles.authorView}>
+                            {iconsComments.account.default}
+                            <View>
+                              <Text style={styles.authorName}>
+                                {item.userName}
+                              </Text>
+                              <Text style={styles.timeLapse}>
+                                {timeLapse(item.createdAt)}
+                              </Text>
+                            </View>
+                          </View>
+                          <Text>{item.comment}</Text>
+                          <View style={styles.footerIcons}>
+                            <View style={styles.likeResIcons}>
+                              <View style={{ flexDirection: 'row' }}>
+                                <TouchableOpacity onPress={() => handleLikeReply(item.commentId, item._id)}>
+                                  {item.commentLikes.includes(loggedUser._id) ? iconsComments.heart.filled : iconsComments.heart.empty}
+                                </TouchableOpacity>
+                                <Text>{item.commentLikes.length}</Text>
+                              </View>
+                            </View>
+                            <View style={styles.responseBtn}>
+                              <TouchableOpacity
+                                onPress={() => handleReplyReply(item)}
+                              >
+                                <Text>Responder</Text>
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        </View>
+                      );
+                    }}
+                  />
+                </View>
+              )}
             </View>
           );
         }}
       />
+      {replying.status && (
+        <View style={styles.replying}>
+          <Text>Respondiendo a {replying.receiver}</Text>
+          <TouchableWithoutFeedback
+            onPress={() => setReplying(replyInitialState)}
+          >
+            <Text style={{ fontSize: 18 }}>x</Text>
+          </TouchableWithoutFeedback>
+        </View>
+      )}
+      <View style={styles.commentContainer}>
+        <TextInput
+          ref={inputRef}
+          style={styles.commentInput}
+          placeholder={replying.status ? '¿Cuál es tu respuesta?' : '¿Cuál es tu opinión?'}
+          multiline={true}
+          onChangeText={
+            replying.status ? handleReplyChange : handleArticleCommentChange
+          }
+          value={replying.status ? reply : articleComment}
+        />
+        <TouchableOpacity
+          onPress={
+            replying.status ? handleReplySubmit : handleArticleCommentSubmit
+          }
+        >
+          <View style={{ backgroundColor: '#fff', borderRadius: 20 }}>
+            {iconsComments.send}
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -49,7 +288,7 @@ export default function CommentsScreen ({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ddd'
+    backgroundColor: '#ddd',
   },
   commentView: {
     marginVertical: '5%',
@@ -61,22 +300,53 @@ const styles = StyleSheet.create({
   authorView: {
     flexDirection: 'row',
     marginBottom: '2%',
-    alignItems: 'center'
+    alignItems: 'center',
+    gap: 8,
   },
   authorName: {
     fontSize: 15,
-    fontWeight: '500'
+    fontWeight: '500',
+  },
+  timeLapse: {
+    fontSize: 12,
   },
   footerIcons: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   likeResIcons: {
     flexDirection: 'row',
     marginTop: '3%',
-    gap: 10
+    gap: 10,
   },
   responseBtn: {
-    justifyContent: 'flex-end'
-  }
-})
+    justifyContent: 'flex-end',
+  },
+  repliesView: {
+    marginVertical: '5%',
+    marginLeft: '8%',
+  },
+  replying: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderColor: '#aaa',
+    backgroundColor: '#888',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  commentContainer: {
+    flexDirection: 'row',
+    padding: 20,
+    backgroundColor: '#888',
+    gap: 10,
+  },
+  commentInput: {
+    flex: 2,
+    borderRadius: 15,
+    backgroundColor: '#fff',
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+  },
+});

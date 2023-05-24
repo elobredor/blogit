@@ -1,19 +1,81 @@
-import { GET_ARTICLES, LOAD_HC_DATA, TOGGLE_LOGGED } from "./actions";
+import {
+  GET_ARTICLES,
+  ARTICLES_PENDING,
+  ARTICLES_REJECTED,
+  DETAILS_PENDING,
+  DETAILS_REJECTED,
+  GET_DETAILS,
+  SET_ARTICLE_LIKE,
+  LOG_TO_DB
+} from "./actions";
 
 const initialState = {
+  authors: [],
+  blogs: [],
   articles: [],
-  users: [],
+  articles_fetch: {
+    status: 'idle',
+    error: null
+  },
+  details: {},
+  details_fetch: {
+    status: 'idle',
+    error: null
+  },
+  loggedUser: {},
   logged: false,
 };
 
 export default function rootReducer(state = initialState, action) {
   switch (action.type) {
+    case ARTICLES_PENDING:
+      return {
+        ...state,
+        articles_fetch: { status: 'loading', error: null }
+      };
+    case ARTICLES_REJECTED:
+      return {
+        ...state,
+        articles_fetch: { status: 'rejected', error: action.payload }
+      };
     case GET_ARTICLES:
-      return { ...state, articles: action.payload };
-    case LOAD_HC_DATA:
-      return { ...state, articles: action.payload };
-    case TOGGLE_LOGGED:
-      return { ...state, logged: !state.logged };
+      return {
+        ...state,
+        articles_fetch: { status: 'success', error: null },
+        articles: action.payload
+      };
+    case DETAILS_PENDING:
+      return {
+        ...state,
+        details_fetch: { status: 'loading', error: null }
+      }
+    case DETAILS_REJECTED:
+      return {
+        ...state,
+        details_fetch: { status: 'rejected', error: action.payload }
+      }
+    case GET_DETAILS:
+      return {
+        ...state,
+        details_fetch: { status: 'success', error: null },
+        details: action.payload
+      }
+    case LOG_TO_DB:
+      return {
+        ...state,
+        loggedUser: action.payload,
+        logged: true,
+      }
+    case SET_ARTICLE_LIKE:
+      return {
+        ...state,
+        details: {
+          ...state.details,
+          postLikes: state.details.postLikes.includes(action.payload)
+            ? [...state.details.postLikes].filter(lk => lk !== action.payload)
+            : [...state.details.postLikes, action.payload]
+        }
+      }
     default:
       return { ...state };
   }

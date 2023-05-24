@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loadHCData } from "../../redux/actions";
+import { getArticles } from "../../redux/actions";
 import { useNavigation } from "@react-navigation/native";
 import Filters from "../../component/home/filtersHome/FiltersHome";
 import SearchBar from "../../component/home/searchBar/SearchBar";
@@ -17,17 +17,22 @@ import CardArticle from "../../component/home/cardArticle/CardArticle";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(loadHCData());
-  }, []);
   const articles = useSelector((state) => state.articles);
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    dispatch(getArticles());
+  }, []);
+
   const toggleModal = () => {
     setVisible(!visible);
   };
 
-  const goToHome = () => navigation.navigate("account")
+  const goToHome = () => {
+    setVisible(!visible)
+    navigation.navigate("account")
+  };
 
   return (
     <SafeAreaView>
@@ -71,7 +76,7 @@ const HomeScreen = () => {
             renderItem={({ item }) => (
               <CardArticle toggleModal={toggleModal} item={item} />
             )}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item._id.toString()}
             showsVerticalScrollIndicator={false}
           />
         </View>
