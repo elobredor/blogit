@@ -21,6 +21,11 @@ Blog Site App orientada al sector IT.
 
     http://localhost:4000/api/users/:userId
 
+## Buscar un usuario básico por userId
+#### GET
+
+    http://localhost:4000/api/users/profile/:userId // Provisto por Auth0
+
 ## Crear un Blog
 #### POST
     
