@@ -67,6 +67,17 @@ Blog Site App orientada al sector IT.
       "userId": "mongoDB ID" //ID del usuario
     }
 
+## Agregar comentario a un post
+#### POST
+
+    http://localhost:4000/api/comments/create
+    {
+      "postId": "6467cb380e4d82b9e206b092",
+      "userId": "6466cd0e1c52a27142360a67",
+      "userName": "Diego",
+      "comment": "mi cuarto comentario"
+    }
+
 ## Obtener todos los comentarios de un post (artículo)
 #### GET
     
