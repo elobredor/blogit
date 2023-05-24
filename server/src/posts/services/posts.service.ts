@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { PostsInterface } from 'src/interfaces/post.interface';
 import { CreatePostsDTO } from '../dto/posts.dto';
 import { ErrorManager } from 'src/utils/error.manager';
@@ -35,7 +35,7 @@ export class PostsService {
   }
   //This function returns all the posts in a database ordered by the date of creation.
   public async getAllPosts(page: number): Promise<PostsInterface[]> {
-    const limit: number = 10;
+    const limit: number = 100;
     const skip: number = (page - 1) * limit;
     try {
       const posts = await this.postsModel
@@ -80,11 +80,11 @@ export class PostsService {
               _id: '$_id',
               userId: { $first: '$users.userId' },
               userName: { $first: '$users.userName' },
-              profilePicture: { $first: '$users.profileImage' },
+              profileImage: { $first: '$users.profileImage' },
               blogId: { $first: '$blogId' },
               category: { $first: '$blogs.category' },
               title: { $first: '$title' },
-              content: { $first: '$content' },
+              comments: { $first: '$comments' },
               images: { $first: '$images' },
               postLikes: { $first: '$postLikes' },
               createdAt: { $first: '$createdAt' },
@@ -99,9 +99,56 @@ export class PostsService {
     }
   }
   //This function returns a post with the provided ID.
-  public async getPostById(postId: string): Promise<PostsInterface> {
+  public async getPostById(postId: string): Promise<PostsInterface[]> {
     try {
-      const post = await this.postsModel.findById(postId).select('-__v -comments.postId');
+      //transform the postId to a mongoose ObjectId
+      const postObjectId = new Types.ObjectId(postId);
+
+      const post = await this.postsModel.aggregate([
+        {
+          $match: {
+            _id: postObjectId,
+          },
+        },
+        {
+          $lookup: {
+            from: 'blogs',
+            localField: 'blogId',
+            foreignField: '_id',
+            as: 'blogs',
+          },
+        },
+        {
+          $unwind: '$blogs',
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'blogs.userId',
+            foreignField: '_id',
+            as: 'users',
+          },
+        },
+        {
+          $unwind: '$users',
+        },
+        {
+          $group: {
+            _id: '$_id',
+            userId: { $first: '$users.userId' },
+            userName: { $first: '$users.userName' },
+            profileImage: { $first: '$users.profileImage' },
+            title: { $first: '$title' },
+            content: { $first: '$content' },
+            images: { $first: '$images' },
+            status: { $first: '$status' },
+            postLikes: { $first: '$postLikes' },
+            createdAt: { $first: '$createdAt' },
+            comments: { $first: '$comments' },
+            category: { $first: '$blogs.category' },
+          },
+        },
+      ]);
       //If the post is not found, throw an error.
       if (!post) {
         throw new ErrorManager({
@@ -109,7 +156,8 @@ export class PostsService {
           message: `Post with ID: ${postId} not found`,
         });
       }
-      return post;
+
+      return post[0];
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

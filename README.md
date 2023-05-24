@@ -5,30 +5,34 @@ Blog Site App orientada al sector IT.
 # SERVER ENDPOINTS
 
 ## Crear un usuario:
+
 #### POST
 
     http://localhost:4000/api/users/create
-    
+
     {
-      "userId": "Tu ID", 
-      "userName": "Tu userName", 
+      "userId": "Tu ID",
+      "userName": "Tu userName",
       "email": "mail@gmail.com",
       "profileImage": "http://imagen.com"
     }
 
 ## Buscar un usuario por userId (la que creaste)
+
 #### GET
 
     http://localhost:4000/api/users/:userId
 
 ## Buscar un usuario básico por userId
+
 #### GET
 
     http://localhost:4000/api/users/profile/:userId // Provisto por Auth0
 
 ## Crear un Blog
+
 #### POST
-    
+
     http://localhost:4000/api/blogs/create
 
     {
@@ -37,8 +41,9 @@ Blog Site App orientada al sector IT.
     }
 
 ## Crear un post
+
 #### POST
-  
+
     http://localhost:4000/api/posts/create
 
     {
@@ -50,17 +55,21 @@ Blog Site App orientada al sector IT.
     }
 
 ## Obtener todos los Posts (artículos)
+
 #### GET
 
     http://localhost:4000/api/posts/all/#
 
 ## Obtener un post (artículo) por mongoDB ID
+
 #### GET
 
     http://localhost:4000/api/posts/:id
 
 ## Agregar/remover un like a un post (artículo)
+
 #### PUT
+
     http://localhost:4000/api/posts/like/:id
 
     {
@@ -68,6 +77,7 @@ Blog Site App orientada al sector IT.
     }
 
 ## Agregar comentario a un post
+
 #### POST
 
     http://localhost:4000/api/comments/create
@@ -79,12 +89,15 @@ Blog Site App orientada al sector IT.
     }
 
 ## Obtener todos los comentarios de un post (artículo)
+
 #### GET
-    
+
     http://localhost:4000/api/comments/all/:postId
 
 ## Agregar/eliminar likes a un comentario
+
 #### PUT
+
     http://localhost:4000/api/comments/like/:postId
 
     {
@@ -93,16 +106,19 @@ Blog Site App orientada al sector IT.
     }
 
 ## Buscar Posts (artículos) por palabra clave
+
 #### GET
-    
+
     http://localhost:4000/api/posts/keyword/:keyword
 
 ## Buscar blogs por categoría
+
 #### GET
 
     http://localhost:4000/api/blogs/category/:category
 
 ## Guardar Posts para un asuario (saved)
+
 #### PUT
 
     http://localhost:4000/api/users/saved/:userId // el que creaste no el de mongo
@@ -113,3 +129,24 @@ Blog Site App orientada al sector IT.
       "images": "https://d2slcw3kip6qmk.cloudfront.net/marketing/blog/2018Q3/jira-product-roadmap/how-to-create-a-product-roadmap-visualization-header@2x.png"
     }
 
+## Responder a un comentario
+
+#### PUT
+
+    http://localhost:4000/api/comments/reply/:commentId //el _id de un comentario en mongoDB
+    {
+    "userId": "6466cd0e1c52a27142360a67", //el _id de un usuario
+    "userName": "Diego",
+    "comment": "mi segundo reply"
+
+}
+
+## Dar le like a una respuesta de un comentario
+
+#### PUT
+
+    http://localhost:4000/api/comments/reply/like/:commentId //el _id de un comentario en mongoDB
+    {
+    "userId": "6466cd0e1c52a27142360a67", //el _id de un usuario
+    "replyCommentId": "646d865e00c46f7e25652bda" //el _id de una respuesta a un comentario
+    }

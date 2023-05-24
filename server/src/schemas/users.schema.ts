@@ -36,24 +36,16 @@ export class User {
   @Prop({
     type: [
       {
-        postId: String,
         title: String,
-        images: [String],
+        posts: [String],
       },
     ],
     default: [],
   })
   saved: {
-    postId: string;
-    postTitle: string;
-    postImages: string[];
+    title: string;
+    posts: string[];
   }[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-
-// Asignar valores al campo fieldName
-// createUserDto.fieldName = {
-//   postId: 'post_id',
-//   categoria: 'categoria',
-// };

@@ -1,4 +1,4 @@
-import { IsString, MaxLength, IsNumber } from 'class-validator';
+import { IsString, MaxLength, IsNumber, IsOptional } from 'class-validator';
 
 export class CreatePostsDTO {
   @IsString()
@@ -6,13 +6,14 @@ export class CreatePostsDTO {
   blogId: string;
 
   @IsString()
-  @MaxLength(100)
+  @MaxLength(200)
   title: string;
 
   @IsString()
-  @MaxLength(1000)
+  @MaxLength(10000)
   content: string;
 
+  @IsOptional()
   @IsNumber()
   status: number;
 }

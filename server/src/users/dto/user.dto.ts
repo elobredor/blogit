@@ -10,7 +10,7 @@ import {
   IsArray,
 } from 'class-validator';
 import { ROLES } from 'src/constants/roles';
-import { SavedPost } from 'src/interfaces/user.interface';
+import { SavedItem } from 'src/interfaces/user.interface';
 export class CreateUserDto {
   @IsString()
   @MaxLength(16)
@@ -59,27 +59,27 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsArray()
-  saved: SavedPost[];
+  saved: SavedItem[];
 }
 
 export class UserUpdateDTO {
   @IsString()
-  @MaxLength(16)
+  @MaxLength(25)
   @IsOptional()
   userId: string;
 
   @IsString()
-  @MaxLength(50)
+  @MaxLength(70)
   @IsOptional()
   userName: string;
 
   @IsString()
-  @MaxLength(40)
+  @MaxLength(70)
   @IsOptional()
   email: string;
 
   @IsString()
-  @MaxLength(70)
+  @MaxLength(250)
   @IsOptional()
   profileImage: string;
 
@@ -94,21 +94,21 @@ export class UserUpdateDTO {
   status: number;
 
   @IsOptional()
-  @MaxLength(150)
+  @MaxLength(300)
   @IsOptional()
   about: string;
 
   @IsOptional()
-  @MaxLength(75)
+  @MaxLength(200)
   @IsString()
   socialNetwork1: string;
 
   @IsOptional()
-  @MaxLength(75)
+  @MaxLength(200)
   @IsString()
   socialNetwork2: string;
 
   @IsOptional()
   @IsArray()
-  saved: SavedPost[];
+  saved: SavedItem[];
 }

@@ -1,18 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CommentInterface } from 'src/interfaces/comment.interface';
 import { PostsInterface } from 'src/interfaces/post.interface';
 import { CreateCommentDTO } from '../dto/comments.dto';
 import { ErrorManager } from 'src/utils/error.manager';
 import { CreateCommentLikesDTO } from '../dto/commentLikes.dto';
+import { ReplyCommentInterface } from 'src/interfaces/replyComment.interface';
+import { CreateReplyCommentLikesDTO } from '../dto/replyComment.dto';
 
 @Injectable()
 export class CommentsService {
-  constructor(
-    @InjectModel('posts') private readonly postsModel: Model<PostsInterface>,
-    @InjectModel('comments') private readonly commentsModel: Model<CommentInterface>,
-  ) {}
+  constructor(@InjectModel('posts') private readonly postsModel: Model<PostsInterface>) {}
   //This function creates a new comment in a database using the provided data and returns the created comment.
   public async createComment(body: CreateCommentDTO): Promise<CommentInterface> {
     const { postId } = body;
@@ -75,6 +74,68 @@ export class CommentsService {
         //if the user has already liked the comment, remove the user from the commentLikes array.
         comment.commentLikes = comment.commentLikes.filter((id) => id.toString() !== userId);
         await postComment.save();
+        return;
+      }
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //this function replies to a comment
+  public async replyToComment(body: ReplyCommentInterface, commentId: string): Promise<ReplyCommentInterface> {
+    const commentObjectId = new Types.ObjectId(commentId);
+    try {
+      const comments = await this.postsModel.findOne({ comments: { $elemMatch: { _id: commentObjectId } } });
+      //If the comment is not found, throw an error.
+      if (!comments) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Comment with ID: ${commentId} not found`,
+        });
+      }
+
+      //If the comment is found, find the comment and update it.
+      const comment = comments.comments.find((c) => c._id.toString() === commentId);
+      comment.replyComment.push(body);
+      await comments.save();
+      return;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //this function add/remove likes from reply comments
+  public async likeReplyComment(body: CreateReplyCommentLikesDTO, commentId: string): Promise<ReplyCommentInterface> {
+    const { userId, replyCommentId } = body;
+    try {
+      const comments = await this.postsModel.findOne({ comments: { $elemMatch: { _id: commentId } } });
+      //If the comment is not found, throw an error.
+      if (!comments) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Comment with ID: ${commentId} not found`,
+        });
+      }
+      //If the comment is found, find the comment and update it.
+      const comment = comments.comments.find((c) => c._id.toString() === commentId);
+
+      //If the comment is not found, throw an error.
+      if (!comment) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Comment with ID: ${commentId} not found`,
+        });
+      }
+
+      const replyComment = comment.replyComment.find((c) => c._id.toString() === replyCommentId);
+      //verify if the user has already liked the comment
+      if (!replyComment?.commentLikes.includes(userId)) {
+        //if the user has not liked the comment, add the user to the commentLikes array.
+        replyComment?.commentLikes.push(userId);
+        await comments.save();
+        return;
+      } else {
+        //if the user has already liked the comment, remove the user from the commentLikes array.
+        replyComment.commentLikes = replyComment?.commentLikes.filter((id) => id.toString() !== userId);
+        await comments.save();
         return;
       }
     } catch (error) {

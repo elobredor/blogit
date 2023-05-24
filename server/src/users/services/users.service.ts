@@ -29,15 +29,13 @@ export class UsersService {
   }
   //This function finds and returns a user by their ID.
   public async findOne(userId: string): Promise<UserInterface> {
+    console.log(userId);
     try {
       const user = await this.userModel.aggregate([
         {
           $match: {
             userId: userId,
           },
-        },
-        {
-          $unwind: '$userId',
         },
         {
           $lookup: {
@@ -59,9 +57,6 @@ export class UsersService {
           },
         },
         {
-          $unwind: '$posts',
-        },
-        {
           $sort: {
             'posts.createdAt': -1,
           },
@@ -72,7 +67,7 @@ export class UsersService {
             userId: { $first: '$userId' },
             userName: { $first: '$userName' },
             email: { $first: '$email' },
-            profilePicture: { $first: '$profilePicture' },
+            profileImage: { $first: '$profileImage' },
             role: { $first: '$role' },
             status: { $first: '$status' },
             blogs: {
@@ -140,7 +135,7 @@ export class UsersService {
   //function to save posts
   public async savePosts(userId: string, body: UserUpdateDTO): Promise<UserInterface> {
     try {
-      const user = await this.userModel.findOneAndUpdate({ userId: userId }, { $push: { saved: body } }, { new: true });
+      const user = await this.userModel.findOneAndUpdate({ userId }, { $push: { saved: body } }, { new: true });
       if (!user) {
         throw new ErrorManager({
           type: 'NOT_FOUND',
