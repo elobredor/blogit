@@ -28,7 +28,7 @@ export class CreateUserDto {
   email: string;
 
   @IsString()
-  @MaxLength(70)
+  @MaxLength(250)
   @IsNotEmpty()
   profileImage: string;
 

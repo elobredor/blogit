@@ -134,12 +134,12 @@ Blog Site App orientada al sector IT.
 #### PUT
 
     http://localhost:4000/api/comments/reply/:commentId //el _id de un comentario en mongoDB
+    
     {
     "userId": "6466cd0e1c52a27142360a67", //el _id de un usuario
     "userName": "Diego",
     "comment": "mi segundo reply"
-
-}
+    }
 
 ## Dar le like a una respuesta de un comentario
 
