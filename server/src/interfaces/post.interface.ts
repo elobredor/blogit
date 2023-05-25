@@ -6,7 +6,7 @@ export interface PostsInterface extends Document {
   readonly blogId: string;
   readonly title: string;
   readonly content: string;
-  readonly images: string[];
+  readonly images: string;
   readonly createdAt: Date;
   readonly updatedAt: Date;
   readonly status: number;
