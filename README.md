@@ -233,3 +233,9 @@ Blog Site App orientada al sector IT.
     {
     "comment": "reply comment updated",
     }
+
+## eliminar una respuesta a un comentario
+
+#### DELETE
+
+    http://localhost:4000/api/comments/reply-delete/:commentId //el _id de un replyComment de mongoDB
