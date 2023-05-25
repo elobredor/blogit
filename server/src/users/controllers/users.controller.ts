@@ -41,10 +41,9 @@ export class UsersController {
   //this is a method in NestJs controller that update a user
   @Put('update/:userId')
   public async updateUser(@Res() response: Response, @Param('userId') userId: string, @Body() body: UserUpdateDTO) {
-    const updatedUser = await this.usersService.updateUser(userId, body);
+    await this.usersService.updateUser(userId, body);
     return response.status(HttpStatus.OK).json({
       message: 'User has been successfully updated',
-      updatedUser,
     });
   }
   //method to save posts
