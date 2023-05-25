@@ -186,3 +186,35 @@ Blog Site App orientada al sector IT.
 #### PUT
 
     http://localhost:4000/api/users/enable/:userId //el id de Auth0
+
+## cambiar el status a 0 de un post
+
+#### PUT
+
+    http://localhost:4000/api/posts/status/:postId //el _id de mongoDB
+
+## cambiar el status a 1 de un post
+
+#### PUT
+
+    http://localhost:4000/api/posts/enable/:postId //el _id de mongoDB
+
+## actualizar un post
+
+#### PUT
+
+    http://localhost:4000/api/posts/update/:postId //el _id de mongoDB
+    {
+    "title": "title updated", //solo si se va a cambiar este campo
+    "images": "http://imagen.com", //solo si se va a cambiar este campo
+    "content": "my new post content" //solo si se va a cambiar este campo
+    }
+
+## actualizar un comentario
+
+#### PUT
+
+    http://localhost:4000/api/comments/update/:commentId //el _id de mongoDB
+    {
+    "comment": "comment updated",
+    }
