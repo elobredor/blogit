@@ -134,7 +134,7 @@ Blog Site App orientada al sector IT.
 #### PUT
 
     http://localhost:4000/api/comments/reply/:commentId //el _id de un comentario en mongoDB
-    
+
     {
     "userId": "6466cd0e1c52a27142360a67", //el _id de un usuario
     "userName": "Diego",
@@ -158,5 +158,6 @@ Blog Site App orientada al sector IT.
     http://localhost:4000/api/users/saved/:userId //el id de Auth0
     {
     "postId": "646ce9c7146cdcdbe236531b", //_id del post
-    "title": "test 404" //nombre de la carpeta
+    "title": "test 404", //nombre de la carpeta
+    "images": "imagen.com" //url de la imagen
     }
