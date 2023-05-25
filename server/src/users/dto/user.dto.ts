@@ -89,6 +89,7 @@ export class UserUpdateDTO {
   @IsString()
   @MaxLength(25)
   @IsOptional()
+  @IsEmpty({ message: 'El campo userId no debe tener valor cuando se envía como predeterminado.' })
   userId: string;
 
   @IsString()
@@ -99,6 +100,7 @@ export class UserUpdateDTO {
   @IsString()
   @MaxLength(70)
   @IsOptional()
+  @IsEmpty({ message: 'El campo email no debe tener valor cuando se envía como predeterminado.' })
   email: string;
 
   @IsString()
@@ -108,11 +110,11 @@ export class UserUpdateDTO {
 
   @IsOptional()
   @IsEnum(ROLES)
-  @IsEmpty({ message: 'El campo no debe tener valor cuando se envía como predeterminado.' })
+  @IsEmpty({ message: 'El campo role no debe tener valor cuando se envía como predeterminado.' })
   role: ROLES;
 
   @IsOptional()
-  @IsEmpty({ message: 'El campo no debe tener valor cuando se envía como predeterminado.' })
+  @IsEmpty({ message: 'El campo status no debe tener valor cuando se envía como predeterminado.' })
   @IsNumber()
   status: number;
 
