@@ -53,4 +53,20 @@ export class PostsController {
       posts,
     });
   }
+  //method to change the status of a post to 0
+  @Put('status/:postId')
+  public async changePostStatus(@Res() response: Response, @Param('postId', ParseObjectIdPipe) postId: string) {
+    await this.postsService.changeStatus(postId);
+    return response.status(HttpStatus.OK).json({
+      message: 'Post has been removed successfully',
+    });
+  }
+  //method to change the status of a post
+  @Put('enable/:postId')
+  public async enablePostStatus(@Res() response: Response, @Param('postId', ParseObjectIdPipe) postId: string) {
+    await this.postsService.enablePost(postId);
+    return response.status(HttpStatus.OK).json({
+      message: 'Post has been enabled successfully',
+    });
+  }
 }

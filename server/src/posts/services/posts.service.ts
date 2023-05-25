@@ -196,4 +196,36 @@ export class PostsService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+  //function change status of post to 0
+  public async changeStatus(postId: string): Promise<PostsInterface> {
+    try {
+      const post = await this.postsModel.findOneAndUpdate({ _id: postId }, { status: 0 });
+      //If the post is not found, throw an error.
+      if (!post) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Post with ID: ${postId} not found`,
+        });
+      }
+      return;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //function change status of post to 1 (enable)
+  public async enablePost(postId: string): Promise<PostsInterface> {
+    try {
+      const post = await this.postsModel.findOneAndUpdate({ _id: postId }, { status: 1 });
+      //If the post is not found, throw an error.
+      if (!post) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Post with ID: ${postId} not found`,
+        });
+      }
+      return;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
 }
