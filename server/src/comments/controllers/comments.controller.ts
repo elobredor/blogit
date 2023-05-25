@@ -1,10 +1,10 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res, Put } from '@nestjs/common';
 import { Response } from 'express';
 import { CommentsService } from '../services/comments.service';
-import { CreateCommentDTO } from '../dto/comments.dto';
+import { CreateCommentDTO, UpdateCommentDTO } from '../dto/comments.dto';
 import { ParseObjectIdPipe } from 'src/utils/parse-object-id-pipe.pipe';
 import { CreateCommentLikesDTO } from '../dto/commentLikes.dto';
-import { CreateReplyCommentDTO, CreateReplyCommentLikesDTO } from '../dto/replyComment.dto';
+import { CreateReplyCommentLikesDTO } from '../dto/replyComment.dto';
 import { ReplyCommentInterface } from 'src/interfaces/replyComment.interface';
 
 @Controller('comments')
@@ -61,6 +61,19 @@ export class CommentsController {
     await this.commentsService.likeReplyComment(body, commentId);
     return response.status(HttpStatus.OK).json({
       message: 'Reply has been updated successfully',
+    });
+  }
+  //method to update a comment
+  @Put('update/:commentId')
+  public async updateComment(
+    @Res() response: Response,
+    @Body() body: UpdateCommentDTO,
+    @Param('commentId', ParseObjectIdPipe) commentId: string,
+  ) {
+    const updatedComment = await this.commentsService.updateComment(body, commentId);
+    return response.status(HttpStatus.OK).json({
+      message: 'Comment has been updated successfully',
+      updatedComment,
     });
   }
 }

@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CommentInterface } from 'src/interfaces/comment.interface';
 import { PostsInterface } from 'src/interfaces/post.interface';
-import { CreateCommentDTO } from '../dto/comments.dto';
+import { CreateCommentDTO, UpdateCommentDTO } from '../dto/comments.dto';
 import { ErrorManager } from 'src/utils/error.manager';
 import { CreateCommentLikesDTO } from '../dto/commentLikes.dto';
 import { ReplyCommentInterface } from 'src/interfaces/replyComment.interface';
@@ -138,6 +138,26 @@ export class CommentsService {
         await comments.save();
         return;
       }
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //This function update a comment.
+  public async updateComment(body: UpdateCommentDTO, commentId: string): Promise<CommentInterface> {
+    try {
+      const comments = await this.postsModel.findOne({ comments: { $elemMatch: { _id: commentId } } });
+      //If the comment is not found, throw an error.
+      if (!comments) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Comment with ID: ${commentId} not found`,
+        });
+      }
+      //If the comment is found, find the comment and update it.
+      const comment = comments.comments.find((c) => c._id.toString() === commentId);
+      comment.comment = body.comment;
+      await comments.save();
+      return comment;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
