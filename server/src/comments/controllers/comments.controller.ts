@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res, Put } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Res, Put, Delete } from '@nestjs/common';
 import { Response } from 'express';
 import { CommentsService } from '../services/comments.service';
 import { CreateCommentDTO, UpdateCommentDTO } from '../dto/comments.dto';
@@ -74,6 +74,26 @@ export class CommentsController {
     return response.status(HttpStatus.OK).json({
       message: 'Comment has been updated successfully',
       updatedComment,
+    });
+  }
+  //method to delete a comment
+  @Delete('delete/:commentId')
+  public async deleteComment(@Res() response: Response, @Param('commentId', ParseObjectIdPipe) commentId: string) {
+    await this.commentsService.deleteComment(commentId);
+    return response.status(HttpStatus.OK).json({
+      message: 'Comment has been deleted successfully',
+    });
+  }
+  //method to update a reply
+  @Put('reply-update/:replyId')
+  public async updateReply(
+    @Res() response: Response,
+    @Body() body: UpdateCommentDTO,
+    @Param('replyId', ParseObjectIdPipe) replyId: string,
+  ) {
+    await this.commentsService.updateReplyComment(body, replyId);
+    return response.status(HttpStatus.OK).json({
+      message: 'Reply has been updated successfully',
     });
   }
 }
