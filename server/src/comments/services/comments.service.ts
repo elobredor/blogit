@@ -201,4 +201,22 @@ export class CommentsService {
     await comments.save();
     return;
   }
+  //This function delete a reply comment.
+  public async deleteReplyComment(replyId: string): Promise<ReplyCommentInterface> {
+    const comments = await this.postsModel.findOne({
+      comments: { $elemMatch: { replyComment: { $elemMatch: { _id: replyId } } } },
+    });
+    //If the comment is not found, throw an error.
+    if (!comments) {
+      throw new ErrorManager({
+        type: 'NOT_FOUND',
+        message: `Comment with ID: ${replyId} not found`,
+      });
+    }
+    //If the comment is found, find the comment and update it.
+    const replyComment = comments.comments.find((c) => c.replyComment.find((r) => r._id.toString() === replyId));
+    replyComment.replyComment = replyComment.replyComment.filter((r) => r._id.toString() !== replyId);
+    await comments.save();
+    return;
+  }
 }

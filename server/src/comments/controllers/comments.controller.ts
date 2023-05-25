@@ -96,4 +96,12 @@ export class CommentsController {
       message: 'Reply has been updated successfully',
     });
   }
+  //method to delete a reply
+  @Delete('reply-delete/:replyId')
+  public async deleteReply(@Res() response: Response, @Param('replyId', ParseObjectIdPipe) replyId: string) {
+    await this.commentsService.deleteReplyComment(replyId);
+    return response.status(HttpStatus.OK).json({
+      message: 'Reply comment has been deleted successfully',
+    });
+  }
 }
