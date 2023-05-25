@@ -15,10 +15,10 @@ export class UsersService {
     try {
       //check if user already exist
       const userExist = await this.userModel.findOne({ email });
-      if (userExist) {
+      if (userExist || userExist.userId.toString() === body.userId) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
-          message: 'User already exist',
+          message: `User with ${email} or ${body.userId} already exist`,
         });
       }
       const newUser = new this.userModel(body);
@@ -29,12 +29,12 @@ export class UsersService {
   }
   //This function finds and returns a user by their ID.
   public async findOne(userId: string): Promise<UserInterface> {
-    console.log(userId);
     try {
       const user = await this.userModel.aggregate([
         {
           $match: {
             userId: userId,
+            status: 1,
           },
         },
         {
@@ -120,14 +120,14 @@ export class UsersService {
   //function to update user
   public async updateUser(userId: string, body: UserUpdateDTO): Promise<UserInterface> {
     try {
-      const user = await this.userModel.findOneAndUpdate({ userId: userId }, body, { new: true });
+      const user = await this.userModel.findOneAndUpdate({ userId: userId }, body);
       if (!user) {
         throw new ErrorManager({
           type: 'NOT_FOUND',
           message: 'User not found',
         });
       }
-      return user;
+      return;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
