@@ -14,7 +14,13 @@ export const styles = StyleSheet.create({
   },
   authorView: {
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+  },
+  authorImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 30,
+    marginHorizontal: 8
   },
   authorName: {
     fontSize: 22,
@@ -46,7 +52,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     top: '70%',
     bottom: '8%',
-    right: '5%' ,
+    right: '5%',
     padding: '3%',
     alignItems: 'center',
     justifyContent: 'flex-end'

@@ -6,7 +6,7 @@ import {
   DETAILS_REJECTED,
   GET_DETAILS,
   SET_ARTICLE_LIKE,
-  LOG_TO_DB
+  LOG_TO_DB,
 } from "./actions";
 
 const initialState = {
@@ -14,13 +14,13 @@ const initialState = {
   blogs: [],
   articles: [],
   articles_fetch: {
-    status: 'idle',
-    error: null
+    status: "idle",
+    error: null,
   },
   details: {},
   details_fetch: {
-    status: 'idle',
-    error: null
+    status: "idle",
+    error: null,
   },
   loggedUser: {},
   logged: false,
@@ -31,51 +31,51 @@ export default function rootReducer(state = initialState, action) {
     case ARTICLES_PENDING:
       return {
         ...state,
-        articles_fetch: { status: 'loading', error: null }
+        articles_fetch: { status: "loading", error: null },
       };
     case ARTICLES_REJECTED:
       return {
         ...state,
-        articles_fetch: { status: 'rejected', error: action.payload }
+        articles_fetch: { status: "rejected", error: action.payload },
       };
     case GET_ARTICLES:
       return {
         ...state,
-        articles_fetch: { status: 'success', error: null },
-        articles: action.payload
+        articles_fetch: { status: "success", error: null },
+        articles: action.payload,
       };
     case DETAILS_PENDING:
       return {
         ...state,
-        details_fetch: { status: 'loading', error: null }
-      }
+        details_fetch: { status: "loading", error: null },
+      };
     case DETAILS_REJECTED:
       return {
         ...state,
-        details_fetch: { status: 'rejected', error: action.payload }
-      }
+        details_fetch: { status: "rejected", error: action.payload },
+      };
     case GET_DETAILS:
       return {
         ...state,
-        details_fetch: { status: 'success', error: null },
-        details: action.payload
-      }
+        details_fetch: { status: "success", error: null },
+        details: action.payload,
+      };
     case LOG_TO_DB:
       return {
         ...state,
         loggedUser: action.payload,
         logged: true,
-      }
+      };
     case SET_ARTICLE_LIKE:
       return {
         ...state,
         details: {
           ...state.details,
           postLikes: state.details.postLikes.includes(action.payload)
-            ? [...state.details.postLikes].filter(lk => lk !== action.payload)
-            : [...state.details.postLikes, action.payload]
-        }
-      }
+            ? [...state.details.postLikes].filter((lk) => lk !== action.payload)
+            : [...state.details.postLikes, action.payload],
+        },
+      };
     default:
       return { ...state };
   }

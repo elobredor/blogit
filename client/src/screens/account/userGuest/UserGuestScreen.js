@@ -9,7 +9,10 @@ const UserGuestScreen = () => {
 
   return (
     <View>
-      <Button onPress={() => dispatch(logToDb('aghgfsdfg8dfg7'))} title="Log in" />
+      <Button
+        onPress={() => dispatch(logToDb("abcdfg123456"))}
+        title="Log in"
+      />
     </View>
   );
 };

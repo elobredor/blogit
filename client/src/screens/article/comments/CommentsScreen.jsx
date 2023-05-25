@@ -13,6 +13,7 @@ import { iconsComments } from '../../../utils/iconOptions';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDetails } from '../../../redux/actions';
 import { timeLapse } from '../../../utils/timeLapse';
+import { MY_IP } from "react-native-dotenv";
 
 const replyInitialState = {
   status: false,
@@ -59,7 +60,7 @@ export default function CommentsScreen() {
       comment: articleComment,
     };
     setArticleComment('');
-    fetch('http://192.168.1.8:4000/api/comments/create', {
+    fetch(`http://${MY_IP}:4000/api/comments/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -78,7 +79,7 @@ export default function CommentsScreen() {
       userId: loggedUser._id,
       commentId
     }
-    fetch(`http://192.168.1.8:4000/api/comments/like/${_id}`, {
+    fetch(`http://${MY_IP}:4000/api/comments/like/${_id}`, {
       method: 'PUT',
       headers: {
         'Content-Type':'application/json'
@@ -98,7 +99,7 @@ export default function CommentsScreen() {
       replyCommentId
     };
 
-    fetch(`http://192.168.1.8:4000/api/comments/reply/like/${commentId}`, {
+    fetch(`http://${MY_IP}:4000/api/comments/reply/like/${commentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type':'application/json'
@@ -148,7 +149,7 @@ export default function CommentsScreen() {
       comment: reply,
     };
     setReplying(replyInitialState);
-    fetch(`http://192.168.1.8:4000/api/comments/reply/${replying.commentId}`, {
+    fetch(`http://${MY_IP}:4000/api/comments/reply/${replying.commentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
