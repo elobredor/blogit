@@ -190,29 +190,37 @@ export class UsersService {
   }
   //function to change status to user and his posts
   public async changeStatus(userId: string): Promise<UserInterface> {
-    const user = await this.userModel.findOneAndUpdate({ userId: userId }, { status: 0 });
-    if (!user) {
-      throw new ErrorManager({
-        type: 'NOT_FOUND',
-        message: 'User not found',
-      });
+    try {
+      const user = await this.userModel.findOneAndUpdate({ userId: userId }, { status: 0 });
+      if (!user) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'User not found',
+        });
+      }
+      const blog = await this.blogModel.findOne({ userId: user._id });
+      await this.postsModel.updateMany({ blogId: blog._id }, { $set: { status: 0 } });
+      return;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
     }
-    const blog = await this.blogModel.findOne({ userId: user._id });
-    await this.postsModel.updateMany({ blogId: blog._id }, { $set: { status: 0 } });
-    return;
   }
   //function to enable user and his posts
   public async enableUser(userId: string): Promise<UserInterface> {
-    const user = await this.userModel.findOneAndUpdate({ userId: userId }, { status: 1 });
-    console.log(user);
-    if (!user) {
-      throw new ErrorManager({
-        type: 'NOT_FOUND',
-        message: 'User not found',
-      });
+    try {
+      const user = await this.userModel.findOneAndUpdate({ userId: userId }, { status: 1 });
+      if (!user) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'User not found',
+        });
+      }
+      //enable posts
+      const blog = await this.blogModel.findOne({ userId: user._id });
+      await this.postsModel.updateMany({ blogId: blog._id }, { $set: { status: 1 } });
+      return;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
     }
-    const blog = await this.blogModel.findOne({ userId: user._id });
-    await this.postsModel.updateMany({ blogId: blog._id }, { $set: { status: 1 } });
-    return;
   }
 }
