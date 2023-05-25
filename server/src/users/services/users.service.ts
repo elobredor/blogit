@@ -135,20 +135,46 @@ export class UsersService {
   //function to save posts
   public async savePosts(userId: string, body: UserUpdateDTO): Promise<UserInterface> {
     try {
-      const user = await this.userModel.findOne({ userId });
+      let user: UserInterface;
+      //check if user exist
+      user = await this.userModel.findOne({ userId });
+      //if user not exist throw error
       if (!user) {
         throw new ErrorManager({
           type: 'NOT_FOUND',
           message: 'User not found',
         });
       }
-      if (user) {
-        const savedPost = user.saved.find((post) => post.title === body.title);
-        if (!savedPost.posts.includes(body.postId)) {
-          savedPost.posts.push(body.postId);
+
+      //check if post title is already exist in saved array
+      const savedPost = user.saved.some((post) => post.title === body.title);
+
+      if (!savedPost) {
+        //if post title is not exist in saved array then push postId in saved array
+        user = await this.userModel.findOneAndUpdate(
+          { userId: userId },
+          { $push: { saved: { title: body.title, posts: { postId: body.postId, images: body.images } } } },
+          { new: true },
+        );
+      } else {
+        //if post title is already exist, find the object
+        const postTitle = user.saved.find((post) => post.title === body.title);
+        if (!postTitle) {
+          throw new ErrorManager({
+            type: 'NOT_FOUND',
+            message: 'Post title not found',
+          });
+        }
+        //check if postId is already exist in posts array
+        const postId = postTitle.posts.some((post) => post.postId === body.postId);
+
+        if (!postId) {
+          //if postId is not exist in posts array then push postId in posts array
+          postTitle.posts.push({ postId: body.postId, images: body.images });
           await user.save();
         } else {
-          savedPost.posts = savedPost.posts.filter((id) => id.toString() !== body.postId);
+          //if postId is already exist in posts array then remove postId from posts array
+          postTitle.posts = postTitle.posts.filter((post) => post.postId.toString() !== body.postId);
           await user.save();
         }
       }
