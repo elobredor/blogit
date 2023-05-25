@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { PostsInterface } from 'src/interfaces/post.interface';
-import { CreatePostsDTO } from '../dto/posts.dto';
+import { CreatePostsDTO, CreateUpdatePostDTO } from '../dto/posts.dto';
 import { ErrorManager } from 'src/utils/error.manager';
 import { BlogInterface } from 'src/interfaces/blog.interface';
 import { CreatePostsLikesDTO } from '../dto/postLikes.dto';
@@ -216,6 +216,22 @@ export class PostsService {
   public async enablePost(postId: string): Promise<PostsInterface> {
     try {
       const post = await this.postsModel.findOneAndUpdate({ _id: postId }, { status: 1 });
+      //If the post is not found, throw an error.
+      if (!post) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Post with ID: ${postId} not found`,
+        });
+      }
+      return;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //function to update post
+  public async updatePost(postId: string, body: CreateUpdatePostDTO): Promise<PostsInterface> {
+    try {
+      const post = await this.postsModel.findByIdAndUpdate({ _id: postId }, body);
       //If the post is not found, throw an error.
       if (!post) {
         throw new ErrorManager({

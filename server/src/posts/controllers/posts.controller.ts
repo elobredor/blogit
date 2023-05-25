@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { PostsService } from '../services/posts.service';
-import { CreatePostsDTO } from '../dto/posts.dto';
+import { CreatePostsDTO, CreateUpdatePostDTO } from '../dto/posts.dto';
 import { ParseObjectIdPipe } from 'src/utils/parse-object-id-pipe.pipe';
 import { CreatePostsLikesDTO } from '../dto/postLikes.dto';
 
@@ -67,6 +67,18 @@ export class PostsController {
     await this.postsService.enablePost(postId);
     return response.status(HttpStatus.OK).json({
       message: 'Post has been enabled successfully',
+    });
+  }
+  //method to update a post
+  @Put('update/:postId')
+  public async updatePost(
+    @Res() response: Response,
+    @Param('postId', ParseObjectIdPipe) postId: string,
+    @Body() body: CreateUpdatePostDTO,
+  ) {
+    await this.postsService.updatePost(postId, body);
+    return response.status(HttpStatus.OK).json({
+      message: 'Post has been updated successfully',
     });
   }
 }
