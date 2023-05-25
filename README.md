@@ -161,3 +161,28 @@ Blog Site App orientada al sector IT.
     "title": "test 404", //nombre de la carpeta
     "images": "imagen.com" //url de la imagen
     }
+
+## actualizar un usuario
+
+#### PUT
+
+    http://localhost:4000/api/users/update/:userId //el id de Auth0
+    {
+    "userName": "John Doe", //solo si se va a cambiar este campo
+    "profileImage": "http://imagen.com", //solo si se va a cambiar este campo
+    "about": "about me", //solo si se va a cambiar este campo
+    "socialNetwork1": "my social network", //solo si se va a cambiar este campo
+    "socialNetwork2": "my other social network", //solo si se va a cambiar este campo
+    }
+
+## cambiar el status a 0 de un usuario y a todos sus posts
+
+#### PUT
+
+    http://localhost:4000/api/users/status/:userId //el id de Auth0
+
+## cambiar el status a 1 de un usuario y a todos sus posts
+
+#### PUT
+
+    http://localhost:4000/api/users/enable/:userId //el id de Auth0
