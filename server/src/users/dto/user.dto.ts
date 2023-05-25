@@ -23,9 +23,13 @@ class SavedPostDto {
   postId: string;
 
   @IsOptional()
+  @IsString()
+  images: string;
+
+  @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  posts: string[];
+  posts: object[];
 }
 
 export class CreateUserDto {
@@ -136,6 +140,11 @@ export class UserUpdateDTO {
   @MaxLength(300)
   @IsOptional()
   title: string;
+
+  @IsString()
+  @MaxLength(300)
+  @IsOptional()
+  images: string;
 
   @IsOptional()
   @IsArray()
