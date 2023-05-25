@@ -11,6 +11,9 @@ export class ReplyComment {
   userName: string;
 
   @Prop({ required: true })
+  profileImage: string;
+
+  @Prop({ required: true })
   comment: string;
 
   @Prop({ default: Date.now })

@@ -6,6 +6,7 @@ export interface CommentInterface extends Document {
   postId: string;
   userId: string;
   userName: string;
+  profileImage: string;
   comment: string;
   commentLikes: string[];
   createdAt: Date;

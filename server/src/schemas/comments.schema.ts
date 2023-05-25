@@ -16,7 +16,10 @@ export class Comment {
   userName: string;
 
   @Prop({ required: true })
-  readonly comment: string;
+  profileImage: string;
+
+  @Prop({ required: true })
+  comment: string;
 
   @Prop({ default: Date.now })
   createdAt: Date;

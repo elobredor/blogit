@@ -10,6 +10,10 @@ export class CreateReplyCommentDTO {
   userName: string;
 
   @IsString()
+  @MaxLength(250)
+  profileImage: string;
+
+  @IsString()
   @MaxLength(1000)
   comment: string;
 }

@@ -36,7 +36,7 @@ export class CommentsService {
   public async getComments(postId: string): Promise<CommentInterface[]> {
     try {
       const post = await this.postsModel.findById(postId);
-      console.log(post);
+
       //If the user is not found, throw an error.
       if (!post) {
         throw new ErrorManager({
