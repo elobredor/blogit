@@ -218,3 +218,18 @@ Blog Site App orientada al sector IT.
     {
     "comment": "comment updated",
     }
+
+## eliminar un comentario
+
+#### DELETE
+
+    http://localhost:4000/api/comments/delete/:commentId //el _id de mongoDB
+
+## actualizar una respuesta a un comentario
+
+#### PUT
+
+    http://localhost:4000/api/comments/reply-update/:replyId //el _id de un replyComment de mongoDB
+    {
+    "comment": "reply comment updated",
+    }
