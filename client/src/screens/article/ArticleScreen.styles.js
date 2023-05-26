@@ -1,5 +1,27 @@
 import { StyleSheet } from 'react-native';
 
+export const tagsStyles = {
+  h1: {
+    fontSize: '32px',
+    fontWeight: 'bold',
+  },
+  h2: {
+    fontSize: '26px',
+    fontWeight: 'bold',
+  },
+  p: {
+    lineHeight: '2.4rem',
+    fontSize: '22px',
+  },
+  li: {
+    lineHeight: '2rem',
+    fontSize: '22px',
+  },
+  code: {
+    fontSize: '20px'
+  }
+};
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
