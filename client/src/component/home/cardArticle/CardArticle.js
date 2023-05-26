@@ -66,7 +66,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
       <View style={styles.card}>
         <ImageBackground
           source={{
-            uri: item.images[0],
+            uri: item.images,
           }}
           imageStyle={{ borderRadius: 25 }}
         >

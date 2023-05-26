@@ -133,7 +133,7 @@ export default function ArticleScreen({ route }) {
         <ScrollView style={styles.container}>
           <View style={styles.imageView}>
             <ImageBackground
-              source={{ uri: article.images[0] }}
+              source={{ uri: article.images }}
               imageStyle={{ borderRadius: 10, height: 180 }}
             ></ImageBackground>
           </View>
