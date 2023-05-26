@@ -8,7 +8,9 @@ import { useNavigation } from "@react-navigation/native";
 
 const SavedScreen = () => {
   const [modalVisibility, setModalVisibility] = useState(false);
-  const hasLogged = useSelector((state) => state.logged ? state.loggedUser : false);
+  const hasLogged = useSelector((state) =>
+    state.logged ? state.loggedUser : false
+  );
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -32,7 +34,10 @@ const SavedScreen = () => {
         />
       ) : (
         <View>
-          <ModalLogin modalVisibility={modalVisibility} setModalVisibility={setModalVisibility}/>
+          <ModalLogin
+            modalVisibility={modalVisibility}
+            setModalVisibility={setModalVisibility}
+          />
         </View>
       )}
     </View>

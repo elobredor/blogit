@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import { styles } from "./cardArticleStyles";
 import { iconsCard } from "client/src/utils/iconOptions.js";
@@ -15,31 +16,28 @@ import { MY_IP } from "react-native-dotenv";
 
 const CardArticle = ({ item, setModalVisibility }) => {
   const [favorite, setFavorite] = useState();
-  const [saved, setSaved] = useState(false)
+  const [saved, setSaved] = useState(false);
   const hasLogged = useSelector((state) =>
     state.logged ? state.loggedUser : false
   );
   const dispatch = useDispatch();
 
   const navigation = useNavigation();
-
   useEffect(() => {
-    if (hasLogged !== false) {
-      let answer = false;
-      [...hasLogged.saved].forEach(folder => {
-        if (folder.posts.includes(item._id)) {
-          answer = true
-        }
-      });
+    if (hasLogged) {
+      const answer = hasLogged.saved.some((folder) =>
+        folder.posts.some((post) => post.postId === item._id)
+      );
       setSaved(answer);
     }
-  }, [hasLogged])
+  }, [hasLogged]);
 
   //agregar guardados
   const savedArticle = (id) => {
     const savedBody = {
       postId: id,
       title: "Leer más tarde",
+      images: item.images,
     };
 
     fetch(`http://${MY_IP}:4000/api/users/saved/${hasLogged.userId}`, {
@@ -66,7 +64,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
       <View style={styles.card}>
         <ImageBackground
           source={{
-            uri: item.images[0],
+            uri: item.images,
           }}
           imageStyle={{ borderRadius: 25 }}
         >
@@ -78,17 +76,32 @@ const CardArticle = ({ item, setModalVisibility }) => {
 
               <View>
                 <Text style={styles.title}>{item.title}</Text>
-
-                <Text
+                <View
                   style={{
-                    color: "white",
-                    fontSize: 16,
+                    flexDirection: "row",
+                    alignItems: "center",
                   }}
                 >
-                  {iconsCard.account.focused}
-
-                  {item.userName}
-                </Text>
+                  <Image
+                    source={{ uri: item.profileImage }}
+                    style={{
+                      width: 35,
+                      height: 35,
+                      marginRight: 8,
+                      borderRadius: 50,
+                      borderWidth: 1,
+                      borderColor: "white",
+                    }}
+                  />
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: 16,
+                    }}
+                  >
+                    {item.userName}
+                  </Text>
+                </View>
               </View>
             </View>
 

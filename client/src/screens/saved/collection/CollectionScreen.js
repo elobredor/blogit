@@ -17,8 +17,9 @@ import { getArticles } from "../../../redux/actions";
 //pedir el artículo en get all page
 
 const CollectionScreen = ({ route }) => {
-  const ids = route.params;
-  console.log(ids);
+  const data = route.params;
+
+  const ids = data.map((obj) => obj.postId);
 
   const [board, setBoard] = useState([]);
 
