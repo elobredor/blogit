@@ -6,6 +6,7 @@ import {
   DETAILS_REJECTED,
   GET_DETAILS,
   SET_ARTICLE_LIKE,
+  SET_ARTICLE_LIKE2,
   LOG_TO_DB,
 } from "./actions";
 
@@ -76,6 +77,32 @@ export default function rootReducer(state = initialState, action) {
             : [...state.details.postLikes, action.payload],
         },
       };
+    case SET_ARTICLE_LIKE2:
+      const { userId, articleId } = action.payload;
+      return {
+        ...state,
+        articles: state.articles.map((art) => {
+          if (art._id === articleId) {
+            // Validar si el userId ya existe en postLikes
+            if (art.postLikes.includes(userId)) {
+              // Devolver el artículo sin el userId
+              return {
+                ...art,
+                postLikes: art.postLikes.filter((id) => id !== userId),
+              };
+            } else {
+              // Devolver el artículo con el userId agregado
+              return {
+                ...art,
+                postLikes: [...art.postLikes, userId],
+              };
+            }
+          }
+          // Mantener el resto de los artículos sin cambios
+          return art;
+        }),
+      };
+
     default:
       return { ...state };
   }

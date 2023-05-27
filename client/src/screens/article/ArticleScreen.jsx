@@ -6,7 +6,7 @@ import {
   ImageBackground,
   TouchableWithoutFeedback,
   Dimensions,
-  Image
+  Image,
 } from "react-native";
 import { MY_IP } from "react-native-dotenv";
 import { ModalLogin } from "../../component/shared/ModalLogin.jsx";
@@ -99,7 +99,10 @@ export default function ArticleScreen({ route }) {
       <>
         <View style={styles.headerView}>
           <View style={styles.authorView}>
-            <Image source={{ uri: article.profileImage }} style={styles.authorImage}/>
+            <Image
+              source={{ uri: article.profileImage }}
+              style={styles.authorImage}
+            />
             <View>
               <Text style={styles.authorName}>{article.userName}</Text>
               <Text style={styles.timeDate}>
@@ -142,7 +145,10 @@ export default function ArticleScreen({ route }) {
             source={{ html: article.content }}
           />
         </ScrollView>
-        <ModalLogin modalVisibility={modalVisibility} setModalVisibility={setModalVisibility} />
+        <ModalLogin
+          modalVisibility={modalVisibility}
+          setModalVisibility={setModalVisibility}
+        />
       </>
     );
 }
