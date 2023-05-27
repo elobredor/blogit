@@ -13,12 +13,18 @@ import { ModalLogin } from '../../component/shared/ModalLogin.jsx';
 import { iconsArticle } from 'client/src/utils/iconOptions.js';
 import { styles, tagsStyles } from './ArticleScreen.styles';
 import { useNavigation } from '@react-navigation/native';
-import RenderHtml from 'react-native-render-html';
+import RenderHtml, { defaultSystemFonts } from 'react-native-render-html';
 import { formatDate, setReadingTime } from '../../utils/formatData';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDetails, setArticleLike } from '../../redux/actions';
+import { useFonts, JosefinSans_500Medium, JosefinSans_700Bold } from '@expo-google-fonts/josefin-sans';
+const systemFonts = [...defaultSystemFonts, 'JosefinSans_500Medium', 'JosefinSans_700Bold'];
 
 export default function ArticleScreen({ route }) {
+  let [fontsLoaded] = useFonts({
+    JosefinSans_500Medium,
+    JosefinSans_700Bold
+  });
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [favorite, setFavorite] = useState(false);
@@ -69,7 +75,7 @@ export default function ArticleScreen({ route }) {
     }
   };
 
-  if (fetchStatus.status === 'loading')
+  if (fetchStatus.status === 'loading' || !fontsLoaded)
     return (
       <View
         style={{
@@ -137,13 +143,14 @@ export default function ArticleScreen({ route }) {
           <View style={styles.imageView}>
             <ImageBackground
               source={{ uri: article.images }}
-              imageStyle={{ borderRadius: 10, height: 180 }}
+              imageStyle={{ borderRadius: 10, height: 156 }}
             ></ImageBackground>
           </View>
           <RenderHtml
             contentWidth={Dimensions.get('window').width}
             source={{ html: article.content }}
             tagsStyles={tagsStyles}
+            systemFonts={systemFonts}
           />
         </ScrollView>
         <ModalLogin

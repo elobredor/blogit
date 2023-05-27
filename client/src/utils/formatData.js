@@ -22,7 +22,7 @@ export const formatDate = (date) => {
 }
 
 export const setReadingTime = (words) => {
-  const readingTime = `Tiempo de lectura: ${Math.ceil(words.split(' ').length / 100)} min`;
+  const readingTime = `${Math.ceil(words.split(' ').length / 100)} min de lectura`;
   return readingTime;
 }
 
