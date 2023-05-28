@@ -49,6 +49,11 @@ const CardArticle = ({ item, setModalVisibility }) => {
     })
       .then((res) => {
         if (res.ok) {
+          console.log(
+            "te gustó esa mondá, para ser especifico el artículo con id: " +
+              item._id
+          );
+          // necesito mandar el id del articulo que fue cambiado
           dispatch(setArticleLike2(hasLogged._id, item._id));
         } else {
           throw new Error("ha habido un error");
