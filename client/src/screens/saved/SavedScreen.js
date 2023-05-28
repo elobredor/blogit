@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, FlatList, Button } from "react-native";
+import { View, FlatList } from "react-native";
 import { styles } from "./savedScreen.styles";
 import { ModalLogin } from "../../component/shared/ModalLogin";
 import BoardSaved from "../../component/saved/BoardSaved.js";

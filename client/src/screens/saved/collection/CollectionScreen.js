@@ -7,18 +7,14 @@ import { styles } from "./collectionStyles";
 
 const CollectionScreen = ({ route }) => {
   const data = route.params;
-
   const ids = data.map((obj) => obj.postId);
-
   const [board, setBoard] = useState([]);
-
-  const articles = useSelector((state) =>
-    state.articles.filter((art) => ids.includes(art._id))
-  );
+  const articles = useSelector((state) => state.articles);
+  const savedArticles = articles.filter((obj) => ids.includes(obj._id));
 
   useEffect(() => {
-    setBoard(articles);
-  }, []);
+    setBoard(savedArticles);
+  }, [articles]);
 
   return (
     <View style={styles.colecctionContainer}>

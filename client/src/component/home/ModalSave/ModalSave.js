@@ -17,7 +17,9 @@ const ModalSave = ({ alert, setAlert }) => {
       <View style={styles.modalBack}>
         <View style={styles.modalFront}>
           <Text>Guardado en Leer más tarde</Text>
-          <Text>Colecciones</Text>
+          <Text onPress={() => navigation.navigate("savedTab")}>
+            Colecciones
+          </Text>
         </View>
       </View>
     </Modal>
