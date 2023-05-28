@@ -7,8 +7,9 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 10,
     padding: 10,
-    width: 340,
+    width: 365,
   },
+  //prev articles
   boardTitle: { fontWeight: "500", fontSize: 20 },
   prevContainer: {
     flexDirection: "row",
@@ -16,6 +17,6 @@ export const styles = StyleSheet.create({
     marginTop: 20,
   },
   textEmpty: { marginTop: 50, fontSize: 22, textAlign: "center" },
-  prevArticle: { height: 100, width: 155 },
+  prevArticle: { height: 100, width: 170 },
 });
 export default styles;
