@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   ScrollView,
   View,
@@ -6,24 +6,32 @@ import {
   ImageBackground,
   TouchableWithoutFeedback,
   Dimensions,
-  Image,,
-} from 'react-native';
-import { MY_IP } from 'react-native-dotenv';
-import { ModalLogin } from '../../component/shared/ModalLogin.jsx';
-import { iconsArticle } from 'client/src/utils/iconOptions.js';
-import { styles, tagsStyles } from './ArticleScreen.styles';
-import { useNavigation } from '@react-navigation/native';
-import RenderHtml, { defaultSystemFonts } from 'react-native-render-html';
-import { formatDate, setReadingTime } from '../../utils/formatData';
-import { useSelector, useDispatch } from 'react-redux';
-import { getDetails, setArticleLike, getArticles } from '../../redux/actions';
-import { useFonts, JosefinSans_500Medium, JosefinSans_700Bold } from '@expo-google-fonts/josefin-sans';
-const systemFonts = [...defaultSystemFonts, 'JosefinSans_500Medium', 'JosefinSans_700Bold'];
+  Image,
+} from "react-native";
+import { MY_IP } from "react-native-dotenv";
+import { ModalLogin } from "../../component/shared/ModalLogin.jsx";
+import { iconsArticle } from "client/src/utils/iconOptions.js";
+import { styles, tagsStyles } from "./ArticleScreen.styles";
+import { useNavigation } from "@react-navigation/native";
+import RenderHtml, { defaultSystemFonts } from "react-native-render-html";
+import { formatDate, setReadingTime } from "../../utils/formatData";
+import { useSelector, useDispatch } from "react-redux";
+import { getDetails, setArticleLike, getArticles } from "../../redux/actions";
+import {
+  useFonts,
+  JosefinSans_500Medium,
+  JosefinSans_700Bold,
+} from "@expo-google-fonts/josefin-sans";
+const systemFonts = [
+  ...defaultSystemFonts,
+  "JosefinSans_500Medium",
+  "JosefinSans_700Bold",
+];
 
 export default function ArticleScreen({ route }) {
   let [fontsLoaded] = useFonts({
     JosefinSans_500Medium,
-    JosefinSans_700Bold
+    JosefinSans_700Bold,
   });
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -44,12 +52,12 @@ export default function ArticleScreen({ route }) {
     if (!loggedUser) {
       setModalVisibility(true);
     } else {
-      navigation.navigate('comments');
+      navigation.navigate("comments");
     }
   };
 
   useEffect(() => {
-    if (fetchStatus.status === 'success' && loggedUser) {
+    if (fetchStatus.status === "success" && loggedUser) {
       if (article.postLikes.includes(loggedUser._id)) {
         setFavorite(true);
       } else {
@@ -64,9 +72,9 @@ export default function ArticleScreen({ route }) {
     } else {
       const body = { userId: loggedUser._id };
       fetch(`http://${MY_IP}:4000/api/posts/like/${article._id}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
       }).then((res) => {
@@ -78,32 +86,32 @@ export default function ArticleScreen({ route }) {
     }
   };
 
-  if (fetchStatus.status === 'loading' || !fontsLoaded)
+  if (fetchStatus.status === "loading" || !fontsLoaded)
     return (
       <View
         style={{
           paddingTop: 150,
-          backgroundColor: '#eee',
-          alignItems: 'center',
+          backgroundColor: "#eee",
+          alignItems: "center",
           flex: 1,
         }}
       ></View>
     );
-  if (fetchStatus.status === 'rejected')
+  if (fetchStatus.status === "rejected")
     return (
       <View
         style={{
-          backgroundColor: '#eee',
-          justifyContent: 'center',
-          alignItems: 'center',
+          backgroundColor: "#eee",
+          justifyContent: "center",
+          alignItems: "center",
           flex: 1,
         }}
       >
-        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Error:</Text>
+        <Text style={{ fontSize: 30, fontWeight: "bold" }}>Error:</Text>
         <Text style={{ fontSize: 30 }}>{fetchStatus.error}</Text>
       </View>
     );
-  if (fetchStatus.status === 'success')
+  if (fetchStatus.status === "success")
     return (
       <>
         <View style={styles.headerView}>
@@ -123,13 +131,13 @@ export default function ArticleScreen({ route }) {
             </View>
           </View>
           <View style={styles.icons}>
-            <View style={{ flexDirection: 'row', gap: 2 }}>
+            <View style={{ flexDirection: "row", gap: 2 }}>
               <TouchableWithoutFeedback onPress={handleNavigateToComments}>
                 {iconsArticle.comment}
               </TouchableWithoutFeedback>
               <Text>{article.comments.length}</Text>
             </View>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: "row" }}>
               <TouchableWithoutFeedback onPress={handleFavorite}>
                 {!favorite
                   ? iconsArticle.heart.empty
@@ -150,7 +158,7 @@ export default function ArticleScreen({ route }) {
             ></ImageBackground>
           </View>
           <RenderHtml
-            contentWidth={Dimensions.get('window').width}
+            contentWidth={Dimensions.get("window").width}
             source={{ html: article.content }}
             tagsStyles={tagsStyles}
             systemFonts={systemFonts}
