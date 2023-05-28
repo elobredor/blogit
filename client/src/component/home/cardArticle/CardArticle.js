@@ -5,17 +5,20 @@ import {
   TouchableOpacity,
   ImageBackground,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import { styles } from "./cardArticleStyles";
 import { iconsCard } from "client/src/utils/iconOptions.js";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
-import { logToDb } from "../../../redux/actions";
+import { logToDb, setArticleLike2 } from "../../../redux/actions";
 import { MY_IP } from "react-native-dotenv";
+import ModalSave from "../ModalSave/ModalSave";
 
 const CardArticle = ({ item, setModalVisibility }) => {
   const [favorite, setFavorite] = useState();
-  const [saved, setSaved] = useState(false)
+  const [saved, setSaved] = useState(false);
+  const [alert, setAlert] = useState(false);
   const hasLogged = useSelector((state) =>
     state.logged ? state.loggedUser : false
   );
@@ -24,22 +27,50 @@ const CardArticle = ({ item, setModalVisibility }) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (hasLogged !== false) {
-      let answer = false;
-      [...hasLogged.saved].forEach(folder => {
-        if (folder.posts.includes(item._id)) {
-          answer = true
+    if (item.postLikes.includes(hasLogged._id)) {
+      setFavorite(true);
+    } else {
+      setFavorite(false);
+    }
+  }, [hasLogged, item.postLikes]);
+
+  //agregarLike
+  const favoriteArticle = () => {
+    const favoriteBody = {
+      userId: hasLogged._id,
+    };
+
+    fetch(`http://${MY_IP}:4000/api/posts/like/${item._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(favoriteBody),
+    })
+      .then((res) => {
+        if (res.ok) {
+          dispatch(setArticleLike2(hasLogged._id, item._id));
+        } else {
+          throw new Error("ha habido un error");
         }
-      });
+      })
+      .catch((err) => console.error(err));
+  };
+
+  useEffect(() => {
+    if (hasLogged) {
+      const answer = hasLogged.saved.some((folder) =>
+        folder.posts.some((post) => post.postId === item._id)
+      );
       setSaved(answer);
     }
-  }, [hasLogged])
-
+  }, [hasLogged]);
   //agregar guardados
-  const savedArticle = (id) => {
+  const savedArticle = () => {
     const savedBody = {
-      postId: id,
+      postId: item._id,
       title: "Leer más tarde",
+      images: item.images,
     };
 
     fetch(`http://${MY_IP}:4000/api/users/saved/${hasLogged.userId}`, {
@@ -57,73 +88,69 @@ const CardArticle = ({ item, setModalVisibility }) => {
         }
       })
       .catch((err) => console.error(err));
+
+    if (saved === false) {
+      setAlert(true);
+    }
   };
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("article", item._id)}
-    >
-      <View style={styles.card}>
-        <ImageBackground
-          source={{
-            uri: item.images,
-          }}
-          imageStyle={{ borderRadius: 25 }}
-        >
-          <View style={styles.content}>
-            <View style={{ justifyContent: "space-between" }}>
-              <View style={{ flexDirection: "row", alignSelf: "flex-start" }}>
-                <Text style={styles.btnFilter}>{item.category}</Text>
+    <>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate("article", item._id)}
+      >
+        <View style={styles.card}>
+          <ImageBackground
+            source={{ uri: item.images }}
+            imageStyle={{ borderRadius: 25 }}
+          >
+            <View style={styles.content}>
+              <View style={{ justifyContent: "space-between" }}>
+                <View style={{ flexDirection: "row", alignSelf: "flex-start" }}>
+                  <Text style={styles.btnFilter}>{item.category}</Text>
+                </View>
+
+                <View>
+                  <Text style={styles.title}>{item.title}</Text>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Image
+                      source={{ uri: item.profileImage }}
+                      style={styles.profileImg}
+                    />
+                    <Text style={{ color: "white", fontSize: 16 }}>
+                      {item.userName}
+                    </Text>
+                  </View>
+                </View>
               </View>
 
-              <View>
-                <Text style={styles.title}>{item.title}</Text>
-
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 16,
-                  }}
+              <View style={styles.reactiveItems}>
+                <TouchableOpacity
+                  onPress={() =>
+                    hasLogged ? favoriteArticle() : setModalVisibility(true)
+                  }
+                  style={styles.favorite}
                 >
-                  {iconsCard.account.focused}
+                  {favorite ? iconsCard.heart.empty : iconsCard.heart.filled}
+                  <Text style={{ color: "white", fontSize: 18 }}>
+                    {item.postLikes.length}
+                  </Text>
+                </TouchableOpacity>
 
-                  {item.userName}
-                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    hasLogged ? savedArticle() : setModalVisibility(true)
+                  }
+                >
+                  {saved ? iconsCard.saved.filled : iconsCard.saved.empty}
+                </TouchableOpacity>
               </View>
             </View>
-
-            <View
-              style={{
-                justifyContent: "space-between",
-              }}
-            >
-              <TouchableOpacity
-                onPress={() =>
-                  hasLogged ? setFavorite(!favorite) : setModalVisibility(true)
-                }
-                style={{
-                  flexDirection: "row",
-                  gap: 5,
-                }}
-              >
-                {favorite ? iconsCard.heart.empty : iconsCard.heart.filled}
-                <Text style={{ color: "white", fontSize: 15, marginBottom: 4 }}>
-                  16
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() =>
-                  hasLogged ? savedArticle(item._id) : setModalVisibility(true)
-                }
-              >
-                {saved ? iconsCard.saved.filled : iconsCard.saved.empty}
-              </TouchableOpacity>
-            </View>
-          </View>
-        </ImageBackground>
-      </View>
-    </TouchableWithoutFeedback>
+          </ImageBackground>
+        </View>
+      </TouchableWithoutFeedback>
+      <ModalSave alert={alert} setAlert={setAlert} />
+    </>
   );
 };
 

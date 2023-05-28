@@ -1,41 +1,32 @@
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  ImageBackground,
-  TouchableWithoutFeedback,
-  StyleSheet,
-  FlatList,
-} from "react-native";
-import { iconsCard } from "../../../utils/iconOptions";
+import { Text, View, FlatList } from "react-native";
 import { useState, useEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
+
 import CardArticle from "../../../component/home/cardArticle/CardArticle";
-import { getArticles } from "../../../redux/actions";
-//obtener los id de los artículos guardados en default
-//pedir el artículo en get all page
+import { styles } from "./collectionStyles";
 
 const CollectionScreen = ({ route }) => {
-  const ids = route.params;
-  console.log(ids);
-
+  const data = route.params;
+  const ids = data.map((obj) => obj.postId);
   const [board, setBoard] = useState([]);
-
-  const articles = useSelector((state) =>
-    state.articles.filter((art) => ids.includes(art._id))
-  );
+  const articles = useSelector((state) => state.articles);
+  const savedArticles = articles.filter((obj) => ids.includes(obj._id));
 
   useEffect(() => {
-    setBoard(articles);
-  }, []);
+    setBoard(savedArticles);
+  }, [articles]);
 
   return (
-    <View>
-      <Text style={{ fontSize: 24 }}>Leer más tarde</Text>
-      <Text>Añade una descripción</Text>
+    <View style={styles.colecctionContainer}>
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>Leer más tarde</Text>
+        <Text styles={styles.descri}>
+          Artículos pendientes para revisar más tarde.
+        </Text>
+      </View>
 
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={board}
         renderItem={({ item }) => (
           <CardArticle
@@ -47,37 +38,5 @@ const CollectionScreen = ({ route }) => {
     </View>
   );
 };
-
-export const styles = StyleSheet.create({
-  card: {
-    borderRadius: 20,
-    marginBottom: 10,
-    elevation: 10,
-  },
-  content: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    minHeight: 170,
-    padding: 15,
-  },
-
-  title: {
-    fontSize: 20,
-    marginBottom: 6,
-    color: "white",
-    fontWeight: "bold",
-    maxWidth: "90%",
-  },
-  btnFilter: {
-    borderRadius: 8,
-    backgroundColor: "white",
-    fontSize: 15,
-    fontWeight: "500",
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-    textAlign: "center",
-    marginBottom: "15%",
-  },
-});
 
 export default CollectionScreen;

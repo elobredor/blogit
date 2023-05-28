@@ -6,6 +6,7 @@ import {
   DETAILS_REJECTED,
   GET_DETAILS,
   SET_ARTICLE_LIKE,
+  SET_ARTICLE_LIKE2,
   LOG_TO_DB,
 } from "./actions";
 
@@ -76,6 +77,23 @@ export default function rootReducer(state = initialState, action) {
             : [...state.details.postLikes, action.payload],
         },
       };
+    case SET_ARTICLE_LIKE2:
+      const { userId, articleId } = action.payload;
+      return {
+        ...state,
+        articles: state.articles.map((art) => {
+          if (art._id === articleId) {
+            return art.postLikes.includes(userId)
+              ? {
+                  ...art,
+                  postLikes: art.postLikes.filter((id) => id !== userId),
+                }
+              : { ...art, postLikes: [...art.postLikes, userId] };
+          }
+          return art;
+        }),
+      };
+
     default:
       return { ...state };
   }
