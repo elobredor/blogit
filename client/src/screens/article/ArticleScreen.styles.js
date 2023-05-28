@@ -1,5 +1,30 @@
 import { StyleSheet } from 'react-native';
 
+export const tagsStyles = {
+  h1: {
+    fontSize: '32px',
+    fontWeight: 'normal',
+    // fontFamily: 'JosefinSans_700Bold'
+  },
+  h2: {
+    fontSize: '26px',
+    fontWeight: 'normal',
+    // fontFamily: 'JosefinSans_700Bold'
+  },
+  p: {
+    lineHeight: '2.4rem',
+    fontSize: '22px',
+    // fontFamily: 'JosefinSans_500Medium'
+  },
+  li: {
+    lineHeight: '2rem',
+    fontSize: '22px',
+  },
+  code: {
+    fontSize: '15px'
+  }
+};
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -38,7 +63,7 @@ export const styles = StyleSheet.create({
     marginBottom: '5%'
   },
   imageView: {
-    height: 180,
+    height: 156,
     marginVertical: '5%'
   },
   imageIcon: {
