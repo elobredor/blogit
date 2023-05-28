@@ -16,7 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import RenderHtml from "react-native-render-html";
 import { formatDate, setReadingTime } from "../../utils/formatData";
 import { useSelector, useDispatch } from "react-redux";
-import { getDetails, setArticleLike } from "../../redux/actions";
+import { getDetails, setArticleLike, getArticles } from "../../redux/actions";
 
 export default function ArticleScreen({ route }) {
   const navigation = useNavigation();
@@ -64,7 +64,10 @@ export default function ArticleScreen({ route }) {
         },
         body: JSON.stringify(body),
       }).then((res) => {
-        if (res.ok) dispatch(setArticleLike(loggedUser._id));
+        if (res.ok) {
+          dispatch(setArticleLike(loggedUser._id));
+          dispatch(getArticles());
+        }
       });
     }
   };
