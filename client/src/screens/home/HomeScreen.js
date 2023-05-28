@@ -41,13 +41,10 @@ const HomeScreen = () => {
 
           <Text style={styles.logo}>BlogIT</Text>
         </View>
-
         <SearchBar />
-
         <Filters />
-
         <FlatList
-          data={articles}
+          data={/* sortArticles.length ? sortArticle :*/ articles}
           renderItem={({ item }) => (
             <CardArticle setModalVisibility={setModalVisibility} item={item} />
           )}

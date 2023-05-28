@@ -1,7 +1,7 @@
 import { Text, View, FlatList } from "react-native";
-
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
 import CardArticle from "../../../component/home/cardArticle/CardArticle";
 import { styles } from "./collectionStyles";
 
@@ -26,6 +26,7 @@ const CollectionScreen = ({ route }) => {
       </View>
 
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={board}
         renderItem={({ item }) => (
           <CardArticle

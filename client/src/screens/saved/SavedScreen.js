@@ -18,6 +18,7 @@ const SavedScreen = () => {
     <View style={styles.savedContainer}>
       {hasLogged !== false ? (
         <FlatList
+          showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item._id.toString()}
           data={hasLogged.saved}
           renderItem={({ item }) => <BoardSaved item={item} />}
