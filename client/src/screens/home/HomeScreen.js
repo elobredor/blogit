@@ -26,45 +26,20 @@ const HomeScreen = () => {
   return (
     <>
       <View style={styles.container}>
-        <View
-          style={{
-            marginTop: 40,
-            flexDirection: "row",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
+        <View style={styles.header}>
           {img === undefined ? (
             <TouchableOpacity
               onPress={() => !isLogged && setModalVisibility(true)}
-              style={{ marginLeft: 3 }}
             >
               {iconOptions.account.focused}
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity style={{ marginLeft: 3 }}>
-              <Image
-                source={{ uri: img }}
-                style={{
-                  width: 35,
-                  height: 35,
-
-                  borderRadius: 50,
-                  borderWidth: 1,
-                  borderColor: "white",
-                }}
-              />
+            <TouchableOpacity>
+              <Image source={{ uri: img }} style={styles.profilePh} />
             </TouchableOpacity>
           )}
 
-          <Text
-            style={{
-              fontSize: 26,
-              marginLeft: "33%",
-            }}
-          >
-            BlogIT
-          </Text>
+          <Text style={styles.logo}>BlogIT</Text>
         </View>
 
         <SearchBar />

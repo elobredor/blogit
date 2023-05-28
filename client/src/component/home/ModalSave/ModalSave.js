@@ -9,7 +9,7 @@ const ModalSave = ({ alert, setAlert }) => {
   useEffect(() => {
     setTimeout(() => {
       setAlert(false);
-    }, 2500);
+    }, 1500);
   }, [alert]);
 
   return (

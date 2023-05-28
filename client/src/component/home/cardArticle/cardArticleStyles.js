@@ -4,11 +4,12 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 10,
     elevation: 10,
+    minWidth: 365,
   },
   content: {
     flexDirection: "row",
     justifyContent: "space-between",
-    minHeight: 170,
+    minHeight: 190,
     padding: 15,
   },
 
@@ -17,7 +18,7 @@ export const styles = StyleSheet.create({
     marginBottom: 6,
     color: "white",
     fontWeight: "bold",
-    maxWidth: "90%",
+    maxWidth: 270,
   },
   btnFilter: {
     borderRadius: 8,
@@ -28,5 +29,22 @@ export const styles = StyleSheet.create({
     paddingVertical: 2,
     textAlign: "center",
     marginBottom: "15%",
+  },
+  profileImg: {
+    width: 35,
+    height: 35,
+    marginRight: 8,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: "white",
+  },
+  reactiveItems: {
+    justifyContent: "space-between",
+  },
+  favorite: {
+    flexDirection: "row",
+    gap: 5,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

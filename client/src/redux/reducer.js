@@ -83,22 +83,13 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         articles: state.articles.map((art) => {
           if (art._id === articleId) {
-            // Validar si el userId ya existe en postLikes
-            if (art.postLikes.includes(userId)) {
-              // Devolver el artículo sin el userId
-              return {
-                ...art,
-                postLikes: art.postLikes.filter((id) => id !== userId),
-              };
-            } else {
-              // Devolver el artículo con el userId agregado
-              return {
-                ...art,
-                postLikes: [...art.postLikes, userId],
-              };
-            }
+            return art.postLikes.includes(userId)
+              ? {
+                  ...art,
+                  postLikes: art.postLikes.filter((id) => id !== userId),
+                }
+              : { ...art, postLikes: [...art.postLikes, userId] };
           }
-          // Mantener el resto de los artículos sin cambios
           return art;
         }),
       };

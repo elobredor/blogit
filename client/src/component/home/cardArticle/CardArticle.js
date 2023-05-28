@@ -23,18 +23,8 @@ const CardArticle = ({ item, setModalVisibility }) => {
     state.logged ? state.loggedUser : false
   );
   const dispatch = useDispatch();
-  console.log(item._id);
-  console.log(item.postLikes);
 
   const navigation = useNavigation();
-  useEffect(() => {
-    if (hasLogged) {
-      const answer = hasLogged.saved.some((folder) =>
-        folder.posts.some((post) => post.postId === item._id)
-      );
-      setSaved(answer);
-    }
-  }, [hasLogged]);
 
   useEffect(() => {
     if (item.postLikes.includes(hasLogged._id)) {
@@ -50,7 +40,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
       userId: hasLogged._id,
     };
 
-    fetch(`http://${MY_IP}:4000/api/users/saved/${item._id}`, {
+    fetch(`http://${MY_IP}:4000/api/posts/like/${item._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -72,6 +62,14 @@ const CardArticle = ({ item, setModalVisibility }) => {
       .catch((err) => console.error(err));
   };
 
+  useEffect(() => {
+    if (hasLogged) {
+      const answer = hasLogged.saved.some((folder) =>
+        folder.posts.some((post) => post.postId === item._id)
+      );
+      setSaved(answer);
+    }
+  }, [hasLogged]);
   //agregar guardados
   const savedArticle = () => {
     const savedBody = {
@@ -108,9 +106,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
       >
         <View style={styles.card}>
           <ImageBackground
-            source={{
-              uri: item.images,
-            }}
+            source={{ uri: item.images }}
             imageStyle={{ borderRadius: 25 }}
           >
             <View style={styles.content}>
@@ -121,55 +117,27 @@ const CardArticle = ({ item, setModalVisibility }) => {
 
                 <View>
                   <Text style={styles.title}>{item.title}</Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Image
                       source={{ uri: item.profileImage }}
-                      style={{
-                        width: 35,
-                        height: 35,
-                        marginRight: 8,
-                        borderRadius: 50,
-                        borderWidth: 1,
-                        borderColor: "white",
-                      }}
+                      style={styles.profileImg}
                     />
-                    <Text
-                      style={{
-                        color: "white",
-                        fontSize: 16,
-                      }}
-                    >
+                    <Text style={{ color: "white", fontSize: 16 }}>
                       {item.userName}
                     </Text>
                   </View>
                 </View>
               </View>
 
-              <View
-                style={{
-                  justifyContent: "space-between",
-                }}
-              >
+              <View style={styles.reactiveItems}>
                 <TouchableOpacity
                   onPress={() =>
                     hasLogged ? favoriteArticle() : setModalVisibility(true)
                   }
-                  style={{
-                    flexDirection: "row",
-                    gap: 5,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
+                  style={styles.favorite}
                 >
                   {favorite ? iconsCard.heart.empty : iconsCard.heart.filled}
-                  <Text
-                    style={{ color: "white", fontSize: 18, marginBottom: 4 }}
-                  >
+                  <Text style={{ color: "white", fontSize: 18 }}>
                     {item.postLikes.length}
                   </Text>
                 </TouchableOpacity>

@@ -8,7 +8,7 @@ const SavedStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Guardados" component={SavedScreen} />
-      <Stack.Screen name="collection" component={CollectionScreen} />
+      <Stack.Screen name="Collection" component={CollectionScreen} />
     </Stack.Navigator>
   );
 };
