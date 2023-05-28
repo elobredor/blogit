@@ -4,10 +4,16 @@ import { Model } from 'mongoose';
 import { UserInterface } from 'src/interfaces/user.interface';
 import { CreateUserDto, UserUpdateDTO } from '../dto/user.dto';
 import { ErrorManager } from 'src/utils/error.manager';
+import { BlogInterface } from 'src/interfaces/blog.interface';
+import { PostsInterface } from 'src/interfaces/post.interface';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('users') private readonly userModel: Model<UserInterface>) {}
+  constructor(
+    @InjectModel('users') private readonly userModel: Model<UserInterface>,
+    @InjectModel('blogs') private readonly blogModel: Model<BlogInterface>,
+    @InjectModel('posts') private readonly postsModel: Model<PostsInterface>,
+  ) {}
 
   //This function creates a new user in a database using the provided data and returns the created user.
   async create(body: CreateUserDto): Promise<UserInterface> {
@@ -15,10 +21,10 @@ export class UsersService {
     try {
       //check if user already exist
       const userExist = await this.userModel.findOne({ email });
-      if (userExist) {
+      if (userExist || userExist.userId.toString() === body.userId) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
-          message: 'User already exist',
+          message: `User with ${email} or ${body.userId} already exist`,
         });
       }
       const newUser = new this.userModel(body);
@@ -29,7 +35,6 @@ export class UsersService {
   }
   //This function finds and returns a user by their ID.
   public async findOne(userId: string): Promise<UserInterface> {
-    console.log(userId);
     try {
       const user = await this.userModel.aggregate([
         {
@@ -120,14 +125,14 @@ export class UsersService {
   //function to update user
   public async updateUser(userId: string, body: UserUpdateDTO): Promise<UserInterface> {
     try {
-      const user = await this.userModel.findOneAndUpdate({ userId: userId }, body, { new: true });
+      const user = await this.userModel.findOneAndUpdate({ userId: userId }, body);
       if (!user) {
         throw new ErrorManager({
           type: 'NOT_FOUND',
           message: 'User not found',
         });
       }
-      return user;
+      return;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
@@ -179,6 +184,41 @@ export class UsersService {
         }
       }
       return user;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //function to change status to user and his posts
+  public async changeStatus(userId: string): Promise<UserInterface> {
+    try {
+      const user = await this.userModel.findOneAndUpdate({ userId: userId }, { status: 0 });
+      if (!user) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'User not found',
+        });
+      }
+      const blog = await this.blogModel.findOne({ userId: user._id });
+      await this.postsModel.updateMany({ blogId: blog._id }, { $set: { status: 0 } });
+      return;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //function to enable user and his posts
+  public async enableUser(userId: string): Promise<UserInterface> {
+    try {
+      const user = await this.userModel.findOneAndUpdate({ userId: userId }, { status: 1 });
+      if (!user) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'User not found',
+        });
+      }
+      //enable posts
+      const blog = await this.blogModel.findOne({ userId: user._id });
+      await this.postsModel.updateMany({ blogId: blog._id }, { $set: { status: 1 } });
+      return;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

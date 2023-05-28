@@ -1,11 +1,7 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Put, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto, UserUpdateDTO } from '../dto/user.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { PublicAccess } from 'src/auth/decorators/public.decorator';
-import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('users')
 //@UseGuards(AuthGuard, RolesGuard)
@@ -41,10 +37,9 @@ export class UsersController {
   //this is a method in NestJs controller that update a user
   @Put('update/:userId')
   public async updateUser(@Res() response: Response, @Param('userId') userId: string, @Body() body: UserUpdateDTO) {
-    const updatedUser = await this.usersService.updateUser(userId, body);
+    await this.usersService.updateUser(userId, body);
     return response.status(HttpStatus.OK).json({
       message: 'User has been successfully updated',
-      updatedUser,
     });
   }
   //method to save posts
@@ -54,6 +49,22 @@ export class UsersController {
     return response.status(HttpStatus.OK).json({
       message: 'Post has been successfully saved',
       savedPost,
+    });
+  }
+  //method to change status of user
+  @Put('status/:userId')
+  public async changeStatus(@Res() response: Response, @Param('userId') userId: string) {
+    await this.usersService.changeStatus(userId);
+    return response.status(HttpStatus.OK).json({
+      message: 'Status has been successfully changed',
+    });
+  }
+  //method to enable user
+  @Put('enable/:userId')
+  public async enableUser(@Res() response: Response, @Param('userId') userId: string) {
+    await this.usersService.enableUser(userId);
+    return response.status(HttpStatus.OK).json({
+      message: 'User has been successfully enabled',
     });
   }
 }
