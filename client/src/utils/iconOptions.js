@@ -11,6 +11,10 @@ export const iconOptions = {
     default: <Ionicons color={"grey"} size={24} name="home-outline" />,
     focused: <Ionicons color="black" size={24} name="home" />,
   },
+  search: {
+    default: <AntDesign name="search1" size={24} color="grey" />,
+    focused: <AntDesign name="search1" size={24} color="black" />
+  },
   saved: {
     default: (
       <MaterialCommunityIcons

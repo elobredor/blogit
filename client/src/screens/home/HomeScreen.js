@@ -1,7 +1,6 @@
 import { View, Text, FlatList, TouchableOpacity, Image } from "react-native";
 import Filters from "../../component/home/filtersHome/FiltersHome";
 import CardArticle from "../../component/home/cardArticle/CardArticle";
-import SearchBar from "../../component/home/searchBar/SearchBar";
 import { ModalLogin } from "../../component/shared/ModalLogin";
 import React, { useEffect, useState } from "react";
 import { styles } from "./homeScreen.styles";
@@ -41,7 +40,6 @@ const HomeScreen = () => {
 
           <Text style={styles.logo}>BlogIT</Text>
         </View>
-        <SearchBar />
         <Filters />
         <FlatList
           data={/* sortArticles.length ? sortArticle :*/ articles}

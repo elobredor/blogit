@@ -116,7 +116,6 @@ const CardArticle = ({ item, setModalVisibility }) => {
           >
             <LinearGradient
               colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.9)']}
-              // colors={['#fff', '#000']}
               start={[1, 0]}
               end={[1, 1]}
               locations={[0.1, 1]}
