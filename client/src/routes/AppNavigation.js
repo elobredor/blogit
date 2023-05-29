@@ -3,6 +3,7 @@ import { iconOptions } from '../utils/iconOptions';
 import HomeStack from './HomeStack';
 import NotificationStack from './NotificationStack';
 import SavedStack from './SavedStack';
+import { SearchStack } from './SearchStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,6 +24,15 @@ const AppNavigation = () => {
           title: 'Home',
           tabBarIcon: ({ focused }) =>
             focused ? iconOptions.home.focused : iconOptions.home.default,
+        }}
+      />
+      <Tab.Screen
+        name='searchTab'
+        component={SearchStack}
+        options={{
+          title: 'Search',
+          tabBarIcon: ({focused}) => 
+            focused ? iconOptions.search.focused : iconOptions.search.default,
         }}
       />
       <Tab.Screen
