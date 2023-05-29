@@ -4,15 +4,16 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 10,
     elevation: 10,
-    minWidth: 365,
+    width: 355,
+    overflow: 'hidden'
   },
   content: {
     flexDirection: "row",
     justifyContent: "space-between",
-    minHeight: 190,
-    padding: 15,
+    height: 156,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
   },
-
   title: {
     fontSize: 20,
     marginBottom: 6,
@@ -28,11 +29,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 2,
     textAlign: "center",
-    marginBottom: "15%",
   },
   profileImg: {
-    width: 35,
-    height: 35,
+    width: 30,
+    height: 30,
     marginRight: 8,
     borderRadius: 50,
     borderWidth: 1,

@@ -14,17 +14,27 @@ import { useSelector, useDispatch } from "react-redux";
 import { logToDb, setArticleLike2 } from "../../../redux/actions";
 import { MY_IP } from "react-native-dotenv";
 import ModalSave from "../ModalSave/ModalSave";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const CardArticle = ({ item, setModalVisibility }) => {
   const [favorite, setFavorite] = useState();
   const [saved, setSaved] = useState(false);
   const [alert, setAlert] = useState(false);
+  // const [imageSize, setImageSize] = useState({ width: null, height: null });
   const hasLogged = useSelector((state) =>
     state.logged ? state.loggedUser : false
   );
   const dispatch = useDispatch();
 
   const navigation = useNavigation();
+
+  // useEffect(() => {
+  //   const getImageSize = async () => {
+  //     const { width, height } = await Image.getSize(require('../../../../assets/atomo-save.png'));
+  //     setImageSize({ width, height });
+  //   };
+  //   getImageSize();
+  // }, []);
 
   useEffect(() => {
     if (item.postLikes.includes(hasLogged._id)) {
@@ -104,48 +114,58 @@ const CardArticle = ({ item, setModalVisibility }) => {
             source={{ uri: item.images }}
             imageStyle={{ borderRadius: 25 }}
           >
-            <View style={styles.content}>
-              <View style={{ justifyContent: "space-between" }}>
-                <View style={{ flexDirection: "row", alignSelf: "flex-start" }}>
-                  <Text style={styles.btnFilter}>{item.category}</Text>
-                </View>
+            <LinearGradient
+              colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.9)']}
+              // colors={['#fff', '#000']}
+              start={[1, 0]}
+              end={[1, 1]}
+              locations={[0.1, 1]}
+              style={{ flex: 1 }}
+            >
+              <View style={styles.content}>
+                <View style={{ justifyContent: "space-between" }}>
+                  <View style={{ flexDirection: "row", alignSelf: "flex-start" }}>
+                    <Text style={styles.btnFilter}>{item.category}</Text>
+                  </View>
 
-                <View>
-                  <Text style={styles.title}>{item.title}</Text>
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Image
-                      source={{ uri: item.profileImage }}
-                      style={styles.profileImg}
-                    />
-                    <Text style={{ color: "white", fontSize: 16 }}>
-                      {item.userName}
-                    </Text>
+                  <View>
+                    <Text style={styles.title}>{item.title}</Text>
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                      <Image
+                        source={{ uri: item.profileImage }}
+                        style={styles.profileImg}
+                      />
+                      <Text style={{ color: "white", fontSize: 16 }}>
+                        {item.userName}
+                      </Text>
+                    </View>
                   </View>
                 </View>
-              </View>
 
-              <View style={styles.reactiveItems}>
-                <TouchableOpacity
-                  onPress={() =>
-                    hasLogged ? favoriteArticle() : setModalVisibility(true)
-                  }
-                  style={styles.favorite}
-                >
-                  {favorite ? iconsCard.heart.empty : iconsCard.heart.filled}
-                  <Text style={{ color: "white", fontSize: 18 }}>
-                    {item.postLikes.length}
-                  </Text>
-                </TouchableOpacity>
+                <View style={styles.reactiveItems}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      hasLogged ? favoriteArticle() : setModalVisibility(true)
+                    }
+                    style={styles.favorite}
+                  >
+                    {favorite ? iconsCard.heart.empty : iconsCard.heart.filled}
+                    <Text style={{ color: "white", fontSize: 18 }}>
+                      {item.postLikes.length}
+                    </Text>
+                  </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={() =>
-                    hasLogged ? savedArticle() : setModalVisibility(true)
-                  }
-                >
-                  {saved ? iconsCard.saved.filled : iconsCard.saved.empty}
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      hasLogged ? savedArticle() : setModalVisibility(true)
+                    }
+                  >
+                    {/* {saved ? iconsCard.saved.filled : iconsCard.saved.empty} */}
+                    <Image source={require('../../../../assets/atomo-save.png')} style={{width: 25 , height: 25 }} />
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
+            </LinearGradient>
           </ImageBackground>
         </View>
       </TouchableWithoutFeedback>

@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     width: "100%",
-    paddingHorizontal: 10,
+    paddingHorizontal: 17,
   },
   header: {
     marginTop: 40,
