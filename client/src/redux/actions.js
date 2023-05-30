@@ -12,6 +12,7 @@ export const DETAILS_REJECTED = "DETAILS_REJECTED";
 export const SET_ARTICLE_LIKE = "SET_ARTICLE_LIKE";
 export const SET_ARTICLE_LIKE2 = "SET_ARTICLE_LIKE2";
 export const LOG_TO_DB = "LOG_TO_DB";
+export const GET_CATEGORY = "GET_CATEGORY";
 
 export const categoryBtn = () => {
   fetch(`http://${MY_IP}:4000/api/blogs/category/No Code`);
@@ -56,6 +57,9 @@ export const setArticleLike = (userId) => {
 
 export const setArticleLike2 = (userId, articleId) => {
   return { type: SET_ARTICLE_LIKE2, payload: { userId, articleId } };
+};
+export const getCategory = (category) => {
+  return { type: GET_CATEGORY, payload: category };
 };
 
 export const logToDb = (id) => (dispatch) => {

@@ -11,6 +11,7 @@ import { iconOptions } from "../../utils/iconOptions";
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const articles = useSelector((state) => state.articles);
+  const filtered = useSelector((state) => state.filtered);
   const isLogged = useSelector((state) => {
     state.logged;
   });
@@ -42,7 +43,7 @@ const HomeScreen = () => {
         </View>
         <Filters />
         <FlatList
-          data={/* sortArticles.length ? sortArticle :*/ articles}
+          data={filtered.length ? filtered : articles}
           renderItem={({ item }) => (
             <CardArticle setModalVisibility={setModalVisibility} item={item} />
           )}
