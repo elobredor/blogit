@@ -50,14 +50,17 @@ export const getDetails = (articleId) => (dispatch) => {
     );
 };
 
-// SET_ARTICLE_LIKE
+// SET_ARTICLE_LIKE(DETAILS)
 export const setArticleLike = (userId) => {
   return { type: SET_ARTICLE_LIKE, payload: userId };
 };
 
+// SET_ARTICLE_LIKE(HOME)
 export const setArticleLike2 = (userId, articleId) => {
   return { type: SET_ARTICLE_LIKE2, payload: { userId, articleId } };
 };
+
+// GET_CATEGORY
 export const getCategory = (category) => {
   return { type: GET_CATEGORY, payload: category };
 };
