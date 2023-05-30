@@ -8,12 +8,14 @@ import {
   SET_ARTICLE_LIKE,
   SET_ARTICLE_LIKE2,
   LOG_TO_DB,
+  GET_CATEGORY,
 } from "./actions";
 
 const initialState = {
   authors: [],
   blogs: [],
   articles: [],
+  filtered: [],
   articles_fetch: {
     status: "idle",
     error: null,
@@ -67,6 +69,22 @@ export default function rootReducer(state = initialState, action) {
         loggedUser: action.payload,
         logged: true,
       };
+    case GET_CATEGORY:
+      if (action.payload == "all") {
+        console.log(action.payload);
+        return {
+          ...state,
+          filtered: [],
+        };
+      }
+      console.log(action.payload);
+      return {
+        ...state,
+        filtered: [...state.articles].filter((obj) =>
+          action.payload.includes(obj.category)
+        ),
+      };
+
     case SET_ARTICLE_LIKE:
       return {
         ...state,

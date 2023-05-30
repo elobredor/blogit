@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logToDb, setArticleLike2 } from "../../../redux/actions";
 import { MY_IP } from "react-native-dotenv";
 import ModalSave from "../ModalSave/ModalSave";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 
 const CardArticle = ({ item, setModalVisibility }) => {
   const [favorite, setFavorite] = useState();
@@ -115,7 +115,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
             imageStyle={{ borderRadius: 25 }}
           >
             <LinearGradient
-              colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.9)']}
+              colors={["rgba(0,0,0,0.3)", "rgba(0,0,0,0.9)"]}
               start={[1, 0]}
               end={[1, 1]}
               locations={[0.1, 1]}
@@ -123,13 +123,17 @@ const CardArticle = ({ item, setModalVisibility }) => {
             >
               <View style={styles.content}>
                 <View style={{ justifyContent: "space-between" }}>
-                  <View style={{ flexDirection: "row", alignSelf: "flex-start" }}>
+                  <View
+                    style={{ flexDirection: "row", alignSelf: "flex-start" }}
+                  >
                     <Text style={styles.btnFilter}>{item.category}</Text>
                   </View>
 
                   <View>
                     <Text style={styles.title}>{item.title}</Text>
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <View
+                      style={{ flexDirection: "row", alignItems: "center" }}
+                    >
                       <Image
                         source={{ uri: item.profileImage }}
                         style={styles.profileImg}
@@ -159,8 +163,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
                       hasLogged ? savedArticle() : setModalVisibility(true)
                     }
                   >
-                    {/* {saved ? iconsCard.saved.filled : iconsCard.saved.empty} */}
-                    <Image source={require('../../../../assets/atomo-save.png')} style={{width: 25 , height: 25 }} />
+                    {saved ? iconsCard.saved.filled : iconsCard.saved.empty}
                   </TouchableOpacity>
                 </View>
               </View>
