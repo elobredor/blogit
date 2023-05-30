@@ -27,8 +27,10 @@ const HomeStack = () => {
         name="comments"
         component={CommentsScreen}
         options={{
-          headerTitle: () => null,
-          headerLeft: () => <ArticleHeader />
+          title: 'Comentarios',
+          headerTintColor: '#f5f5f5',
+          headerTitleStyle: { fontSize: 20 },
+          headerStyle: { backgroundColor: '#020123' },
         }}
       />
       <Stack.Screen

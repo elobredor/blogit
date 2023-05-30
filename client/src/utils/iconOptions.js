@@ -4,6 +4,7 @@ import {
   Ionicons,
   MaterialCommunityIcons,
   Fontisto,
+  FontAwesome5
 } from "@expo/vector-icons";
 
 export const iconOptions = {
@@ -102,11 +103,11 @@ export const iconsComments = {
     ),
   },
   heart: {
-    empty: <Ionicons name="heart-outline" size={24} color="black" />,
-    filled: <Ionicons name="heart" size={24} color="#c00" />,
+    empty: <Entypo name="heart-outlined" size={24} color="#f5f5f5" style={{marginTop: -2, marginRight: 6 }} />,
+    filled: <Entypo name="heart" size={24} color="#f5f5f5" style={{marginTop: -2, marginRight: 6 }} />,
   },
   comment: (
-    <Fontisto name="comment" size={20} color="black" style={{ marginTop: 3 }} />
+    <FontAwesome5 name="comment" size={20} color="#f5f5f5" style={{ marginRight: 6 }} />
   ),
   saved: {
     default: (
@@ -119,5 +120,5 @@ export const iconsComments = {
   ),
   plus: <Entypo name="plus" size={24} color="white" />,
   cross: <Entypo name="cross" size={24} color="white" />,
-  send: <MaterialCommunityIcons name="send-circle" size={40} color="#f05" />,
+  send: <MaterialCommunityIcons name="send-circle" size={30} color="#f05" />,
 };

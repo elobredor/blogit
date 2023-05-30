@@ -7,14 +7,15 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
-  Image
+  Image,
 } from 'react-native';
 import { styles } from './CommentsScreen.styles';
 import { iconsComments } from '../../../utils/iconOptions';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDetails } from '../../../redux/actions';
 import { timeLapse } from '../../../utils/timeLapse';
-import { MY_IP } from "react-native-dotenv";
+import { LinearGradient } from 'expo-linear-gradient';
+import { MY_IP } from 'react-native-dotenv';
 
 const replyInitialState = {
   status: false,
@@ -38,9 +39,7 @@ export default function CommentsScreen() {
 
   // INPUT_FOCUS
   useEffect(() => {
-    setTimeout(() => {
-      inputRef.current.focus();
-    }, 100);
+    inputRef.current.focus();
   }, []);
 
   // COMMENT_SCROLLING
@@ -50,7 +49,7 @@ export default function CommentsScreen() {
     }
   }, [comments]);
 
-  // HANDLE_COMMENT_INPUT
+  // HANDLE_COMMENT_CHANGE
   const handleArticleCommentChange = (text) => {
     setArticleComment(text);
   };
@@ -63,7 +62,7 @@ export default function CommentsScreen() {
       userId: loggedUser._id,
       userName: loggedUser.userName,
       comment: articleComment,
-      profileImage: loggedUser.profileImage
+      profileImage: loggedUser.profileImage,
     };
     setArticleComment('');
     fetch(`http://${MY_IP}:4000/api/comments/create`, {
@@ -84,18 +83,18 @@ export default function CommentsScreen() {
   const handleLikeComment = (commentId) => {
     const likeCommentBody = {
       userId: loggedUser._id,
-      commentId
-    }
+      commentId,
+    };
     fetch(`http://${MY_IP}:4000/api/comments/like/${_id}`, {
       method: 'PUT',
       headers: {
-        'Content-Type':'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(likeCommentBody)
+      body: JSON.stringify(likeCommentBody),
     })
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error('Something went wrong');
-        dispatch(getDetails(_id))
+        dispatch(getDetails(_id));
       })
       .catch(() => dispatch(getDetails(_id)));
   };
@@ -104,19 +103,19 @@ export default function CommentsScreen() {
   const handleLikeReply = (commentId, replyCommentId) => {
     const likeReplyBody = {
       userId: loggedUser._id,
-      replyCommentId
+      replyCommentId,
     };
 
     fetch(`http://${MY_IP}:4000/api/comments/reply/like/${commentId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type':'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(likeReplyBody)
+      body: JSON.stringify(likeReplyBody),
     })
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error('Something went wrong');
-        dispatch(getDetails(_id))
+        dispatch(getDetails(_id));
       })
       .catch(() => dispatch(getDetails(_id)));
   };
@@ -160,7 +159,7 @@ export default function CommentsScreen() {
       userId: loggedUser._id,
       userName: loggedUser.userName,
       comment: reply,
-      profileImage: loggedUser.profileImage
+      profileImage: loggedUser.profileImage,
     };
     // console.log(replyBody);
     setReplying(replyInitialState);
@@ -176,98 +175,150 @@ export default function CommentsScreen() {
         dispatch(getDetails(_id));
         return res.json();
       })
-      .then(data => console.log(data))
+      .then((data) => console.log(data))
       .catch(() => dispatch(getDetails(_id)));
   };
 
   return (
     <View style={styles.container}>
-      <FlatList
-        ref={commentListRef}
-        data={comments}
-        keyExtractor={(item) => item._id.toString()}
-        renderItem={({ item }) => {
-          return (
-            <View style={styles.commentView}>
-              <View style={styles.authorView}>
-                <Image style={{ width: 40, height: 40, borderRadius: 20 }} source={{ uri: item.profileImage }} />
-                <View>
-                  <Text style={styles.authorName}>{item.userName}</Text>
-                  <Text style={styles.timeLapse}>
-                    {timeLapse(item.createdAt)}
-                  </Text>
-                </View>
-              </View>
-              <Text>{item.comment}</Text>
-              <View style={styles.footerIcons}>
-                <View style={styles.likeResIcons}>
-                  <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={() => handleLikeComment(item._id)}>
-                      {item.commentLikes.includes(loggedUser._id) ? iconsComments.heart.filled : iconsComments.heart.empty}
-                    </TouchableOpacity>
-                    <Text>{item.commentLikes.length}</Text>
-                  </View>
-                  <View style={{ flexDirection: 'row', gap: 2 }}>
-                    <TouchableOpacity onPress={() => handleRepliesVisibility(item._id)}>
-                      {iconsComments.comment}
-                    </TouchableOpacity>
-                    <Text>{item.replyComment.length}</Text>
+      {!comments.length ? (
+        <View style={styles.noCommentView}>
+          <Text style={styles.noCommentText}>
+            ¡Hola, {loggedUser.userName}!
+          </Text>
+          <Text>{'\n'}</Text>
+          <Text style={styles.noCommentText}>El primer comentario está</Text>
+          <Text style={styles.noCommentText}>esperando por tí.</Text>
+          <Text>{'\n\n\n\n'}</Text>
+        </View>
+      ) : (
+        <FlatList
+          ref={commentListRef}
+          data={comments}
+          keyExtractor={(item) => item._id.toString()}
+          renderItem={({ item }) => {
+            return (
+              <View style={styles.commentView}>
+                <View style={styles.authorView}>
+                  <Image
+                    style={{ width: 40, height: 40, borderRadius: 20 }}
+                    source={{ uri: item.profileImage }}
+                  />
+                  <View>
+                    <Text style={styles.authorName}>{item.userName}</Text>
+                    <Text style={styles.timeLapse}>
+                      {timeLapse(item.createdAt)}
+                    </Text>
                   </View>
                 </View>
-                <View style={styles.responseBtn}>
-                  <TouchableOpacity onPress={() => handleReply(item)}>
-                    <Text>Responder</Text>
-                  </TouchableOpacity>
+                <Text style={styles.commentText}>{item.comment}</Text>
+                <View style={styles.footerIcons}>
+                  <View style={styles.likeResIcons}>
+                    <View style={{ flexDirection: 'row' }}>
+                      <TouchableOpacity
+                        onPress={() => handleLikeComment(item._id)}
+                      >
+                        {item.commentLikes.includes(loggedUser._id)
+                          ? iconsComments.heart.filled
+                          : iconsComments.heart.empty}
+                      </TouchableOpacity>
+                      <Text style={{ color: '#f5f5f5', fontSize: 13 }}>
+                        {item.commentLikes.length}
+                      </Text>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                      <TouchableOpacity
+                        onPress={() => handleRepliesVisibility(item._id)}
+                      >
+                        {iconsComments.comment}
+                      </TouchableOpacity>
+                      <Text style={{ color: '#f5f5f5', fontSize: 13 }}>
+                        {item.replyComment.length}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.responseBtn}>
+                    <TouchableOpacity onPress={() => handleReply(item)}>
+                      <Text style={{ color: '#f5f5f5' }}>Responder</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-              {repliesVisibility === item._id && item.replyComment.length > 0 && (
-                <View style={styles.repliesView}>
-                  <FlatList
-                    ref={replyListRef}
-                    data={item.replyComment.map(r => {return{...r, commentId: item._id}})}
-                    keyExtractor={(reply) => reply._id.toString()}
-                    renderItem={({ item }) => {
-                      return (
-                        <View style={{ marginVertical: '3%' }}>
-                          <View style={styles.authorView}>
-                          <Image style={{ width: 40, height: 40, borderRadius: 20 }} source={{ uri: item.profileImage }} />
-                            <View>
-                              <Text style={styles.authorName}>
-                                {item.userName}
+                {repliesVisibility === item._id &&
+                  item.replyComment.length > 0 && (
+                    <View style={styles.repliesView}>
+                      <FlatList
+                        ref={replyListRef}
+                        data={item.replyComment.map((r) => {
+                          return { ...r, commentId: item._id };
+                        })}
+                        keyExtractor={(reply) => reply._id.toString()}
+                        renderItem={({ item }) => {
+                          return (
+                            <View style={{ marginTop: '3%' }}>
+                              <View style={styles.authorView}>
+                                <Image
+                                  style={{
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: 20,
+                                  }}
+                                  source={{ uri: item.profileImage }}
+                                />
+                                <View>
+                                  <Text style={styles.authorName}>
+                                    {item.userName}
+                                  </Text>
+                                  <Text style={styles.timeLapse}>
+                                    {timeLapse(item.createdAt)}
+                                  </Text>
+                                </View>
+                              </View>
+                              <Text style={styles.replyText}>
+                                {item.comment}
                               </Text>
-                              <Text style={styles.timeLapse}>
-                                {timeLapse(item.createdAt)}
-                              </Text>
-                            </View>
-                          </View>
-                          <Text>{item.comment}</Text>
-                          <View style={styles.footerIcons}>
-                            <View style={styles.likeResIcons}>
-                              <View style={{ flexDirection: 'row' }}>
-                                <TouchableOpacity onPress={() => handleLikeReply(item.commentId, item._id)}>
-                                  {item.commentLikes.includes(loggedUser._id) ? iconsComments.heart.filled : iconsComments.heart.empty}
-                                </TouchableOpacity>
-                                <Text>{item.commentLikes.length}</Text>
+                              <View style={styles.footerIcons}>
+                                <View style={styles.likeResIcons}>
+                                  <View style={{ flexDirection: 'row' }}>
+                                    <TouchableOpacity
+                                      onPress={() =>
+                                        handleLikeReply(
+                                          item.commentId,
+                                          item._id
+                                        )
+                                      }
+                                    >
+                                      {item.commentLikes.includes(
+                                        loggedUser._id
+                                      )
+                                        ? iconsComments.heart.filled
+                                        : iconsComments.heart.empty}
+                                    </TouchableOpacity>
+                                    <Text style={{ color: '#f5f5f5' }}>
+                                      {item.commentLikes.length}
+                                    </Text>
+                                  </View>
+                                </View>
+                                <View style={styles.responseBtn}>
+                                  <TouchableOpacity
+                                    onPress={() => handleReplyReply(item)}
+                                  >
+                                    <Text style={{ color: '#f5f5f5' }}>
+                                      Responder
+                                    </Text>
+                                  </TouchableOpacity>
+                                </View>
                               </View>
                             </View>
-                            <View style={styles.responseBtn}>
-                              <TouchableOpacity
-                                onPress={() => handleReplyReply(item)}
-                              >
-                                <Text>Responder</Text>
-                              </TouchableOpacity>
-                            </View>
-                          </View>
-                        </View>
-                      );
-                    }}
-                  />
-                </View>
-              )}
-            </View>
-          );
-        }}
-      />
+                          );
+                        }}
+                      />
+                    </View>
+                  )}
+              </View>
+            );
+          }}
+        />
+      )}
       {replying.status && (
         <View style={styles.replying}>
           <Text>Respondiendo a {replying.receiver}</Text>
@@ -279,23 +330,46 @@ export default function CommentsScreen() {
         </View>
       )}
       <View style={styles.commentContainer}>
-        <TextInput
-          ref={inputRef}
-          style={styles.commentInput}
-          placeholder={replying.status ? '¿Cuál es tu respuesta?' : '¿Cuál es tu opinión?'}
-          multiline={true}
-          onChangeText={
-            replying.status ? handleReplyChange : handleArticleCommentChange
-          }
-          value={replying.status ? reply : articleComment}
-        />
+        <LinearGradient
+          colors={['#34aba6', '#131af8', '#9344ca']}
+          start={[0, 0]}
+          end={[1, 0]}
+          locations={[0, 0.5, 1]}
+          style={{ flex: 1, minHeight: 46, borderRadius: 15 }}
+        >
+          <TextInput
+            ref={inputRef}
+            style={styles.commentInput}
+            placeholder={
+              replying.status
+                ? '¿Cuál es tu respuesta?'
+                : '¿Cuál es tu opinión?'
+            }
+            placeholderTextColor={'#f5f5f5'}
+            multiline={true}
+            onChangeText={
+              replying.status ? handleReplyChange : handleArticleCommentChange
+            }
+            value={replying.status ? reply : articleComment}
+          />
+        </LinearGradient>
         <TouchableOpacity
           onPress={
             replying.status ? handleReplySubmit : handleArticleCommentSubmit
           }
         >
-          <View style={{ backgroundColor: '#fff', borderRadius: 20 }}>
-            {iconsComments.send}
+          <View style={{ backgroundColor: '#3a3969', borderRadius: 20 }}>
+            {articleComment.length || reply.length ? (
+              <Image
+                source={require('../../../../assets/send-active.png')}
+                style={{ width: 40, height: 40 }}
+              />
+            ) : (
+              <Image
+                source={require('../../../../assets/send-inactive.png')}
+                style={{ width: 40, height: 40 }}
+              />
+            )}
           </View>
         </TouchableOpacity>
       </View>
