@@ -5,7 +5,7 @@ import { ModalLogin } from "../../component/shared/ModalLogin";
 import React, { useEffect, useState } from "react";
 import { styles } from "./homeScreen.styles";
 import { useDispatch, useSelector } from "react-redux";
-import { getArticles, logToDb } from "../../redux/actions";
+import { getArticles } from "../../redux/actions";
 import { iconOptions } from "../../utils/iconOptions";
 
 const HomeScreen = () => {

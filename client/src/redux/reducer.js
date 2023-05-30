@@ -70,14 +70,12 @@ export default function rootReducer(state = initialState, action) {
         logged: true,
       };
     case GET_CATEGORY:
-      if (action.payload == "all") {
-        console.log(action.payload);
+      if (action.payload === "ALL") {
         return {
           ...state,
           filtered: [],
         };
       }
-      console.log(action.payload);
       return {
         ...state,
         filtered: [...state.articles].filter((obj) =>

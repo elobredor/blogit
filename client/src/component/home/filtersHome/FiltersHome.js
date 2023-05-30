@@ -8,12 +8,12 @@ const Filters = () => {
   const dispatch = useDispatch();
   const articles = useSelector((state) => state.articles);
 
-  const [currentCategory, setCurrentCategory] = useState("all");
-  const sendData = (text) => {
-    if (text === currentCategory) {
-      setCurrentCategory("all");
+  const [currentCategory, setCurrentCategory] = useState("ALL");
+  const sendData = (category) => {
+    if (category === currentCategory) {
+      setCurrentCategory("ALL");
     } else {
-      setCurrentCategory(text);
+      setCurrentCategory(category);
     }
   };
 
@@ -23,51 +23,50 @@ const Filters = () => {
 
   useEffect(() => {
     dispatch(getCategory(currentCategory));
-    console.log(currentCategory);
   }, [currentCategory]);
   return (
     <View style={styles.containerFilter}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <TouchableOpacity
-          onPress={() => sendData("Back-end")}
+          onPress={() => sendData("UX/UI")}
           style={
-            currentCategory == "Back-end"
+            currentCategory == "UX/UI"
               ? styles.btnFilterFocus
               : styles.btnFilter
           }
         >
-          <Text style={styles.buttonText}>UX/IU</Text>
+          <Text style={styles.buttonText}>UX/UI</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => sendData("Fron-end")}
+          onPress={() => sendData("FRONT-END")}
           style={
-            currentCategory == "Fron-end"
+            currentCategory == "FRONT-END"
               ? styles.btnFilterFocus
               : styles.btnFilter
           }
         >
-          <Text style={styles.buttonText}>Front-end</Text>
+          <Text style={styles.buttonText}>FRONT-END</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => sendData("Back-end")}
+          onPress={() => sendData("BACK-END")}
           style={
-            currentCategory == "Back-end"
+            currentCategory == "BACK-END"
               ? styles.btnFilterFocus
               : styles.btnFilter
           }
         >
-          <Text style={styles.buttonText}>Back-end</Text>
+          <Text style={styles.buttonText}>BACK-END</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => sendData("No code")}
+          onPress={() => sendData("NO-CODE")}
           style={
-            currentCategory == "No code"
+            currentCategory == "NO-CODE"
               ? styles.btnFilterFocus
               : styles.btnFilter
           }
         >
-          <Text style={styles.buttonText}>No code</Text>
+          <Text style={styles.buttonText}>NO-CODE</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
