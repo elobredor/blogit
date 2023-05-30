@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "./boardStyles";
 
 export const RenderPrevArticle = ({ num, articles }) => {
-  if (num == 1) {
+  if (num === 1) {
     return (
       <View style={styles.prevContainer}>
         <PrevArticle articles={articles} />

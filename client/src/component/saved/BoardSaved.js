@@ -1,5 +1,4 @@
 import { Text, View, TouchableOpacity } from "react-native";
-import { iconsCard } from "client/src/utils/iconOptions.js";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { RenderPrevArticle } from "./prevArticles";
