@@ -104,6 +104,13 @@ const CardArticle = ({ item, setModalVisibility }) => {
     }
   };
 
+  //data importante para los modales de guardado
+  const data = {
+    userId: hasLogged._id,
+    postId: item._id,
+    images: item.images,
+  };
+
   return (
     <>
       <TouchableWithoutFeedback
@@ -171,7 +178,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
           </ImageBackground>
         </View>
       </TouchableWithoutFeedback>
-      <ModalSave alert={alert} setAlert={setAlert} />
+      <ModalSave alert={alert} setAlert={setAlert} data={data} />
     </>
   );
 };

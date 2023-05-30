@@ -76,3 +76,12 @@ export const logToDb = (id) => (dispatch) => {
     })
     .catch((error) => console.log(error));
 };
+
+//Handle board:
+//1. Move to another board
+//2. Create new board
+//3. unsaved (?) only if I send the same data
+
+export const handleBoard = (data) => (dispatch) => {
+  fetch(`http://${MY_IP}:4000/api/users/saved/${data.userId}`);
+};

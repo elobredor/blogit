@@ -15,18 +15,17 @@ const BoardSaved = ({ item }) => {
   );
 
   return (
-    <View style={styles.containerBoard}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Collection", item.posts)}
-      >
-        <Text style={styles.boardTitle}>{item.title}</Text>
-        <Text> {item.posts.length} artículo(s)</Text>
-      </TouchableOpacity>
-      <RenderPrevArticle
-        num={lastArticles.length}
-        articles={articles}
-      ></RenderPrevArticle>
-    </View>
+    <>
+      <View style={styles.containerBoard}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Collection", item.posts)}
+        >
+          <Text style={styles.boardTitle}>{item.title}</Text>
+          <Text> {item.posts.length} artículo(s)</Text>
+        </TouchableOpacity>
+        <RenderPrevArticle articles={articles} />
+      </View>
+    </>
   );
 };
 
