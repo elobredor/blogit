@@ -9,7 +9,8 @@ import {
   Keyboard,
   Image,
   Modal,
-  Dimensions
+  Dimensions,
+  Alert
 } from 'react-native';
 import { styles } from './CommentsScreen.styles';
 import { iconsComments } from '../../../utils/iconOptions';
@@ -49,7 +50,7 @@ export default function CommentsScreen() {
     inputRef.current.focus();
   }, []);
 
-  // COMMENT_SCROLLING
+  // COMMENT_SCROLLING (EVALUATE)
   useEffect(() => {
     if (!repliesVisibility && comments.length > 0) {
       commentListRef.current.scrollToEnd({ animated: true });
@@ -128,8 +129,8 @@ export default function CommentsScreen() {
   };
 
   // HANDLE_REPLIES_VISIBILITY
-  const handleRepliesVisibility = (id) => {
-    setRepliesVisibility(id);
+  const handleRepliesVisibility = (commentId) => {
+    setRepliesVisibility(commentId);
   };
 
   // SET_REPLY_INPUT_FOCUS
@@ -143,7 +144,7 @@ export default function CommentsScreen() {
     inputRef.current.focus();
   };
 
-  // POST_REPLY_REPLY
+  // SET_REPLY_REPLY_INPUT_FOCUS
   const handleReplyReply = (reply) => {
     setReplying({
       status: true,
@@ -154,7 +155,7 @@ export default function CommentsScreen() {
     inputRef.current.focus();
   };
 
-  // HANDLE_REPLY_INPUT
+  // HANDLE_REPLY_CHANGE
   const handleReplyChange = (text) => {
     setReply(text);
   };
@@ -168,7 +169,6 @@ export default function CommentsScreen() {
       comment: reply,
       profileImage: loggedUser.profileImage,
     };
-    setReplying(replyInitialState);
     fetch(`http://${MY_IP}:4000/api/comments/reply/${replying.commentId}`, {
       method: 'PUT',
       headers: {
@@ -179,10 +179,10 @@ export default function CommentsScreen() {
       .then((res) => {
         if (!res.ok) throw new Error('Something went wrong');
         dispatch(getDetails(_id));
-        return res.json();
       })
-      .then((data) => console.log(data))
       .catch(() => dispatch(getDetails(_id)));
+      setRepliesVisibility(replying.commentId);
+      setReplying(replyInitialState);
   };
 
   // DELETE_COMMENT/REPLY
