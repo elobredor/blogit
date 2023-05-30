@@ -20,7 +20,8 @@ const HomeStack = () => {
         component={ArticleScreen}
         options={{
           headerTitle: () => null,
-          headerLeft: () => <ArticleHeader />
+          headerLeft: () => <ArticleHeader />,
+          headerStyle: { backgroundColor: '#090841' },
         }}
       />
       <Stack.Screen

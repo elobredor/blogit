@@ -93,5 +93,25 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: '#f5f5f5',
     minHeight: 46
+  },  
+  modalDeleteBack: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    alignItems: 'center'
   },
+  modalDeleteFront: {
+    backgroundColor: '#3A3969',
+    position: 'relative',
+    top: 300,
+    padding: 20,
+    borderRadius: 15,
+    gap: 10
+  },
+  modalDeleteBtn: {
+    backgroundColor: '#37B4A1',
+    paddingHorizontal: 10
+  },
+  modalDeleteText: {
+    color: '#f5f5f5'
+  }
 });

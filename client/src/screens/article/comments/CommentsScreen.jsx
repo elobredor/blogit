@@ -8,6 +8,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Image,
+  Modal,
+  Dimensions
 } from 'react-native';
 import { styles } from './CommentsScreen.styles';
 import { iconsComments } from '../../../utils/iconOptions';
@@ -23,6 +25,8 @@ const replyInitialState = {
   commentId: '',
 };
 
+const { width } = Dimensions.get('window');
+
 export default function CommentsScreen() {
   const dispatch = useDispatch();
   const { comments, _id } = useSelector((state) => state.details);
@@ -36,6 +40,9 @@ export default function CommentsScreen() {
   const [articleComment, setArticleComment] = useState('');
   const [reply, setReply] = useState('');
   const [repliesVisibility, setRepliesVisibility] = useState('');
+  const [editDelete, setEditDelete] = useState('');
+  const [deletionType, setDeletionType] = useState('');
+  const [deteleVisibility, setDeteleVisibility] = useState(false);
 
   // INPUT_FOCUS
   useEffect(() => {
@@ -161,7 +168,6 @@ export default function CommentsScreen() {
       comment: reply,
       profileImage: loggedUser.profileImage,
     };
-    // console.log(replyBody);
     setReplying(replyInitialState);
     fetch(`http://${MY_IP}:4000/api/comments/reply/${replying.commentId}`, {
       method: 'PUT',
@@ -177,6 +183,36 @@ export default function CommentsScreen() {
       })
       .then((data) => console.log(data))
       .catch(() => dispatch(getDetails(_id)));
+  };
+
+  // DELETE_COMMENT/REPLY
+  const deleteComment = () => {
+    if (deletionType === 'comment') {
+      fetch(`http://${MY_IP}:4000/api/comments/delete/${editDelete}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type':'application/json'
+        }})
+        .then(res => {
+          if (res.ok) dispatch(getDetails(_id));
+          else throw new Error('No response from server')
+        })
+        .catch(error => console.log(error));
+    } else if (deletionType === 'reply') {
+      fetch(`http://${MY_IP}:4000/api/comments/reply-delete/${editDelete}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type':'application/json'
+      }})
+      .then(res => {
+        if (res.ok) dispatch(getDetails(_id));
+        else throw new Error('No response from server')
+      })
+      .catch(error => console.log(error));
+    } else {
+      console.log('Invalid deletion process')
+    }
+    setDeteleVisibility(false);
   };
 
   return (
@@ -205,7 +241,25 @@ export default function CommentsScreen() {
                     source={{ uri: item.profileImage }}
                   />
                   <View>
-                    <Text style={styles.authorName}>{item.userName}</Text>
+                    <View style={{flex: 1, width: width * 0.82, flexDirection: 'row', justifyContent: 'space-between'}}>
+                      <Text style={styles.authorName}>{item.userName}</Text>
+                      {editDelete === item._id
+                        ? <View style={{flexDirection: 'row', gap: 15}}>
+                            <TouchableOpacity onPress={() => {
+                              setDeletionType('comment')
+                              setDeteleVisibility(true);
+                            }}>
+                              {iconsComments.trash}
+                            </TouchableOpacity>
+                            <TouchableOpacity>
+                              {iconsComments.edit}
+                            </TouchableOpacity>
+                          </View>
+                        : <TouchableOpacity onPress={() => setEditDelete(item._id)}>
+                            {loggedUser.userName === item.userName && iconsComments.dots}
+                          </TouchableOpacity>
+                      }                      
+                    </View>
                     <Text style={styles.timeLapse}>
                       {timeLapse(item.createdAt)}
                     </Text>
@@ -265,9 +319,25 @@ export default function CommentsScreen() {
                                   source={{ uri: item.profileImage }}
                                 />
                                 <View>
-                                  <Text style={styles.authorName}>
-                                    {item.userName}
-                                  </Text>
+                                  <View style={{flex: 1, width: width * 0.75, flexDirection: 'row', justifyContent: 'space-between'}}>
+                                    <Text style={styles.authorName}>{item.userName}</Text>
+                                    {editDelete === item._id
+                                      ? <View style={{flexDirection: 'row', gap: 15}}>
+                                          <TouchableOpacity onPress={() => {
+                                            setDeletionType('reply');
+                                            setDeteleVisibility(true);
+                                          }}>
+                                            {iconsComments.trash}
+                                          </TouchableOpacity>
+                                          <TouchableOpacity>
+                                            {iconsComments.edit}
+                                          </TouchableOpacity>
+                                        </View>
+                                      : <TouchableOpacity onPress={() => setEditDelete(item._id)}>
+                                          {loggedUser.userName === item.userName && iconsComments.dots}
+                                        </TouchableOpacity>
+                                    }
+                                  </View>
                                   <Text style={styles.timeLapse}>
                                     {timeLapse(item.createdAt)}
                                   </Text>
@@ -373,6 +443,21 @@ export default function CommentsScreen() {
           </View>
         </TouchableOpacity>
       </View>
+      <Modal visible={deteleVisibility} transparent>
+        <View style={styles.modalDeleteBack}>
+          <View style={styles.modalDeleteFront}>
+            <Text style={styles.modalDeleteText}>¿Deseas borrar este comentario?</Text>
+            <View style={{flexDirection: 'row', justifyContent: 'center', gap: 30}}>
+              <TouchableOpacity onPress={deleteComment} style={styles.modalDeleteBtn}>
+                <Text style={styles.modalDeleteText}>Si</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setDeteleVisibility(false)} style={styles.modalDeleteBtn}>
+                <Text style={styles.modalDeleteText}>No</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

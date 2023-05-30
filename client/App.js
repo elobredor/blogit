@@ -1,4 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
 import AccountScreen from './src/screens/account/AccountScreen';
 import AppNavigation from './src/routes/AppNavigation';
 import { Provider } from 'react-redux';
@@ -9,6 +10,7 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer>
         <AppNavigation />
+        <StatusBar translucent={false} style={'light'}/>
       </NavigationContainer>
     </Provider>
   );

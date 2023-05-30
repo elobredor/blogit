@@ -96,7 +96,7 @@ export default function ArticleScreen({ route }) {
       <View
         style={{
           paddingTop: 150,
-          backgroundColor: '#eee',
+          backgroundColor: '#090841',
           alignItems: 'center',
           flex: 1,
         }}
@@ -107,14 +107,14 @@ export default function ArticleScreen({ route }) {
     return (
       <View
         style={{
-          backgroundColor: '#eee',
+          backgroundColor: '#090841',
           justifyContent: 'center',
           alignItems: 'center',
           flex: 1,
         }}
       >
-        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Error:</Text>
-        <Text style={{ fontSize: 30 }}>{fetchStatus.error}</Text>
+        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#f5f5f5' }}>Error:</Text>
+        <Text style={{ fontSize: 30, color: '#f5f5f5' }}>{fetchStatus.error}</Text>
       </View>
     );
   // ARTICLE_RENDER
@@ -142,7 +142,7 @@ export default function ArticleScreen({ route }) {
               <TouchableWithoutFeedback onPress={handleNavigateToComments}>
                 {iconsArticle.comment}
               </TouchableWithoutFeedback>
-              <Text>{article.comments.length}</Text>
+              <Text style={styles.iconCounters}>{article.comments.length}</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <TouchableWithoutFeedback onPress={handleFavorite}>
@@ -150,7 +150,7 @@ export default function ArticleScreen({ route }) {
                   ? iconsArticle.heart.empty
                   : iconsArticle.heart.filled}
               </TouchableWithoutFeedback>
-              <Text>{article.postLikes.length}</Text>
+              <Text style={styles.iconCounters}>{article.postLikes.length}</Text>
             </View>
             <TouchableWithoutFeedback onPress={() => setSaved(!saved)}>
               {saved ? iconsArticle.saved.focused : iconsArticle.saved.default}
