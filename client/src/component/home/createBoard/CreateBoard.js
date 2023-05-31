@@ -20,6 +20,7 @@ const CreateBoard = ({ showCreate, setShowCreate, data }) => {
   // });
   // console.log("Esta carpeta ya existe");
 
+  //TENGO QUE CERRAR EL MODAL ANTERIOR
   const handleChange = (text) => {
     setValue(text);
   };

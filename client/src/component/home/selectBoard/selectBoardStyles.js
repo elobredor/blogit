@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
   },
   modalContainer: {
     width: "95%",
+    maxHeight: "50%",
     borderRadius: 15,
     backgroundColor: "#555",
     gap: 10,
@@ -53,7 +54,7 @@ export const styles = StyleSheet.create({
   },
   boardContainer: {
     flexDirection: "row",
-    padding: 15,
+    padding: 10,
     justifyContent: "space-between",
   },
 });
