@@ -10,11 +10,11 @@ const Tab = createBottomTabNavigator();
 const AppNavigation = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={() => ({
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'grey',
         headerShown: false,
-        tabBarStyle: { backgroundColor: 'white' },
+        tabBarStyle: { backgroundColor: 'white', height: 40 },
       })}
     >
       <Tab.Screen

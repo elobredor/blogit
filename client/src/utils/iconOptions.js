@@ -70,11 +70,11 @@ export const iconsArticle = {
     ),
   },
   heart: {
-    empty: <Ionicons name="heart-outline" size={24} color="#f5f5f5" />,
-    filled: <Ionicons name="heart" size={24} color="#f5f5f5" />,
+    empty: <Entypo name="heart-outlined" size={24} color="#f5f5f5" />,
+    filled: <Entypo name="heart" size={24} color="#f5f5f5" />,
   },
   comment: (
-    <Fontisto name="comment" size={20} color="#f5f5f5" style={{ marginTop: 3 }} />
+    <FontAwesome5 name="comment" size={20} color="#f5f5f5" style={{ marginTop: 2 }} />
   ),
   saved: {
     default: (

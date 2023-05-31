@@ -26,6 +26,12 @@ const replyInitialState = {
   commentId: '',
 };
 
+const editInitialState = {
+  status: false,
+  type: '',
+  // commentId: '',
+};
+
 const { width } = Dimensions.get('window');
 
 export default function CommentsScreen() {
@@ -44,11 +50,7 @@ export default function CommentsScreen() {
   const [editDelete, setEditDelete] = useState('');
   const [deletionType, setDeletionType] = useState('');
   const [deteleVisibility, setDeteleVisibility] = useState(false);
-
-  // INPUT_FOCUS
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
+  const [editing, setEditing] = useState(editInitialState);
 
   // COMMENT_SCROLLING (EVALUATE)
   useEffect(() => {
@@ -64,27 +66,69 @@ export default function CommentsScreen() {
 
   // POST_COMMENT
   const handleArticleCommentSubmit = () => {
-    Keyboard.dismiss();
-    const commentBody = {
-      postId: _id,
-      userId: loggedUser._id,
-      userName: loggedUser.userName,
-      comment: articleComment,
-      profileImage: loggedUser.profileImage,
-    };
-    setArticleComment('');
-    fetch(`http://${MY_IP}:4000/api/comments/create`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(commentBody),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('Something went wrong');
-        dispatch(getDetails(_id));
+    if (editing.status && editing.type === 'comment') {
+      Keyboard.dismiss();
+      const editBody = { comment: articleComment };
+      setArticleComment('');
+      fetch(`http://${MY_IP}:4000/api/comments/update/${editing.editingId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify(editBody)
       })
-      .catch(() => dispatch(getDetails(_id)));
+        .then(res => {
+          if (!res.ok) throw new Error('Something went wrong');
+          dispatch(getDetails(_id));
+        })
+        .catch(error => {
+          console.error(error);
+          dispatch(getDetails(_id));
+        })
+        setEditing(editInitialState);
+    } else if (editing.status && editing.type === 'reply') {
+      Keyboard.dismiss();
+      const editBody = { comment: articleComment };
+      setArticleComment('');
+      fetch(`http://${MY_IP}:4000/api/comments/reply-update/${editing.editingId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify(editBody)
+      })
+        .then(res => {
+          if (!res.ok) throw new Error('Something went wrong');
+          dispatch(getDetails(_id));
+        })
+        .catch(error => {
+          console.error(error.message);
+          dispatch(getDetails(_id));
+        })
+        setEditing(editInitialState);
+    } else {
+      Keyboard.dismiss();
+      const commentBody = {
+        postId: _id,
+        userId: loggedUser._id,
+        userName: loggedUser.userName,
+        comment: articleComment,
+        profileImage: loggedUser.profileImage,
+      };
+      setArticleComment('');
+      fetch(`http://${MY_IP}:4000/api/comments/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(commentBody),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error('Something went wrong');
+          dispatch(getDetails(_id));
+        })
+        .catch(() => dispatch(getDetails(_id)));
+    }
   };
 
   // LIKE/UNLIKE_COMMENT
@@ -135,6 +179,8 @@ export default function CommentsScreen() {
 
   // SET_REPLY_INPUT_FOCUS
   const handleReply = (comment) => {
+    setEditing(editInitialState);
+    setArticleComment('');
     setReplying({
       status: true,
       receiver: comment.userName,
@@ -146,6 +192,8 @@ export default function CommentsScreen() {
 
   // SET_REPLY_REPLY_INPUT_FOCUS
   const handleReplyReply = (reply) => {
+    setEditing(editInitialState);
+    setArticleComment('');
     setReplying({
       status: true,
       receiver: reply.userName,
@@ -161,7 +209,7 @@ export default function CommentsScreen() {
   };
 
   // POST_REPLY
-  const handleReplySubmit = () => {
+  const handleReplySubmit = () => {    
     Keyboard.dismiss();
     const replyBody = {
       userId: loggedUser._id,
@@ -197,7 +245,7 @@ export default function CommentsScreen() {
           if (res.ok) dispatch(getDetails(_id));
           else throw new Error('No response from server')
         })
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
     } else if (deletionType === 'reply') {
       fetch(`http://${MY_IP}:4000/api/comments/reply-delete/${editDelete}`, {
       method: 'DELETE',
@@ -208,12 +256,23 @@ export default function CommentsScreen() {
         if (res.ok) dispatch(getDetails(_id));
         else throw new Error('No response from server')
       })
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
     } else {
-      console.log('Invalid deletion process')
+      console.error('Invalid deletion process')
     }
     setDeteleVisibility(false);
   };
+
+  const handleEditing = (comment, editingId, type) => {
+    setReplying(replyInitialState);
+    setEditing({
+      status: true,
+      type,
+      editingId,
+    });
+    setArticleComment(comment);
+    inputRef.current.focus();
+  }
 
   return (
     <View style={styles.container}>
@@ -241,17 +300,18 @@ export default function CommentsScreen() {
                     source={{ uri: item.profileImage }}
                   />
                   <View>
-                    <View style={{flex: 1, width: width * 0.82, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{flex: 1, width: width * 0.80, flexDirection: 'row', justifyContent: 'space-between'}}>
                       <Text style={styles.authorName}>{item.userName}</Text>
                       {editDelete === item._id
-                        ? <View style={{flexDirection: 'row', gap: 15}}>
+                        ? <View style={{flexDirection: 'row', gap: 30}}>
                             <TouchableOpacity onPress={() => {
                               setDeletionType('comment')
                               setDeteleVisibility(true);
                             }}>
                               {iconsComments.trash}
                             </TouchableOpacity>
-                            <TouchableOpacity>
+                            {/* UNDER_DEV */}
+                            <TouchableOpacity onPress={() => handleEditing(item.comment, item._id, 'comment')}>
                               {iconsComments.edit}
                             </TouchableOpacity>
                           </View>
@@ -319,17 +379,17 @@ export default function CommentsScreen() {
                                   source={{ uri: item.profileImage }}
                                 />
                                 <View>
-                                  <View style={{flex: 1, width: width * 0.75, flexDirection: 'row', justifyContent: 'space-between'}}>
+                                  <View style={{flex: 1, width: width * 0.74, flexDirection: 'row', justifyContent: 'space-between'}}>
                                     <Text style={styles.authorName}>{item.userName}</Text>
                                     {editDelete === item._id
-                                      ? <View style={{flexDirection: 'row', gap: 15}}>
+                                      ? <View style={{flexDirection: 'row', gap: 30}}>
                                           <TouchableOpacity onPress={() => {
                                             setDeletionType('reply');
                                             setDeteleVisibility(true);
                                           }}>
                                             {iconsComments.trash}
                                           </TouchableOpacity>
-                                          <TouchableOpacity>
+                                          <TouchableOpacity onPress={() => handleEditing(item.comment, item._id, 'reply')}>
                                             {iconsComments.edit}
                                           </TouchableOpacity>
                                         </View>
@@ -390,12 +450,29 @@ export default function CommentsScreen() {
         />
       )}
       {replying.status && (
-        <View style={styles.replying}>
-          <Text>Respondiendo a {replying.receiver}</Text>
+        <View style={styles.overInput}>
+          <Text style={styles.overInputText}>Respondiendo a {replying.receiver}</Text>
           <TouchableWithoutFeedback
-            onPress={() => setReplying(replyInitialState)}
+            onPress={() => {
+              setReplying(replyInitialState);
+              Keyboard.dismiss();
+            }}
           >
-            <Text style={{ fontSize: 18 }}>x</Text>
+            <Text style={{ fontSize: 18, color: '#f5f5f5' }}>x</Text>
+          </TouchableWithoutFeedback>
+        </View>
+      )}
+      {editing.status && (
+        <View style={styles.overInput}>
+          <Text style={styles.overInputText}>Editando {editing.type === 'reply' && "respuesta"}{editing.type === 'comment' && "comentario"}...</Text>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setEditing(editInitialState);
+              setArticleComment('');
+              Keyboard.dismiss();
+            }}
+          >
+            <Text style={{ fontSize: 18, color: '#f5f5f5' }}>x</Text>
           </TouchableWithoutFeedback>
         </View>
       )}
@@ -405,7 +482,7 @@ export default function CommentsScreen() {
           start={[0, 0]}
           end={[1, 0]}
           locations={[0, 0.5, 1]}
-          style={{ flex: 1, minHeight: 46, borderRadius: 15 }}
+          style={{ flex: 1, marginVertical: 12, minHeight: 26 + (20 * articleComment.split('\n').length) ,borderRadius: 15 }}
         >
           <TextInput
             ref={inputRef}
@@ -424,6 +501,7 @@ export default function CommentsScreen() {
           />
         </LinearGradient>
         <TouchableOpacity
+          disabled={!articleComment.length && !reply.length}
           onPress={
             replying.status ? handleReplySubmit : handleArticleCommentSubmit
           }
@@ -446,13 +524,16 @@ export default function CommentsScreen() {
       <Modal visible={deteleVisibility} transparent>
         <View style={styles.modalDeleteBack}>
           <View style={styles.modalDeleteFront}>
-            <Text style={styles.modalDeleteText}>¿Deseas borrar este comentario?</Text>
-            <View style={{flexDirection: 'row', justifyContent: 'center', gap: 30}}>
-              <TouchableOpacity onPress={deleteComment} style={styles.modalDeleteBtn}>
-                <Text style={styles.modalDeleteText}>Si</Text>
+            <Text style={styles.modalDeleteText1}>¿Esta publicación</Text>
+            <Text style={styles.modalDeleteText1}>no te gusta?{'\n'}</Text>
+            <Text style={styles.modalDeleteText2}>¿Estás seguro que ya no</Text>
+            <Text style={styles.modalDeleteText2}>te gusta esta publicación?{'\n'}</Text>
+            <View style={{alignItems: 'stretch'}}>
+              <TouchableOpacity onPress={deleteComment} activeOpacity={0.6} style={styles.modalDeleteBtn}>
+                <Text style={styles.modalDeleteText2}>Si</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => setDeteleVisibility(false)} style={styles.modalDeleteBtn}>
-                <Text style={styles.modalDeleteText}>No</Text>
+              <TouchableOpacity onPress={() => setDeteleVisibility(false)} activeOpacity={0.6} style={styles.modalDeleteBtn}>
+                <Text style={styles.modalDeleteText2}>No</Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -64,7 +64,7 @@ export const styles = StyleSheet.create({
     color: '#f5f5f5',
     fontSize: 16
   },
-  replying: {
+  overInput: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -73,12 +73,16 @@ export const styles = StyleSheet.create({
     backgroundColor: '#888',
     paddingVertical: 10,
     paddingHorizontal: 20,
+    backgroundColor: '#3a3969',
+  },
+  overInputText: {
+    color: '#f5f5f5'
   },
   commentContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
-    height: 70,
+    paddingHorizontal: 20,
+    minHeight: 70,
     backgroundColor: '#3a3969',
     gap: 10,
     overflow: 'hidden'
@@ -92,7 +96,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 15,
     fontSize: 16,
     color: '#f5f5f5',
-    minHeight: 46
   },  
   modalDeleteBack: {
     flex: 1,
@@ -103,15 +106,26 @@ export const styles = StyleSheet.create({
     backgroundColor: '#3A3969',
     position: 'relative',
     top: 300,
-    padding: 20,
+    width: '50%',
+    justifyContent: 'flex-end',
     borderRadius: 15,
-    gap: 10
+    overflow: 'hidden',
+    paddingTop: 20
   },
   modalDeleteBtn: {
+    height: 30,
     backgroundColor: '#37B4A1',
-    paddingHorizontal: 10
+    justifyContent: 'center',
+    borderTopWidth: 1,
+    borderColor: '#27A491'
   },
-  modalDeleteText: {
-    color: '#f5f5f5'
+  modalDeleteText1: {
+    textAlign: 'center',
+    color: '#f5f5f5',
+    fontWeight: 'bold'
+  },
+  modalDeleteText2: {
+    textAlign: 'center',
+    color: '#f5f5f5',
   }
 });
