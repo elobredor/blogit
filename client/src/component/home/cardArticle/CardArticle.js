@@ -106,7 +106,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
 
   //data importante para los modales de guardado
   const data = {
-    userId: hasLogged._id,
+    userId: hasLogged.userId,
     postId: item._id,
     images: item.images,
   };

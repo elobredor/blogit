@@ -4,6 +4,7 @@ import { iconsCard, iconsArticle } from "../../../utils/iconOptions";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { logToDb } from "../../../redux/actions";
+import { MY_IP } from "react-native-dotenv";
 
 const CreateBoard = ({ showCreate, setShowCreate, data }) => {
   const dispacth = useDispatch();
@@ -15,7 +16,6 @@ const CreateBoard = ({ showCreate, setShowCreate, data }) => {
 
   const handleSubmit = () => {
     const bodyBoard = {
-      userId: data.userId,
       postId: data.postId,
       title: value,
       images: data.images,
@@ -50,7 +50,12 @@ const CreateBoard = ({ showCreate, setShowCreate, data }) => {
               <Text style={styles.text}>Nueva Colección</Text>
             </View>
 
-            <Text style={{ color: "#3B79BE", fontSize: 22 }}>Crear</Text>
+            <Text
+              onPress={handleSubmit}
+              style={{ color: "#3B79BE", fontSize: 22 }}
+            >
+              Crear
+            </Text>
           </View>
 
           <TextInput

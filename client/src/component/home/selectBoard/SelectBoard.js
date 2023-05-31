@@ -3,9 +3,9 @@ import { styles } from "./selectBoardStyles";
 import { useNavigation } from "@react-navigation/native";
 import { iconsCard, iconsArticle } from "../../../utils/iconOptions";
 import { useState, useEffect } from "react";
-import CreateBoard from "../createBoard/createBoard";
+import CreateBoard from "../createBoard/CreateBoard";
 
-const ModalSave = ({ visible, articleId, data }) => {
+const ModalSave = ({ visible, setVisible, data }) => {
   const [showCreate, setShowCreate] = useState(false); // Estado de ModalCreateCol // crear un tablero
   const [saved, setSaved] = useState(true);
   const navigation = useNavigation();
@@ -28,7 +28,9 @@ const ModalSave = ({ visible, articleId, data }) => {
             </View>
             {/* Info */}
             <View style={styles.infoContainer}>
-              <Text style={styles.text}>Colecciones</Text>
+              <Text onPress={() => setVisible(false)} style={styles.text}>
+                Colecciones
+              </Text>
               <Text
                 onPress={() => {
                   setShowCreate(true);
@@ -55,7 +57,6 @@ const ModalSave = ({ visible, articleId, data }) => {
       <CreateBoard
         showCreate={showCreate}
         setShowCreate={setShowCreate}
-        articleId={articleId}
         data={data}
       />
     </>
