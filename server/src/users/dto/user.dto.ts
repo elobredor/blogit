@@ -26,6 +26,11 @@ class SavedPostDto {
   @IsString()
   images: string;
 
+  @IsString()
+  @MaxLength(500)
+  @IsOptional()
+  description: string;
+
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
@@ -147,6 +152,16 @@ export class UserUpdateDTO {
   @MaxLength(300)
   @IsOptional()
   images: string;
+
+  @IsString()
+  @MaxLength(500)
+  @IsOptional()
+  description: string;
+
+  @IsString()
+  @MaxLength(35)
+  @IsOptional()
+  _id: string;
 
   @IsOptional()
   @IsArray()

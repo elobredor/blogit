@@ -151,6 +151,8 @@ export class UsersService {
         });
       }
 
+      if (!body.description) body.description = '';
+
       //check if post title is already exist in saved array
       const savedPost = user.saved.some((post) => post.title === body.title);
 
@@ -158,7 +160,15 @@ export class UsersService {
         //if post title is not exist in saved array then push postId in saved array
         user = await this.userModel.findOneAndUpdate(
           { userId: userId },
-          { $push: { saved: { title: body.title, posts: { postId: body.postId, images: body.images } } } },
+          {
+            $push: {
+              saved: {
+                title: body.title,
+                description: body.description,
+                posts: { postId: body.postId, images: body.images },
+              },
+            },
+          },
           { new: true },
         );
       } else {
@@ -172,7 +182,6 @@ export class UsersService {
         }
         //check if postId is already exist in posts array
         const postId = postTitle.posts.some((post) => post.postId === body.postId);
-
         if (!postId) {
           //if postId is not exist in posts array then push postId in posts array
           postTitle.posts.push({ postId: body.postId, images: body.images });
@@ -219,6 +228,29 @@ export class UsersService {
       const blog = await this.blogModel.findOne({ userId: user._id });
       await this.postsModel.updateMany({ blogId: blog._id }, { $set: { status: 1 } });
       return;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //function to update a saved post
+  public async updateSavedPost(savedId: string, body: UserUpdateDTO): Promise<UserInterface> {
+    try {
+      const savedPost = await this.userModel.findOne({ saved: { $elemMatch: { _id: savedId } } });
+
+      //If the saved _id is not found, throw an error.
+      if (!savedPost) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Saved Post with ID: ${savedId} not found`,
+        });
+      }
+
+      //If the comment is found, find the comment and update it.
+      const saved = savedPost.saved.find((art) => art._id.toString() === savedId);
+      saved.description = body.description || saved.description;
+      saved.title = body.title || saved.title;
+      await savedPost.save();
+      return savedPost;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

@@ -33,8 +33,8 @@ export class User {
   @Prop({ type: String })
   socialNetwork2: string;
 
-  @Prop([{ title: String, posts: [{ postId: String, images: String }] }])
-  saved: { title: string; posts: object[] }[];
+  @Prop([{ title: String, description: String, posts: [{ postId: String, images: String }] }])
+  saved: { title: string; description: string; posts: object[] }[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
