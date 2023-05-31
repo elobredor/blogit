@@ -159,7 +159,18 @@ Blog Site App orientada al sector IT.
     {
     "postId": "646ce9c7146cdcdbe236531b", //_id del post
     "title": "test 404", //nombre de la carpeta
-    "images": "imagen.com" //url de la imagen
+    "images": "imagen.com", //url de la imagen
+    "description": "descripción deseada"
+    }
+
+## Actualizar una carpeta de un saved
+
+#### PUT
+
+    http://localhost:4000/api/users/updateSaved/:savedId //el _id de un saved
+    {
+    "title": "test 404", //nombre de la carpeta (solo se debe enviar si se quiere modificar)
+    "description": "descripción deseada" //solo se debe enviar si se quiere modificar
     }
 
 ## actualizar un usuario
