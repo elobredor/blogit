@@ -19,7 +19,7 @@ const CollectionScreen = ({ route }) => {
   return (
     <View style={styles.colecctionContainer}>
       <View style={styles.textContainer}>
-        <Text style={styles.title}>Leer más tarde</Text>
+        <Text style={styles.title}>Todos los artículos</Text>
         <Text styles={styles.descri}>
           Artículos pendientes para revisar más tarde.
         </Text>

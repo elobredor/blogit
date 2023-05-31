@@ -2,40 +2,55 @@ import { Modal, View, Text, TouchableOpacity, TextInput } from "react-native";
 import { styles } from "./createBoardStyles";
 import { iconsCard, iconsArticle } from "../../../utils/iconOptions";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logToDb } from "../../../redux/actions";
 import { MY_IP } from "react-native-dotenv";
 
 const CreateBoard = ({ showCreate, setShowCreate, data }) => {
   const dispacth = useDispatch();
   const [value, setValue] = useState();
+  // const saved = profileInfo.saved; // arreglo de objetos
+  // const profileInfo = useSelector((state) => state.loggedUser);
+  // saved.forEach((board) => {
+  //   if (board.title === value) {
+  //     console.log(`La carpeta ${board.title} ya existe`);
+  //   } else {
+  //     console.log(`Puedes crear una carpeta con el nombre "${board.title}"`);
+  //   }
+  // });
+  // console.log("Esta carpeta ya existe");
+
   const handleChange = (text) => {
     setValue(text);
-    //validar que text no sea ""
   };
 
   const handleSubmit = () => {
-    const bodyBoard = {
-      postId: data.postId,
-      title: value,
-      images: data.images,
-    };
-    fetch(`http://${MY_IP}:4000/api/users/saved/${data.userId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(bodyBoard),
-    })
-      .then((res) => {
-        if (res.ok) {
-          dispacth(logToDb(data.userId));
-          console.log(`la carpeta ${value} ha sido creada exitosamente`);
-        } else {
-          throw new Error("something went wrong");
-        }
+    if (value !== "") {
+      const bodyBoard = {
+        postId: data.postId,
+        title: value,
+        images: data.images,
+      };
+      fetch(`http://${MY_IP}:4000/api/users/saved/${data.userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyBoard),
       })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          if (res.ok) {
+            console.log(`la carpeta ${value} ha sido creada exitosamente`);
+            dispacth(logToDb(data.userId));
+            setShowCreate(false);
+          } else {
+            throw new Error("something went wrong");
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      console.log("Olvidaste poner el nombre de la carpeta");
+    }
   };
   return (
     <Modal visible={showCreate} transparent animationType="fade">

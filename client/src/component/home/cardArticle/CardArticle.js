@@ -79,7 +79,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
   const savedArticle = () => {
     const savedBody = {
       postId: item._id,
-      title: "Leer más tarde",
+      title: "Todos los artículos",
       images: item.images,
     };
 

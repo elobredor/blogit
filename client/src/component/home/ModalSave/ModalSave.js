@@ -7,7 +7,7 @@ import SelectBoard from "../selectBoard/SelectBoard.js";
 const ModalSave = ({ alert, setAlert, data }) => {
   const [visible, setVisible] = useState(false); // estado de Modal collection // Elegir tablero
   const navigation = useNavigation();
-  const boardName = "Leer más tarde";
+  const boardName = "Todos los artículos";
 
   useEffect(() => {
     setTimeout(() => {
@@ -22,7 +22,7 @@ const ModalSave = ({ alert, setAlert, data }) => {
           <View style={styles.modalContainer}>
             <View style={{}}>
               <Text style={styles.info}>Guardado en </Text>
-              <Text style={styles.boardName}> Leer más tarde</Text>
+              <Text style={styles.boardName}>Todos los artículos</Text>
             </View>
             <Text style={styles.link} onPress={() => setVisible(true)}>
               Colecciones

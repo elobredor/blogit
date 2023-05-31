@@ -6,10 +6,10 @@ import { useState, useEffect } from "react";
 import CreateBoard from "../createBoard/CreateBoard";
 
 const ModalSave = ({ visible, setVisible, data }) => {
-  const [showCreate, setShowCreate] = useState(false); // Estado de ModalCreateCol // crear un tablero
+  const [showCreate, setShowCreate] = useState(false); // Estado de CreateBoard
   const [saved, setSaved] = useState(true);
   const navigation = useNavigation();
-  const boardName = "Leer más tarde";
+  const boardName = "Todos los artículos";
 
   return (
     <>
