@@ -186,11 +186,41 @@ export class UsersService {
           //if postId is not exist in posts array then push postId in posts array
           postTitle.posts.push({ postId: body.postId, images: body.images });
           await user.save();
-        } else {
-          //if postId is already exist in posts array then remove postId from posts array
-          postTitle.posts = postTitle.posts.filter((post) => post.postId.toString() !== body.postId);
-          await user.save();
         }
+      }
+      return user;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //function to save posts
+  public async deleteSavedPost(userId: string, body: UserUpdateDTO): Promise<UserInterface> {
+    try {
+      let user: UserInterface;
+      //check if user exist
+      user = await this.userModel.findOne({ userId });
+      //if user not exist throw error
+      if (!user) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'User not found',
+        });
+      }
+
+      //if post title is already exist, find the object
+      const postTitle = user.saved.find((post) => post.title === body.title);
+      if (!postTitle) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'Post title not found',
+        });
+      }
+      //check if postId is already exist in posts array
+      const postId = postTitle.posts.some((post) => post.postId === body.postId);
+      if (postId) {
+        //if postId is already exist in posts array then remove postId from posts array
+        postTitle.posts = postTitle.posts.filter((post) => post.postId.toString() !== body.postId);
+        await user.save();
       }
       return user;
     } catch (error) {

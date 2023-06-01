@@ -52,6 +52,15 @@ export class UsersController {
       savedPost,
     });
   }
+  //method to delete saved posts
+  @Put('delete-saved/:userId')
+  public async deleteSaved(@Res() response: Response, @Param('userId') userId: string, @Body() body: UserUpdateDTO) {
+    const deletedSavedPost = await this.usersService.deleteSavedPost(userId, body);
+    return response.status(HttpStatus.OK).json({
+      message: 'Post has been successfully deleted',
+      deletedSavedPost,
+    });
+  }
   //method to change status of user
   @Put('status/:userId')
   public async changeStatus(@Res() response: Response, @Param('userId') userId: string) {
