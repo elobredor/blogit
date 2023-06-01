@@ -2,6 +2,7 @@ import { Body, Controller, Get, HttpStatus, Param, Post, Put, Res } from '@nestj
 import { Response } from 'express';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto, UserUpdateDTO } from '../dto/user.dto';
+import { ParseObjectIdPipe } from 'src/utils/parse-object-id-pipe.pipe';
 
 @Controller('users')
 //@UseGuards(AuthGuard, RolesGuard)
@@ -65,6 +66,19 @@ export class UsersController {
     await this.usersService.enableUser(userId);
     return response.status(HttpStatus.OK).json({
       message: 'User has been successfully enabled',
+    });
+  }
+  //method to update savedPosts
+  @Put('updateSaved/:savedId')
+  public async updateSaved(
+    @Res() response: Response,
+    @Param('savedId', ParseObjectIdPipe) savedId: string,
+    @Body() body: UserUpdateDTO,
+  ) {
+    const saved = await this.usersService.updateSavedPost(savedId, body);
+    return response.status(HttpStatus.OK).json({
+      message: 'Post has been successfully updated',
+      saved,
     });
   }
 }

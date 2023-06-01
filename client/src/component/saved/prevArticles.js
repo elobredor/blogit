@@ -1,28 +1,34 @@
-import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
+import { View, TouchableOpacity, ImageBackground } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./boardStyles";
 
-export const RenderPrevArticle = ({ num, articles }) => {
-  if (num == 1) {
+export const RenderPrevArticle = ({ articles }) => {
+  const num = articles.length;
+  if (num === 1) {
     return (
       <View style={styles.prevContainer}>
-        <PrevArticle articles={articles} />
-        <Text>Previzualiza otro articulo </Text>
+        <PrevArticleFill articles={articles} />
+        <View style={styles.prevArticle}></View>
       </View>
     );
   } else if (num >= 2) {
     return (
       <View style={styles.prevContainer}>
-        <PrevArticle articles={articles} />
-        <PrevArticle articles={articles} n={1} />
+        <PrevArticleFill articles={articles} />
+        <PrevArticleFill articles={articles} n={1} />
       </View>
     );
   } else if (num === 0) {
-    return <Text style={styles.textEmpty}>Esta carpeta está vacía</Text>;
+    return (
+      <View style={styles.prevContainer}>
+        <View style={styles.prevArticle}></View>
+        <View style={styles.prevArticle}></View>
+      </View>
+    );
   }
 };
 
-export const PrevArticle = ({ n = 0, articles }) => {
+export const PrevArticleFill = ({ n = 0, articles }) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity

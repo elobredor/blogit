@@ -16,6 +16,8 @@ export interface UserInterface extends Document {
 }
 
 interface SavedPost {
+  _id: string;
+  description: string;
   title: string;
   posts: { postId: string; images: string }[];
 }

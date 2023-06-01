@@ -17,6 +17,13 @@ export const styles = StyleSheet.create({
     marginTop: 20,
   },
   textEmpty: { marginTop: 50, fontSize: 22, textAlign: "center" },
-  prevArticle: { height: 100, width: 170 },
+  prevArticle: {
+    height: 100,
+    width: 170,
+    backgroundColor: "#aaa",
+    borderRadius: 14,
+  },
+  //prevCon
 });
+
 export default styles;

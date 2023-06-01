@@ -5,8 +5,13 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  textContainer: {
+  headerContainer: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-around",
     margin: 12,
+  },
+  textContainer: {
     textAlign: "left",
     alignSelf: "flex-start",
   },
@@ -17,4 +22,5 @@ export const styles = StyleSheet.create({
   descri: {
     fontSize: 24,
   },
+  dots: { alignSelf: "center", marginRight: 10 },
 });

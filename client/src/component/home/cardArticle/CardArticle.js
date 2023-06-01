@@ -19,22 +19,13 @@ import { LinearGradient } from "expo-linear-gradient";
 const CardArticle = ({ item, setModalVisibility }) => {
   const [favorite, setFavorite] = useState();
   const [saved, setSaved] = useState(false);
-  const [alert, setAlert] = useState(false);
-  // const [imageSize, setImageSize] = useState({ width: null, height: null });
+  const [alert, setAlert] = useState(false); // visibilidad del modal save
   const hasLogged = useSelector((state) =>
     state.logged ? state.loggedUser : false
   );
   const dispatch = useDispatch();
 
   const navigation = useNavigation();
-
-  // useEffect(() => {
-  //   const getImageSize = async () => {
-  //     const { width, height } = await Image.getSize(require('../../../../assets/atomo-save.png'));
-  //     setImageSize({ width, height });
-  //   };
-  //   getImageSize();
-  // }, []);
 
   useEffect(() => {
     if (item.postLikes.includes(hasLogged._id)) {
@@ -104,6 +95,14 @@ const CardArticle = ({ item, setModalVisibility }) => {
     }
   };
 
+  //data importante para los modales de creacion de tableros
+  const data = {
+    userId: hasLogged.userId,
+    postId: item._id,
+    images: item.images,
+    saved: hasLogged.saved,
+  };
+
   return (
     <>
       <TouchableWithoutFeedback
@@ -171,7 +170,12 @@ const CardArticle = ({ item, setModalVisibility }) => {
           </ImageBackground>
         </View>
       </TouchableWithoutFeedback>
-      <ModalSave alert={alert} setAlert={setAlert} />
+      <ModalSave
+        alert={alert}
+        setAlert={setAlert}
+        data={data}
+        savedFn={savedArticle}
+      />
     </>
   );
 };
