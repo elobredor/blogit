@@ -18,6 +18,10 @@ const SavedStack = () => {
       <Stack.Screen
         name="Collection"
         component={CollectionScreen}
+        options={{
+          headerStyle: { backgroundColor: '#020123' },
+          headerTintColor: '#f5f5f5'
+        }}
       />
     </Stack.Navigator>
   );

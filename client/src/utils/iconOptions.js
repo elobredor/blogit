@@ -46,7 +46,7 @@ export const iconsCard = {
   account: {
     default: <Ionicons color={"grey"} size={24} name="person-outline" />,
     focused: <Ionicons color="white" size={24} name="person" />,
-    dots: <Entypo name="dots-three-vertical" size={24} color="black" />,
+    dots: <Entypo name="dots-three-vertical" size={24} color="#f5f5f5" />,
   },
   glass: {
     default: <Entypo name="magnifying-glass" size={24} color="black" />,
