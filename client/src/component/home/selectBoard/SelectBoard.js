@@ -1,6 +1,5 @@
-import { Modal, View, Text, Image, FlatList } from "react-native";
+import { Modal, View, Text, FlatList, ImageBackground } from "react-native";
 import { styles } from "./selectBoardStyles";
-import { useNavigation } from "@react-navigation/native";
 import { iconsCard, iconsArticle } from "../../../utils/iconOptions";
 import { useState, useEffect } from "react";
 import CreateBoard from "../createBoard/CreateBoard";
@@ -12,9 +11,8 @@ const ModalSave = ({ visible, setVisible, data }) => {
   const [showCreate, setShowCreate] = useState(false); // Estado de CreateBoard
   const [saved, setSaved] = useState(true);
   const [boards, setBoards] = useState([]);
-  const navigation = useNavigation();
-  const boardName = "Todos los artículos";
   const savedB = useSelector((state) => state.loggedUser.saved);
+
   const dispacth = useDispatch();
 
   //funcion guardado
@@ -46,7 +44,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
   useEffect(() => {
     if (savedB && savedB.length > 0) {
       const filteredBoards = savedB.filter(
-        (obj) => obj.title !== "Todos los artículos"
+        (obj) => obj.title !== "Leer más tarde"
       );
       setBoards(filteredBoards);
     }
@@ -55,11 +53,13 @@ const ModalSave = ({ visible, setVisible, data }) => {
   const renderBoards = (boards) => {
     return boards.length > 0 ? (
       <FlatList
-        data={boards.reverse()}
-        renderItem={({ item }) => <BoardE item={item} savedFn={savedFn} />}
+        data={boards}
+        renderItem={({ item }) => (
+          <BoardE item={item} savedFn={savedFn} data={data} />
+        )}
       />
     ) : (
-      <CreateItem />
+      <CreateItem setShowCreate={setShowCreate} />
     );
   };
 
@@ -71,8 +71,15 @@ const ModalSave = ({ visible, setVisible, data }) => {
             {/* See Later Board */}
             <View style={styles.defaultContainer}>
               <View style={styles.leftSide}>
-                <View style={styles.miniPrev}></View>
-                <Text style={styles.text}>{boardName}</Text>
+                <View style={styles.miniPrev}>
+                  <ImageBackground
+                    source={{ uri: data.images }}
+                    imageStyle={{ width: 80, height: 80 }}
+                  >
+                    <Text>.</Text>
+                  </ImageBackground>
+                </View>
+                <Text style={styles.text}>Leer más tarde</Text>
               </View>
               <View style={styles.rigthSide}>
                 {saved ? iconsCard.saved.filled : iconsArticle.plus}
@@ -108,7 +115,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
   );
 };
 
-const CreateItem = () => {
+const CreateItem = ({ setShowCreate }) => {
   return (
     <View style={styles.boardContainer}>
       <View style={styles.leftSide}>
@@ -139,15 +146,19 @@ const BoardE = ({ item, savedFn }) => {
     <>
       <View style={styles.boardContainer}>
         <View style={styles.leftSide}>
-          <View style={styles.miniPrev}>{/*Image del item actual*/}</View>
+          <View style={styles.miniPrev}>
+            <ImageBackground
+              source={{ uri: item.posts[0].images }}
+              imageStyle={{ width: 80, height: 80 }}
+            >
+              <Text>.</Text>
+            </ImageBackground>
+          </View>
           <Text onPress={() => savedFn(item.title)} style={styles.text}>
-            {item.title} {/* obtener el nombre del tablero */}
+            {item.title}
           </Text>
         </View>
-        <View
-          onPress={() => console.log("se ha guardado en " + item.title)}
-          style={styles.rigthSide}
-        >
+        <View onPress={() => savedFn(item.title)} style={styles.rigthSide}>
           {iconsArticle.plus}
         </View>
       </View>

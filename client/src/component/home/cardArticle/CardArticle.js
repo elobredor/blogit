@@ -19,7 +19,7 @@ import { LinearGradient } from "expo-linear-gradient";
 const CardArticle = ({ item, setModalVisibility }) => {
   const [favorite, setFavorite] = useState();
   const [saved, setSaved] = useState(false);
-  const [alert, setAlert] = useState(false);
+  const [alert, setAlert] = useState(false); // visibilidad del modal save
   const hasLogged = useSelector((state) =>
     state.logged ? state.loggedUser : false
   );
@@ -70,7 +70,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
   const savedArticle = () => {
     const savedBody = {
       postId: item._id,
-      title: "Todos los artículos",
+      title: "Leer más tarde",
       images: item.images,
     };
 
@@ -95,7 +95,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
     }
   };
 
-  //data importante para los modales de guardado
+  //data importante para los modales de creacion de tableros
   const data = {
     userId: hasLogged.userId,
     postId: item._id,
@@ -170,7 +170,12 @@ const CardArticle = ({ item, setModalVisibility }) => {
           </ImageBackground>
         </View>
       </TouchableWithoutFeedback>
-      <ModalSave alert={alert} setAlert={setAlert} data={data} />
+      <ModalSave
+        alert={alert}
+        setAlert={setAlert}
+        data={data}
+        savedFn={savedArticle}
+      />
     </>
   );
 };

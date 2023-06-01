@@ -1,26 +1,15 @@
 import { Modal, View, Text, TouchableOpacity, TextInput } from "react-native";
 import { styles } from "./createBoardStyles";
-import { iconsCard, iconsArticle } from "../../../utils/iconOptions";
+import { iconsArticle } from "../../../utils/iconOptions";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logToDb } from "../../../redux/actions";
 import { MY_IP } from "react-native-dotenv";
 
 const CreateBoard = ({ showCreate, setShowCreate, data }) => {
   const dispacth = useDispatch();
   const [value, setValue] = useState();
-  // const saved = profileInfo.saved; // arreglo de objetos
-  // const profileInfo = useSelector((state) => state.loggedUser);
-  // saved.forEach((board) => {
-  //   if (board.title === value) {
-  //     console.log(`La carpeta ${board.title} ya existe`);
-  //   } else {
-  //     console.log(`Puedes crear una carpeta con el nombre "${board.title}"`);
-  //   }
-  // });
-  // console.log("Esta carpeta ya existe");
 
-  //TENGO QUE CERRAR EL MODAL ANTERIOR
   const handleChange = (text) => {
     setValue(text);
   };

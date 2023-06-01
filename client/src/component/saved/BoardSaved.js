@@ -18,7 +18,7 @@ const BoardSaved = ({ item }) => {
     <>
       <View style={styles.containerBoard}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Collection", item.posts)}
+          onPress={() => navigation.navigate("Collection", item)}
         >
           <Text style={styles.boardTitle}>{item.title}</Text>
           <Text> {item.posts.length} artículo(s)</Text>

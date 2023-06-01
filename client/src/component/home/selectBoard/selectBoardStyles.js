@@ -32,8 +32,8 @@ export const styles = StyleSheet.create({
   miniPrev: {
     width: 80,
     height: 80,
-    backgroundColor: "#fff",
     borderRadius: 10,
+    overflow: "hidden",
   },
   text: {
     fontSize: 16,
