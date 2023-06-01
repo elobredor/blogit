@@ -16,7 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import RenderHtml, { defaultSystemFonts } from 'react-native-render-html';
 import { formatDate, setReadingTime } from '../../utils/formatData';
 import { useSelector, useDispatch } from 'react-redux';
-import { getDetails, setArticleLike, getArticles } from '../../redux/actions';
+import { getDetails, setArticleLike, getArticles, logToDb } from '../../redux/actions';
 import {
   useFonts,
   JosefinSans_500Medium,
@@ -27,6 +27,8 @@ const systemFonts = [
   'JosefinSans_500Medium',
   'JosefinSans_700Bold',
 ];
+//SAVED_IMPORTS
+import ModalSave from '../../component/home/ModalSave/ModalSave.js';
 
 export default function ArticleScreen({ route }) {
   let [fontsLoaded] = useFonts({
@@ -43,10 +45,12 @@ export default function ArticleScreen({ route }) {
   const loggedUser = useSelector((state) => {
     return state.logged ? state.loggedUser : null;
   });
+  //SAVED_STATES
+  const [alert, setAlert] = useState(false);
 
   // MOUNT_DETAILS
-  useEffect(() => {
-    dispatch(getDetails(route.params));
+  useEffect(() => {    
+      dispatch(getDetails(route.params));
   }, []);
 
   // NAVIGATE_TO_COMMENTS
@@ -89,6 +93,63 @@ export default function ArticleScreen({ route }) {
       });
     }
   };
+
+  // SAVE_ARTICLE
+  const savedArticle = () => {
+    const savedBody = {
+      postId: article._id,
+      title: "Leer más tarde",
+      images: article.images,
+    };
+
+    fetch(`http://${MY_IP}:4000/api/users/saved/${loggedUser.userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(savedBody),
+    })
+      .then((res) => {
+        if (res.ok) {
+          dispatch(logToDb(loggedUser.userId));
+          setSaved(true);
+        } else {
+          throw new Error("ha habido un error");
+        }
+      })
+      .catch((err) => console.error(err));
+
+    if (saved === false) {
+      setAlert(true);
+    }
+  };
+
+  useEffect(() => {
+    if (loggedUser) {
+      const answer = loggedUser.saved.some((folder) =>
+        folder.posts.some((post) => post.postId === article._id)
+      );
+      setSaved(answer);
+    }
+  }, [loggedUser]);
+
+  let data = {
+    userId: loggedUser.userId,
+    postId: article._id,
+    images: article.images,
+    saved: loggedUser.saved,
+  };
+  // useEffect(() => {
+  //   if (loggedUser && Object.entries(article).length) {
+  //     data = {
+  //       userId: loggedUser.userId,
+  //       postId: article._id,
+  //       images: article.images,
+  //       saved: loggedUser.saved,
+  //     };
+  //   }
+  // }, [article, loggedUser]);
+  
 
   // LOADING_RENDER
   if (fetchStatus.status === 'loading' || !fontsLoaded)
@@ -152,7 +213,7 @@ export default function ArticleScreen({ route }) {
               </TouchableWithoutFeedback>
               <Text style={styles.iconCounters}>{article.postLikes.length}</Text>
             </View>
-            <TouchableWithoutFeedback onPress={() => setSaved(!saved)}>
+            <TouchableWithoutFeedback onPress={() => loggedUser ? savedArticle() : setModalVisibility(true)}>
               {saved ? iconsArticle.saved.focused : iconsArticle.saved.default}
             </TouchableWithoutFeedback>
           </View>
@@ -175,6 +236,12 @@ export default function ArticleScreen({ route }) {
           modalVisibility={modalVisibility}
           setModalVisibility={setModalVisibility}
         />
+        <ModalSave
+          alert={alert}
+          setAlert={setAlert}
+          data={data}
+          savedFn={savedArticle}
+      />
       </>
     );
 }
