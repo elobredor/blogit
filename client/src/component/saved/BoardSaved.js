@@ -1,5 +1,4 @@
 import { Text, View, TouchableOpacity } from "react-native";
-import { iconsCard } from "client/src/utils/iconOptions.js";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { RenderPrevArticle } from "./prevArticles";
@@ -16,18 +15,17 @@ const BoardSaved = ({ item }) => {
   );
 
   return (
-    <View style={styles.containerBoard}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Collection", item.posts)}
-      >
-        <Text style={styles.boardTitle}>{item.title}</Text>
-        <Text> {item.posts.length} artículo(s)</Text>
-      </TouchableOpacity>
-      <RenderPrevArticle
-        num={lastArticles.length}
-        articles={articles}
-      ></RenderPrevArticle>
-    </View>
+    <>
+      <View style={styles.containerBoard}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Collection", item)}
+        >
+          <Text style={styles.boardTitle}>{item.title}</Text>
+          <Text> {item.posts.length} artículo(s)</Text>
+        </TouchableOpacity>
+        <RenderPrevArticle articles={articles} />
+      </View>
+    </>
   );
 };
 

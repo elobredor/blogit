@@ -13,7 +13,7 @@ export const iconOptions = {
   },
   search: {
     default: <AntDesign name="search1" size={24} color="grey" />,
-    focused: <AntDesign name="search1" size={24} color="black" />
+    focused: <AntDesign name="search1" size={24} color="black" />,
   },
   saved: {
     default: (
@@ -49,6 +49,7 @@ export const iconsCard = {
   account: {
     default: <Ionicons color={"grey"} size={24} name="person-outline" />,
     focused: <Ionicons color="white" size={24} name="person" />,
+    dots: <Entypo name="dots-three-vertical" size={24} color="black" />,
   },
   glass: {
     default: <Entypo name="magnifying-glass" size={24} color="black" />,
