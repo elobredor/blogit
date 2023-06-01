@@ -8,36 +8,47 @@ import { MY_IP } from "react-native-dotenv";
 
 const CreateBoard = ({ showCreate, setShowCreate, data }) => {
   const dispacth = useDispatch();
-  const [value, setValue] = useState();
+  const [title, setTitle] = useState("");
+  const [descri, setDescri] = useState("");
 
-  const handleChange = (text) => {
-    setValue(text);
+  const handleChangeTitle = (text) => {
+    setTitle(text);
   };
 
+  const handleChangeDecri = (text) => {
+    setDescri(text);
+  };
   const handleSubmit = () => {
-    if (value !== "") {
-      const bodyBoard = {
-        postId: data.postId,
-        title: value,
-        images: data.images,
-      };
-      fetch(`http://${MY_IP}:4000/api/users/saved/${data.userId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bodyBoard),
-      })
-        .then((res) => {
-          if (res.ok) {
-            console.log(`la carpeta ${value} ha sido creada exitosamente`);
-            dispacth(logToDb(data.userId));
-            setShowCreate(false);
-          } else {
-            throw new Error("something went wrong");
-          }
+    if (title !== "") {
+      if (descri.length > 50 || title.length > 30) {
+        console.log("Este espacio no es para escribir un nuevo libro sagrado."); // modal de aviso o texto debajo del respectivo input
+      } else {
+        const bodyBoard = {
+          postId: data.postId,
+          title: title,
+          images: data.images,
+          description: descri
+            ? descri
+            : "Aquí puedes añadir una breve descripción",
+        };
+        fetch(`http://${MY_IP}:4000/api/users/saved/${data.userId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bodyBoard),
         })
-        .catch((err) => console.log(err));
+          .then((res) => {
+            if (res.ok) {
+              console.log(`la carpeta ${title} ha sido creada exitosamente`);
+              dispacth(logToDb(data.userId));
+              setShowCreate(false);
+            } else {
+              throw new Error("something went wrong");
+            }
+          })
+          .catch((err) => console.log(err));
+      }
     } else {
       console.log("Olvidaste poner el nombre de la carpeta");
     }
@@ -64,15 +75,16 @@ const CreateBoard = ({ showCreate, setShowCreate, data }) => {
           </View>
 
           <TextInput
-            style={styles.input}
+            style={title.length < 30 ? styles.input : styles.inputError}
             placeholder="Nombre de la coleccion"
             placeholderTextColor="white"
-            onChangeText={handleChange}
+            onChangeText={handleChangeTitle}
           />
           <TextInput
-            style={styles.input}
+            style={descri.length < 50 ? styles.input : styles.inputError}
             placeholder="Descripción (opcional)"
             placeholderTextColor="white"
+            onChangeText={handleChangeDecri}
           />
         </View>
       </View>
