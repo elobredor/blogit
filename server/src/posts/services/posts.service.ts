@@ -191,7 +191,60 @@ export class PostsService {
   public async getPostsByKeyword(keyword: string): Promise<PostsInterface[]> {
     try {
       //find posts by title and keyword
-      return await this.postsModel.find({ title: { $regex: keyword, $options: 'i' } }).select('-__v -comments.postId');
+      const posts = await this.postsModel.aggregate([
+        {
+          $match: {
+            title: { $regex: keyword, $options: 'i' },
+          },
+        },
+        {
+          $unwind: '$title',
+        },
+        {
+          $lookup: {
+            from: 'blogs',
+            localField: 'blogId',
+            foreignField: '_id',
+            as: 'blogs',
+          },
+        },
+        {
+          $unwind: '$blogs',
+        },
+        {
+          $sort: {
+            createdAt: -1,
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'blogs.userId',
+            foreignField: '_id',
+            as: 'users',
+          },
+        },
+        {
+          $unwind: '$users',
+        },
+        {
+          $group: {
+            _id: '$_id',
+            userId: { $first: '$users.userId' },
+            userName: { $first: '$users.userName' },
+            profileImage: { $first: '$users.profileImage' },
+            blogId: { $first: '$blogId' },
+            category: { $first: '$blogs.category' },
+            title: { $first: '$title' },
+            comments: { $first: '$comments' },
+            images: { $first: '$images' },
+            postLikes: { $first: '$postLikes' },
+            createdAt: { $first: '$createdAt' },
+          },
+        },
+      ]);
+
+      return posts;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
