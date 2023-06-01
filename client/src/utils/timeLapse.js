@@ -22,3 +22,10 @@ export const timeLapse = (date) => {
   if (seconds > 0) return `${seconds} segundos`;
   return '';
 };
+
+export const simpleTimeLapse = (date) => {
+  const oldDate = new Date(date);
+  const now = new Date();
+  const difference = now - oldDate;
+  return difference;
+};

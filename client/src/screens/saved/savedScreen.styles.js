@@ -2,8 +2,10 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   savedContainer: {
-    marginVertical: 10,
+    flex: 1,
+    paddingVertical: 10,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: '#020123',
   },
 });

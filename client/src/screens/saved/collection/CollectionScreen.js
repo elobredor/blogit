@@ -24,10 +24,7 @@ const CollectionScreen = ({ route }) => {
       <View style={styles.headerContainer}>
         <View style={styles.textContainer}>
           <Text style={styles.title}>{data.title}</Text>
-          <Text styles={styles.descri}>
-            Artículos pendientes para revisar más tarde.
-            {/* Límite de caracteres*/}
-          </Text>
+          <Text style={styles.descri}>Artículos pendientes para revisar más tarde.</Text>
         </View>
         <Text onPress={() => setVisible(true)} style={styles.dots}>
           {iconsCard.account.dots}
@@ -43,7 +40,7 @@ const CollectionScreen = ({ route }) => {
           ></CardArticle>
         )}
       />
-      <DotsModal visible={visible} setVisible={setVisible} />
+      {/* <DotsModal visible={visible} setVisible={setVisible} /> */}
     </View>
   );
 };

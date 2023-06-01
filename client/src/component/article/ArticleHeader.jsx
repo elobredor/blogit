@@ -6,7 +6,7 @@ export default function ArticleHeader () {
   const navigation = useNavigation();
   return (
     <TouchableOpacity onPress={() => navigation.goBack()}>
-      <Ionicons name="arrow-back" size={24} color="black" />
+      <Ionicons name="arrow-back" size={24} color="#f5f5f5" />
     </TouchableOpacity>
   );
 }

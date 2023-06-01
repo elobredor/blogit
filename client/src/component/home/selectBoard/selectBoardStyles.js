@@ -10,18 +10,20 @@ export const styles = StyleSheet.create({
     width: "95%",
     maxHeight: "50%",
     borderRadius: 15,
-    backgroundColor: "#555",
+    backgroundColor: "#3A3969",
     gap: 10,
     elevation: 5,
   },
   // Focus Board
   defaultContainer: {
     flexDirection: "row",
-    backgroundColor: "#999",
+    backgroundColor: "#3A3969",
     borderTopStartRadius: 14,
     borderTopEndRadius: 14,
     padding: 15,
     justifyContent: "space-between",
+    borderBottomWidth: 1,
+    borderColor: '#201952', 
   },
   leftSide: {
     justifyContent: "center",
@@ -38,7 +40,7 @@ export const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     textAlign: "center",
-    color: "white",
+    color: "#f5f5f5",
     fontWeight: "500",
   },
   rigthSide: {

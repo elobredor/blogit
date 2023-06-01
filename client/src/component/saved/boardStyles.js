@@ -3,14 +3,18 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   containerBoard: {
     height: 195,
-    backgroundColor: "#ccc",
+    backgroundColor: "#3a3969",
     marginBottom: 10,
     borderRadius: 10,
     padding: 10,
     width: 365,
   },
   //prev articles
-  boardTitle: { fontWeight: "500", fontSize: 20 },
+  boardTitle: {
+    color: '#f5f5f5',
+    fontWeight: "500",
+    fontSize: 20
+  },
   prevContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -20,7 +24,7 @@ export const styles = StyleSheet.create({
   prevArticle: {
     height: 100,
     width: 170,
-    backgroundColor: "#aaa",
+    backgroundColor: "#222143",
     borderRadius: 14,
   },
   //prevCon

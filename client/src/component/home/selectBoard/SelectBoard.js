@@ -95,7 +95,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
                   setShowCreate(true);
                   setVisible(false);
                 }}
-                style={{ color: "#3B79BE" }}
+                style={{ color: "#37B4A1" }}
               >
                 Nueva Coleccion
               </Text>

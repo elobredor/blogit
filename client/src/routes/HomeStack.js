@@ -20,22 +20,26 @@ const HomeStack = () => {
         component={ArticleScreen}
         options={{
           headerTitle: () => null,
-          headerLeft: () => <ArticleHeader />
+          headerLeft: () => <ArticleHeader />,
+          headerStyle: { backgroundColor: '#090841' },
         }}
       />
       <Stack.Screen
         name="comments"
         component={CommentsScreen}
         options={{
-          headerTitle: () => null,
-          headerLeft: () => <ArticleHeader />
+          title: 'Comentarios',
+          headerTintColor: '#f5f5f5',
+          headerTitleStyle: { fontSize: 20 },
+          headerStyle: { backgroundColor: '#020123' },
         }}
       />
       <Stack.Screen
         name="account"
         component={AccountStack}
         options={{
-          title: 'Log In'
+          title: 'Log In',
+          headerShown: false
         }}
       />
     </Stack.Navigator>

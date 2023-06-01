@@ -45,7 +45,7 @@ const Filters = () => {
               : styles.btnFilter
           }
         >
-          <Text style={styles.buttonText}>FRONT-END</Text>
+          <Text style={styles.buttonText}>Front-end</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => sendData("BACK-END")}
@@ -55,7 +55,7 @@ const Filters = () => {
               : styles.btnFilter
           }
         >
-          <Text style={styles.buttonText}>BACK-END</Text>
+          <Text style={styles.buttonText}>Back-end</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -66,7 +66,7 @@ const Filters = () => {
               : styles.btnFilter
           }
         >
-          <Text style={styles.buttonText}>NO-CODE</Text>
+          <Text style={styles.buttonText}>No-code</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>

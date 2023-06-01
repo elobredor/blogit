@@ -7,6 +7,7 @@ import { styles } from "./homeScreen.styles";
 import { useDispatch, useSelector } from "react-redux";
 import { getArticles } from "../../redux/actions";
 import { iconOptions } from "../../utils/iconOptions";
+import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -16,8 +17,8 @@ const HomeScreen = () => {
     state.logged;
   });
   const img = useSelector((state) => state.loggedUser.profileImage);
-
   const [modalVisibility, setModalVisibility] = useState(false);
+  const { navigate } = useNavigation();
 
   useEffect(() => {
     dispatch(getArticles());
@@ -34,7 +35,7 @@ const HomeScreen = () => {
               {iconOptions.account.focused}
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigate('account')}>
               <Image source={{ uri: img }} style={styles.profilePh} />
             </TouchableOpacity>
           )}
