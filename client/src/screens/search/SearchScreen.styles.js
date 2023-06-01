@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   sortBtnsContainer: {
-    borderTopColor: '#302962',
+    borderTopColor: '#102962',
     borderTopWidth: 2,
     paddingTop: 20,
     flexDirection: 'row',
@@ -45,13 +45,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 17,
     paddingVertical: 5,
     borderRadius: 15,
-    backgroundColor: '#37b4a1'
+    backgroundColor: '#007764',
   },
   sortBtnActive: {
     paddingHorizontal: 17,
     paddingVertical: 5,
     borderRadius: 15,
-    backgroundColor: '#f5f5f5'
+    backgroundColor: '#37b4a1',
   },
   sortBtnText: {
     color: '#020123',

@@ -31,7 +31,7 @@ export const SearchScreen = () => {
 
   useEffect(() => {
     const foundArticles = search.length
-      ? [...articles].filter((art) => art.title.includes(search))
+      ? [...articles].filter((art) => art.title.toLowerCase().includes(search.toLowerCase()))
       : [];
     if (sort === 'popularity') {
       setSearchArticles(
@@ -67,6 +67,8 @@ export const SearchScreen = () => {
           <TextInput
             style={styles.textInput}
             onChangeText={handleChange}
+            placeholder='Blogs...'
+            placeholderTextColor={'#f5f5f5'}
             value={search}
           />
           <TouchableOpacity
@@ -83,18 +85,21 @@ export const SearchScreen = () => {
         <TouchableOpacity
           style={sort === 'all' ? styles.sortBtnActive : styles.sortBtn}
           onPress={() => setSort('all')}
+          activeOpacity={0.6}
         >
           <Text style={styles.sortBtnText}>Todos</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={sort === 'date' ? styles.sortBtnActive : styles.sortBtn}
           onPress={() => setSort('date')}
+          activeOpacity={0.6}
         >
           <Text style={styles.sortBtnText}>Más Recientes</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={sort === 'popularity' ? styles.sortBtnActive : styles.sortBtn}
           onPress={() => setSort('popularity')}
+          activeOpacity={0.6}
         >
           <Text style={styles.sortBtnText}>Populares</Text>
         </TouchableOpacity>

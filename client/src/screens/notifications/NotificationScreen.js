@@ -7,7 +7,7 @@ const NotificationScreen = () => {
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.boxIcon}>
-          <Ionicons color={'grey'} size={24} name='notifications-outline' />
+          <Ionicons color={'#f5f5f5'} size={24} name='notifications-outline' />
         </View>
 
         <View style={{ width: '90%' }}>

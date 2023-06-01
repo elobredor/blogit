@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   card: {
     borderRadius: 20,
-    marginBottom: 10,
+    marginVertical: 9,
     elevation: 10,
     width: 355,
     overflow: 'hidden'

@@ -4,6 +4,7 @@ import HomeStack from './HomeStack';
 import NotificationStack from './NotificationStack';
 import SavedStack from './SavedStack';
 import { SearchStack } from './SearchStack';
+import { View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -11,10 +12,11 @@ const AppNavigation = () => {
   return (
     <Tab.Navigator
       screenOptions={() => ({
-        tabBarActiveTintColor: 'black',
-        tabBarInactiveTintColor: 'grey',
+        tabBarActiveTintColor: '#007764',
+        tabBarInactiveTintColor: '#f5f5f5',
         headerShown: false,
-        tabBarStyle: { backgroundColor: 'white', height: 40 },
+        tabBarHideOnKeyboard: true,
+        tabBarStyle: { backgroundColor: '#020123', height: 45 },
       })}
     >
       <Tab.Screen

@@ -12,11 +12,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 15,
-    backgroundColor: '#eee',
+    backgroundColor: '#3A3969',
     gap: 10,
     elevation: 5
   },
   loginText: {
+    color: '#f5f5f5',
     fontSize: 25,
     textAlign: "center"
   },

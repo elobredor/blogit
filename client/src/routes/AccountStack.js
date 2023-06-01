@@ -11,6 +11,8 @@ const AccountStack = () => {
         name='accountStack'
         component={AccountScreen}
         options={{
+          headerTintColor: '#f5f5f5',
+          headerStyle: {backgroundColor: '#020123'},
           title: 'Perfil'
         }}
       />

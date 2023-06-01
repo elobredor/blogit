@@ -5,35 +5,30 @@ import {
   MaterialCommunityIcons,
   Fontisto,
   MaterialIcons,
-  FontAwesome5
+  FontAwesome5,
+  Feather
 } from "@expo/vector-icons";
 
 export const iconOptions = {
   home: {
-    default: <Ionicons color={"grey"} size={24} name="home-outline" />,
-    focused: <Ionicons color="black" size={24} name="home" />,
+    default: <MaterialCommunityIcons color='#f5f5f5' size={32} name="home-outline" />,
+    focused: <MaterialCommunityIcons color='#37b4a1' size={32} name="home-outline" />,
   },
   search: {
-    default: <AntDesign name="search1" size={24} color="grey" />,
-    focused: <AntDesign name="search1" size={24} color="black" />,
+    default: <MaterialIcons name="search" size={30} color='#f5f5f5' />,
+    focused: <MaterialIcons name="search" size={30} color='#37b4a1' />,
   },
   saved: {
-    default: (
-      <MaterialCommunityIcons
-        color={"grey"}
-        size={24}
-        name="bookmark-outline"
-      />
-    ),
-    focused: <MaterialCommunityIcons color="black" size={24} name="bookmark" />,
+    default: <MaterialCommunityIcons color='#f5f5f5' size={28} name="bookmark-outline" />,
+    focused: <MaterialCommunityIcons color='#37b4a1' size={28} name="bookmark-outline" />,
   },
   notifications: {
-    default: <Ionicons color={"grey"} size={24} name="notifications-outline" />,
-    focused: <Ionicons color="black" size={24} name="notifications" />,
+    default: <MaterialCommunityIcons color={'#f5f5f5'} size={24} name="bell-outline" />,
+    focused: <MaterialCommunityIcons color='#37b4a1' size={24} name="bell-outline" />,
   },
   account: {
-    default: <Ionicons color={"grey"} size={24} name="person-outline" />,
-    focused: <Ionicons color="black" size={24} name="person" />,
+    default: <Ionicons color={'#f5f5f5'} size={24} name="person-outline" />,
+    focused: <Ionicons color="#f5f5f5" size={24} name="person" />,
   },
 };
 
@@ -129,14 +124,14 @@ export const iconsComments = {
 };
 
 export const iconsProfile = {
-  plus: <AntDesign name="plus" size={24} color="black" />,
-  heart: <Entypo name="heart-outlined" size={24} color="black" /* style={{marginTop: -2, marginRight: 6 }} */ />,
-  saved: <MaterialCommunityIcons color="black" size={24} name="bookmark-outline" />,
-  logout: <Ionicons name="power" size={22} color="black" style={{ marginLeft: 2 }}/>
+  plus: <AntDesign name="plus" size={24} color="#f5f5f5" />,
+  heart: <Entypo name="heart-outlined" size={24} color="#f5f5f5"/>,
+  saved: <MaterialCommunityIcons color="#f5f5f5" size={24} name="bookmark-outline" />,
+  logout: <Ionicons name="power" size={22} color="#f5f5f5" style={{ marginLeft: 2 }}/>
 };
 
 export const iconsSearch = {
-  cross: <Entypo name="cross" size={24} color="#f5f5f5" />,  
+  cross: <Feather name="x" size={24} color="#f5f5f5" />,  
   glass: {
     default: <MaterialIcons name="search" size={20} color="#f5f5f5" style={{marginRight: 5}} />,
     shaded: <MaterialIcons name="search" size={20} color="#959595" style={{marginRight: 5}} />

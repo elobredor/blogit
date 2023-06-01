@@ -1,16 +1,20 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
 import styles from './userLoggedScreen.styles';
-import { useSelector } from 'react-redux';
+import { logOut } from '../../../redux/actions';
+import { useSelector, useDispatch } from 'react-redux';
 import { iconsProfile } from '../../../utils/iconOptions';
+import { useNavigation } from '@react-navigation/native';
 
 const UserLoggedScreen = () => {
-  const loggedUser = useSelector(state => state.loggedUser)
+  const dispatch = useDispatch();
+  const loggedUser = useSelector(state => state.loggedUser);
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Image source={{ uri: loggedUser.profileImage }} style={styles.profileImage}/>
       <Text style={styles.userName}>{loggedUser.userName}</Text>
       <View style={styles.subContainer}>
-        <TextInput placeholder='Habla de tí...' multiline style={styles.textInput}/>
+        <TextInput placeholderTextColor={'#f5f5f5'} placeholder='Habla de tí...' multiline style={styles.textInput}/>
         <TouchableOpacity>
           <View style={styles.links}>
             {iconsProfile.plus}
@@ -29,7 +33,10 @@ const UserLoggedScreen = () => {
             <Text style={styles.linksText}>Guardados</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => {
+          navigation.goBack();
+          dispatch(logOut());
+        }}>
           <View style={styles.links}>
             {iconsProfile.logout}
             <Text style={styles.linksText}>Cerrar Sesión</Text>

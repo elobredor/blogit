@@ -8,6 +8,7 @@ import {
   SET_ARTICLE_LIKE,
   SET_ARTICLE_LIKE2,
   LOG_TO_DB,
+  LOG_OUT,
   GET_CATEGORY,
 } from "./actions";
 
@@ -69,6 +70,12 @@ export default function rootReducer(state = initialState, action) {
         loggedUser: action.payload,
         logged: true,
       };
+    case LOG_OUT:
+      return {
+        ...state,
+        loggedUser: initialState.loggedUser,
+        logged: initialState.logged,
+      }
     case GET_CATEGORY:
       if (action.payload === "ALL") {
         return {
