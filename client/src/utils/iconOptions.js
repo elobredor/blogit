@@ -4,6 +4,7 @@ import {
   Ionicons,
   MaterialCommunityIcons,
   Fontisto,
+  Feather,
   FontAwesome5
 } from "@expo/vector-icons";
 
@@ -124,4 +125,12 @@ export const iconsComments = {
   dots: <Entypo name="dots-three-horizontal" size={16} color="#f5f5f5" />,
   trash: <FontAwesome5 name="trash-alt" size={16} color="#f5f5f5" />,
   edit: <FontAwesome5 name="edit" size={16} color="#f5f5f5" />
+};
+
+export const iconsProfile = {
+  cross: <Entypo name="cross" size={24} color="black" />,
+  plus: <AntDesign name="plus" size={24} color="black" />,
+  heart: <Entypo name="heart-outlined" size={24} color="black" /* style={{marginTop: -2, marginRight: 6 }} */ />,
+  saved: <MaterialCommunityIcons color="black" size={24} name="bookmark-outline" />,
+  logout: <Ionicons name="power" size={22} color="black" style={{ marginLeft: 2 }}/>
 };

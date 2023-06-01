@@ -528,12 +528,12 @@ export default function CommentsScreen() {
             <Text style={styles.modalDeleteText1}>no te gusta?{'\n'}</Text>
             <Text style={styles.modalDeleteText2}>¿Estás seguro que ya no</Text>
             <Text style={styles.modalDeleteText2}>te gusta esta publicación?{'\n'}</Text>
-            <View style={{alignItems: 'stretch'}}>
-              <TouchableOpacity onPress={deleteComment} activeOpacity={0.6} style={styles.modalDeleteBtn}>
-                <Text style={styles.modalDeleteText2}>Si</Text>
+            <View style={{alignItems: 'stretch', backgroundColor: '#37b4a1'}}>
+              <TouchableOpacity onPress={deleteComment} activeOpacity={0.5} style={styles.modalDeleteBtn}>
+                <Text style={styles.modalDeleteText1}>Si</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => setDeteleVisibility(false)} activeOpacity={0.6} style={styles.modalDeleteBtn}>
-                <Text style={styles.modalDeleteText2}>No</Text>
+              <TouchableOpacity onPress={() => setDeteleVisibility(false)} activeOpacity={0.5} style={styles.modalDeleteBtn}>
+                <Text style={styles.modalDeleteText1}>No</Text>
               </TouchableOpacity>
             </View>
           </View>

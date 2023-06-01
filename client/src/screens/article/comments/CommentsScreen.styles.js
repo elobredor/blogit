@@ -113,16 +113,17 @@ export const styles = StyleSheet.create({
     paddingTop: 20
   },
   modalDeleteBtn: {
-    height: 30,
-    backgroundColor: '#37B4A1',
+    height: 31,
+    backgroundColor: '#3A3969',
     justifyContent: 'center',
     borderTopWidth: 1,
-    borderColor: '#27A491'
+    borderColor: '#302962'
   },
   modalDeleteText1: {
     textAlign: 'center',
     color: '#f5f5f5',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize: 16
   },
   modalDeleteText2: {
     textAlign: 'center',

@@ -38,7 +38,8 @@ const HomeStack = () => {
         name="account"
         component={AccountStack}
         options={{
-          title: 'Log In'
+          title: 'Log In',
+          headerShown: false
         }}
       />
     </Stack.Navigator>
