@@ -2,9 +2,7 @@ import { Modal, View, Text } from "react-native";
 import { styles } from "./ModalSaveStyles";
 import { useState, useEffect } from "react";
 import SelectBoard from "../selectBoard/SelectBoard.js";
-import { logToDb } from "../../../redux/actions";
 import { useDispatch } from "react-redux";
-import { MY_IP } from "react-native-dotenv";
 
 const ModalSave = ({ alert, setAlert, data, savedFn }) => {
   const [visible, setVisible] = useState(false); // estado de SelectModal// Elegir tablero

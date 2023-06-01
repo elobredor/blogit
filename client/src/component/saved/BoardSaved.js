@@ -21,7 +21,9 @@ const BoardSaved = ({ item }) => {
           onPress={() => navigation.navigate("Collection", item)}
         >
           <Text style={styles.boardTitle}>{item.title}</Text>
-          <Text style={{color: '#f5f5f5'}}> {item.posts.length} artículo(s)</Text>
+          <Text style={{ color: "#f5f5f5" }}>
+            {item.posts.length} artículo(s)
+          </Text>
         </TouchableOpacity>
         <RenderPrevArticle articles={articles} />
       </View>
