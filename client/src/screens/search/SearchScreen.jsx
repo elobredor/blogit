@@ -4,6 +4,7 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
+  Keyboard
 } from 'react-native';
 import styles from './SearchScreen.styles';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -73,6 +74,7 @@ export const SearchScreen = () => {
           />
           <TouchableOpacity
             onPress={() => {
+              Keyboard.dismiss();
               setTouched(false);
               setSearch('');
             }}
