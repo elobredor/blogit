@@ -23,13 +23,21 @@ const styles = StyleSheet.create({
     width: '70%',
     gap: 10
   },
-  textInput: {
+  inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     width: '85%',
     borderWidth: 1,
     borderColor: '#f5f5f5',
+    marginBottom: 30,
+  },
+  textInput: {
+    width: '85%',
+    // borderWidth: 1,
+    // borderColor: '#f5f5f5',
+    // marginBottom: 30,
     color: '#f5f5f5',
     paddingHorizontal: 10,
-    marginBottom: 30
   },
   links: {
     flexDirection: 'row',

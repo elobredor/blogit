@@ -17,23 +17,22 @@ import RenderHtml, { defaultSystemFonts } from 'react-native-render-html';
 import { formatDate, setReadingTime } from '../../utils/formatData';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDetails, setArticleLike, getArticles, logToDb } from '../../redux/actions';
-import {
-  useFonts,
-  JosefinSans_500Medium,
-  JosefinSans_700Bold,
-} from '@expo-google-fonts/josefin-sans';
+import { useFonts, Nunito_500Medium, Nunito_700Bold } from '@expo-google-fonts/nunito';
+import { Arimo_700Bold } from '@expo-google-fonts/arimo';
 const systemFonts = [
   ...defaultSystemFonts,
-  'JosefinSans_500Medium',
-  'JosefinSans_700Bold',
+  'Nunito_500Medium',
+  'Nunito_700Bold',
+  'Arimo_700Bold'
 ];
 //SAVED_IMPORTS
 import ModalSave from '../../component/home/ModalSave/ModalSave.js';
 
 export default function ArticleScreen({ route }) {
   let [fontsLoaded] = useFonts({
-    JosefinSans_500Medium,
-    JosefinSans_700Bold,
+    Nunito_500Medium,
+    Nunito_700Bold,
+    Arimo_700Bold
   });
   const navigation = useNavigation();
   const dispatch = useDispatch();
