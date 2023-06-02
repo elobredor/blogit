@@ -1,4 +1,11 @@
-import { Modal, View, Text, FlatList, ImageBackground } from "react-native";
+import {
+  Modal,
+  View,
+  Text,
+  FlatList,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 import { styles } from "./selectBoardStyles";
 import { iconsCard, iconsArticle } from "../../../utils/iconOptions";
 import { useState, useEffect } from "react";
@@ -11,7 +18,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
   const [showCreate, setShowCreate] = useState(false); // Estado de CreateBoard
   const [saved, setSaved] = useState(true);
   const [boards, setBoards] = useState([]);
-  const savedB = useSelector((state) => state.loggedUser.saved);
+  const savedB = useSelector((state) => state.loggedUser.saved); //Acceder a las carpetas
 
   const dispacth = useDispatch();
 
@@ -55,7 +62,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
       <FlatList
         data={boards}
         renderItem={({ item }) => (
-          <BoardE item={item} savedFn={savedFn} data={data} />
+          <BoardItem item={item} savedFn={savedFn} data={data} />
         )}
       />
     ) : (
@@ -69,7 +76,10 @@ const ModalSave = ({ visible, setVisible, data }) => {
         <View style={styles.modalBg}>
           <View style={styles.modalContainer}>
             {/* See Later Board */}
-            <View style={styles.defaultContainer}>
+            <TouchableOpacity
+              onPress={() => savedFn("Leer más tarde")}
+              style={styles.defaultContainer}
+            >
               <View style={styles.leftSide}>
                 <View style={styles.miniPrev}>
                   <ImageBackground
@@ -84,7 +94,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
               <View style={styles.rigthSide}>
                 {saved ? iconsCard.saved.filled : iconsArticle.plus}
               </View>
-            </View>
+            </TouchableOpacity>
             {/* Info */}
             <View style={styles.infoContainer}>
               <Text onPress={() => setVisible(false)} style={styles.text}>
@@ -119,7 +129,14 @@ const CreateItem = ({ setShowCreate }) => {
   return (
     <View style={styles.boardContainer}>
       <View style={styles.leftSide}>
-        <View style={styles.miniPrev}></View>
+        <View style={styles.miniPrev}>
+          <ImageBackground
+            source={require("../../../../assets/cross.jpg")}
+            imageStyle={{ width: 80, height: 80 }}
+          >
+            <Text>.</Text>
+          </ImageBackground>
+        </View>
         <Text
           onPress={() => {
             setShowCreate(true);
@@ -140,28 +157,36 @@ const CreateItem = ({ setShowCreate }) => {
     </View>
   );
 };
-
-const BoardE = ({ item, savedFn }) => {
+//Aspectos de los tableros que se muestran en el flatList excluyendo Leer más tarde
+const BoardItem = ({ item, savedFn }) => {
   return (
     <>
-      <View style={styles.boardContainer}>
+      <TouchableOpacity
+        onPress={() => savedFn(item.title)}
+        style={styles.boardContainer}
+      >
         <View style={styles.leftSide}>
           <View style={styles.miniPrev}>
-            <ImageBackground
-              source={{ uri: item.posts[0].images }}
-              imageStyle={{ width: 80, height: 80 }}
-            >
-              <Text>.</Text>
-            </ImageBackground>
+            {item.posts[0] ? (
+              <ImageBackground
+                source={{ uri: item.posts[0].images }}
+                imageStyle={{ width: 80, height: 80 }}
+              >
+                <Text>.</Text>
+              </ImageBackground>
+            ) : (
+              <ImageBackground
+                source={require("../../../../assets/cross.jpg")} // en caso de que la carpeta este vacía.
+                imageStyle={{ width: 80, height: 80 }}
+              >
+                <Text>.</Text>
+              </ImageBackground>
+            )}
           </View>
-          <Text onPress={() => savedFn(item.title)} style={styles.text}>
-            {item.title}
-          </Text>
+          <Text style={styles.text}>{item.title}</Text>
         </View>
-        <View onPress={() => savedFn(item.title)} style={styles.rigthSide}>
-          {iconsArticle.plus}
-        </View>
-      </View>
+        <View style={styles.rigthSide}>{iconsArticle.plus}</View>
+      </TouchableOpacity>
     </>
   );
 };
