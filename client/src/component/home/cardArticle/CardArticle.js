@@ -66,35 +66,74 @@ const CardArticle = ({ item, setModalVisibility }) => {
       setSaved(answer);
     }
   }, [hasLogged]);
-  //agregar guardados
+
   const savedArticle = () => {
-    const savedBody = {
-      postId: item._id,
-      title: "Leer más tarde",
-      images: item.images,
+    if (!saved) {
+      const savedBody = {
+        postId: item._id,
+        title: "Leer más tarde",
+        images: item.images,
+      };
+
+      fetch(`http://${MY_IP}:4000/api/users/saved/${hasLogged.userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(savedBody),
+      })
+        .then((res) => {
+          if (res.ok) {
+            dispatch(logToDb(hasLogged.userId));
+            setAlert(true); //Mostrar el modal alert
+            setSaved(true); // Rellenar el ícono
+            console.log("Se ha agregado a Leer mas tarde");
+          } else {
+            throw new Error("ha habido un error");
+          }
+        })
+        .catch((err) => console.error(err));
+    } else {
+      deleteSaved(item._id);
+    }
+  };
+  const getFolderName = (postId) => {
+    let folderName = null;
+    hasLogged.saved.forEach((folder) => {
+      const post = folder.posts.some((post) => post.postId === postId);
+      if (post) {
+        folderName = folder.title;
+        console.log(folderName);
+      }
+    });
+    return folderName;
+  };
+
+  const deleteSaved = (id) => {
+    let folder = getFolderName(id);
+    const deleteBody = {
+      postId: id,
+      title: folder,
     };
 
-    fetch(`http://${MY_IP}:4000/api/users/saved/${hasLogged.userId}`, {
+    fetch(`http://${MY_IP}:4000/api/users/delete-saved/${hasLogged.userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(savedBody),
+      body: JSON.stringify(deleteBody),
     })
       .then((res) => {
         if (res.ok) {
           dispatch(logToDb(hasLogged.userId));
+          setSaved(false); //Vaciar el ícono
+          console.log("fue eliminado correctamente");
         } else {
           throw new Error("ha habido un error");
         }
       })
       .catch((err) => console.error(err));
-
-    if (saved === false) {
-      setAlert(true);
-    }
   };
-
   //data importante para los modales de creacion de tableros
   const data = {
     userId: hasLogged.userId,
@@ -174,7 +213,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
         alert={alert}
         setAlert={setAlert}
         data={data}
-        savedFn={savedArticle}
+        deleteSaved={deleteSaved}
       />
     </>
   );
