@@ -15,6 +15,7 @@ const CollectionScreen = ({ route }) => {
   useEffect(() => {
     setBoard(savedArticles);
   }, [articles]);
+  //Sacar la carpeta Leer mas tarde del flatList
 
   return (
     <View style={styles.colecctionContainer}>
@@ -31,7 +32,7 @@ const CollectionScreen = ({ route }) => {
         renderItem={({ item }) => (
           <CardArticle
             item={item}
-            toggleModal={() => console.log("hola")}
+            toggleModal={() => console.log("Esta fn no es necesaria")}
           ></CardArticle>
         )}
       />

@@ -13,6 +13,10 @@ const BoardSaved = ({ item }) => {
   const articles = useSelector((state) =>
     state.articles.filter((obj) => lastArticles.includes(obj._id))
   );
+  //Boton eliminar y editar
+  //Boton eliminar, modal de confirmacion, onPress ()=> deleteBoard sobre el yes.
+  //Crear funcion deleteBoard
+  //Boton editar, edita enseguida.
 
   return (
     <>

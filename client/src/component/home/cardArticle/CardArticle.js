@@ -103,7 +103,6 @@ const CardArticle = ({ item, setModalVisibility }) => {
       const post = folder.posts.some((post) => post.postId === postId);
       if (post) {
         folderName = folder.title;
-        console.log(folderName);
       }
     });
     return folderName;
@@ -127,7 +126,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
         if (res.ok) {
           dispatch(logToDb(hasLogged.userId));
           setSaved(false); //Vaciar el ícono
-          console.log("fue eliminado correctamente");
+          console.log("fue eliminado correctamente de " + folder);
         } else {
           throw new Error("ha habido un error");
         }
