@@ -19,6 +19,7 @@ export class UsersController {
       newUser,
     });
   }
+
   /* This is a method in a NestJS controller that handles a GET request to retrieve a user by their UserID.*/
   @Get(':userId')
   public async getStudent(@Res() response: Response, @Param('userId') userId: string) {
@@ -27,6 +28,7 @@ export class UsersController {
       user: userExist,
     });
   }
+
   /* This is a method in a NestJS controller that handles a GET request to retrieve usersProfile.*/
   @Get('profile/:userId')
   public async getProfile(@Res() response: Response, @Param('userId') userId: string) {
@@ -35,6 +37,7 @@ export class UsersController {
       usersProfile,
     });
   }
+
   //this is a method in NestJs controller that update a user
   @Put('update/:userId')
   public async updateUser(@Res() response: Response, @Param('userId') userId: string, @Body() body: UserUpdateDTO) {
@@ -43,6 +46,7 @@ export class UsersController {
       message: 'User has been successfully updated',
     });
   }
+
   //method to save posts
   @Put('saved/:userId')
   public async savePost(@Res() response: Response, @Param('userId') userId: string, @Body() body: UserUpdateDTO) {
@@ -52,6 +56,7 @@ export class UsersController {
       savedPost,
     });
   }
+
   //method to delete saved posts
   @Put('delete-saved/:userId')
   public async deleteSaved(@Res() response: Response, @Param('userId') userId: string, @Body() body: UserUpdateDTO) {
@@ -61,6 +66,7 @@ export class UsersController {
       deletedSavedPost,
     });
   }
+
   //method to change status of user
   @Put('status/:userId')
   public async changeStatus(@Res() response: Response, @Param('userId') userId: string) {
@@ -69,6 +75,7 @@ export class UsersController {
       message: 'Status has been successfully changed',
     });
   }
+
   //method to enable user
   @Put('enable/:userId')
   public async enableUser(@Res() response: Response, @Param('userId') userId: string) {
@@ -77,6 +84,7 @@ export class UsersController {
       message: 'User has been successfully enabled',
     });
   }
+
   //method to update savedPosts
   @Put('updateSaved/:savedId')
   public async updateSaved(
@@ -88,6 +96,15 @@ export class UsersController {
     return response.status(HttpStatus.OK).json({
       message: 'Post has been successfully updated',
       saved,
+    });
+  }
+
+  //method to delete folders in saved
+  @Put('delete-folder/:savedId')
+  public async deleteSavedPost(@Res() response: Response, @Param('savedId', ParseObjectIdPipe) savedId: string) {
+    await this.usersService.deleteSavedPostById(savedId);
+    return response.status(HttpStatus.OK).json({
+      message: 'Folder has been successfully deleted',
     });
   }
 }

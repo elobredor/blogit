@@ -33,6 +33,7 @@ export class UsersService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
   //This function finds and returns a user by their ID.
   public async findOne(userId: string): Promise<UserInterface> {
     try {
@@ -107,6 +108,7 @@ export class UsersService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
   //function to get userProfile
   public async getUserProfile(userId: string): Promise<UserInterface> {
     try {
@@ -122,6 +124,7 @@ export class UsersService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
   //function to update user
   public async updateUser(userId: string, body: UserUpdateDTO): Promise<UserInterface> {
     try {
@@ -137,6 +140,7 @@ export class UsersService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
   //function to save posts
   public async savePosts(userId: string, body: UserUpdateDTO): Promise<UserInterface> {
     try {
@@ -193,6 +197,7 @@ export class UsersService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
   //function to save posts
   public async deleteSavedPost(userId: string, body: UserUpdateDTO): Promise<UserInterface> {
     try {
@@ -227,6 +232,7 @@ export class UsersService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
   //function to change status to user and his posts
   public async changeStatus(userId: string): Promise<UserInterface> {
     try {
@@ -244,6 +250,7 @@ export class UsersService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
   //function to enable user and his posts
   public async enableUser(userId: string): Promise<UserInterface> {
     try {
@@ -262,6 +269,7 @@ export class UsersService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
   //function to update a saved post
   public async updateSavedPost(savedId: string, body: UserUpdateDTO): Promise<UserInterface> {
     try {
@@ -281,6 +289,25 @@ export class UsersService {
       saved.title = body.title || saved.title;
       await savedPost.save();
       return savedPost;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  //function to delete a folder in saved
+  public async deleteSavedPostById(savedId: string): Promise<UserInterface> {
+    try {
+      const savedPost = await this.userModel.findOneAndUpdate(
+        { saved: { $elemMatch: { _id: savedId } } },
+        { $pull: { saved: { _id: savedId } } },
+      );
+      if (!savedPost) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Saved Post with ID: ${savedId} not found`,
+        });
+      }
+      return;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
