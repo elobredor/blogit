@@ -260,3 +260,9 @@ Blog Site App orientada al sector IT.
         "postId": "64683872ba892fafcb005acb", //el _id del artículo a eliminar
         "title": "el title de la carpeta"
     }
+
+## eliminar una carpeta en saved
+
+#### PUT
+
+    http://localhost:4000/api/users/delete-folder/:savedId //el _id de un saved
