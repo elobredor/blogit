@@ -13,6 +13,10 @@ const BoardSaved = ({ item }) => {
   const articles = useSelector((state) =>
     state.articles.filter((obj) => lastArticles.includes(obj._id))
   );
+  //Boton eliminar y editar
+  //Boton eliminar, modal de confirmacion, onPress ()=> deleteBoard sobre el yes.
+  //Crear funcion deleteBoard
+  //Boton editar, edita enseguida.
 
   return (
     <>
@@ -21,7 +25,9 @@ const BoardSaved = ({ item }) => {
           onPress={() => navigation.navigate("Collection", item)}
         >
           <Text style={styles.boardTitle}>{item.title}</Text>
-          <Text style={{color: '#f5f5f5'}}> {item.posts.length} artículo(s)</Text>
+          <Text style={{ color: "#f5f5f5" }}>
+            {item.posts.length} artículo(s)
+          </Text>
         </TouchableOpacity>
         <RenderPrevArticle articles={articles} />
       </View>

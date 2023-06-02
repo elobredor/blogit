@@ -49,4 +49,15 @@ export const styles = StyleSheet.create({
     padding: 4,
     marginVertical: 10,
   },
+  inputError: {
+    fontSize: 18,
+    color: "red",
+    borderBottomColor: "red",
+    borderColor: "#555",
+    borderWidth: 2,
+    width: "90%",
+    alignSelf: "center",
+    padding: 4,
+    marginVertical: 10,
+  },
 });
