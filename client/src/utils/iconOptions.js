@@ -9,6 +9,8 @@ import {
   Feather
 } from "@expo/vector-icons";
 
+import { View } from 'react-native';
+
 export const iconOptions = {
   home: {
     default: <MaterialCommunityIcons color='#f5f5f5' size={32} name="home-outline" />,
@@ -34,14 +36,12 @@ export const iconOptions = {
 
 export const iconsCard = {
   heart: {
-    empty: <AntDesign name="heart" size={20} color="red" />,
-    filled: <AntDesign name="hearto" size={20} color="white" />,
+    empty: <MaterialCommunityIcons name="cards-heart-outline" size={24} color="#f5f5f5" />,
+    filled: <MaterialCommunityIcons name="cards-heart" size={24} color="#f5f5f5" />,
   },
   saved: {
-    empty: (
-      <MaterialCommunityIcons color="white" size={24} name="bookmark-outline" />
-    ),
-    filled: <MaterialCommunityIcons color="white" size={24} name="bookmark" />,
+    empty: <MaterialCommunityIcons color="white" size={26} style={{ marginLeft: 18 }} name="bookmark-outline" />,
+    filled: <MaterialCommunityIcons color="white" size={26} style={{ marginLeft: 18 }} name="bookmark" />,
   },
   account: {
     default: <Ionicons color={"grey"} size={24} name="person-outline" />,
@@ -107,9 +107,7 @@ export const iconsComments = {
     <FontAwesome5 name="comment" size={20} color="#f5f5f5" style={{ marginRight: 6 }} />
   ),
   saved: {
-    default: (
-      <MaterialCommunityIcons color="white" size={24} name="bookmark-outline" />
-    ),
+    default: <MaterialCommunityIcons color="white" size={24} name="bookmark-outline" />,
     focused: <MaterialCommunityIcons color="white" size={24} name="bookmark" />,
   },
   commentModal: (
@@ -127,7 +125,8 @@ export const iconsProfile = {
   plus: <AntDesign name="plus" size={24} color="#f5f5f5" />,
   heart: <Entypo name="heart-outlined" size={24} color="#f5f5f5"/>,
   saved: <MaterialCommunityIcons color="#f5f5f5" size={24} name="bookmark-outline" />,
-  logout: <Ionicons name="power" size={22} color="#f5f5f5" style={{ marginLeft: 2 }}/>
+  logout: <Ionicons name="power" size={22} color="#f5f5f5" style={{ marginLeft: 2 }}/>,
+  submit: <MaterialCommunityIcons name="send-circle-outline" size={24} color="#f5f5f5" style={{marginTop: 2, marginRight: 3}} />,
 };
 
 export const iconsSearch = {

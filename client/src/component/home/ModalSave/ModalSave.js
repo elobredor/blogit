@@ -13,6 +13,7 @@ const ModalSave = ({ alert, setAlert, data, deleteSaved }) => {
   }, [alert]);
 
   const handleLink = () => {
+    console.log(deleteSaved);
     deleteSaved(data.postId); //Se elimina de leer más tarde.
     setVisible(true);
   };

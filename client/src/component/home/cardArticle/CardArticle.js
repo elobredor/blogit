@@ -15,8 +15,10 @@ import { logToDb, setArticleLike2 } from "../../../redux/actions";
 import { MY_IP } from "react-native-dotenv";
 import ModalSave from "../ModalSave/ModalSave";
 import { LinearGradient } from "expo-linear-gradient";
+import { useFonts, Arimo_700Bold } from '@expo-google-fonts/arimo';
 
 const CardArticle = ({ item, setModalVisibility }) => {
+  let [fontsLoaded] = useFonts({ Arimo_700Bold });
   const [favorite, setFavorite] = useState();
   const [saved, setSaved] = useState(false);
   const [alert, setAlert] = useState(false); // visibilidad del modal save
@@ -141,6 +143,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
     saved: hasLogged.saved,
   };
 
+  if(!fontsLoaded) return null;
   return (
     <>
       <TouchableWithoutFeedback
@@ -149,7 +152,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
         <View style={styles.card}>
           <ImageBackground
             source={{ uri: item.images }}
-            imageStyle={{ borderRadius: 25 }}
+            imageStyle={{ borderRadius: 10 }}
           >
             <LinearGradient
               colors={["rgba(0,0,0,0.3)", "rgba(0,0,0,0.9)"]}
