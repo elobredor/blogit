@@ -46,6 +46,14 @@ export default function ArticleScreen({ route }) {
   });
   //SAVED_STATES
   const [alert, setAlert] = useState(false);
+  const data = useSelector((state) => {
+    return {
+      userId: state.loggedUser.userId,
+      postId: state.details._id,
+      images: state.details.images,
+      saved: state.loggedUser.saved,
+    }
+  });
 
   // MOUNT_DETAILS
   useEffect(() => {    
@@ -133,13 +141,6 @@ export default function ArticleScreen({ route }) {
       setSaved(answer);
     }
   }, [loggedUser]);
-
-  let data = {
-    userId: loggedUser.userId,
-    postId: article._id,
-    images: article.images,
-    saved: loggedUser.saved,
-  };  
 
   // LOADING_RENDER
   if (fetchStatus.status === 'loading' || !fontsLoaded)
