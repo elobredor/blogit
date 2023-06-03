@@ -19,11 +19,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getDetails, setArticleLike, getArticles, logToDb } from '../../redux/actions';
 import { useFonts, Nunito_500Medium, Nunito_700Bold } from '@expo-google-fonts/nunito';
 import { Arimo_700Bold } from '@expo-google-fonts/arimo';
+import { OpenSans_500Medium } from '@expo-google-fonts/open-sans';
+import { Raleway_700Bold } from '@expo-google-fonts/raleway';
 const systemFonts = [
   ...defaultSystemFonts,
   'Nunito_500Medium',
   'Nunito_700Bold',
-  'Arimo_700Bold'
+  'Arimo_700Bold',
+  'OpenSans_500Medium',
+  'Raleway_700Bold'
 ];
 //SAVED_IMPORTS
 import ModalSave from '../../component/home/ModalSave/ModalSave.js';
@@ -32,7 +36,9 @@ export default function ArticleScreen({ route }) {
   let [fontsLoaded] = useFonts({
     Nunito_500Medium,
     Nunito_700Bold,
-    Arimo_700Bold
+    Arimo_700Bold,
+    OpenSans_500Medium,
+    Raleway_700Bold
   });
   const navigation = useNavigation();
   const dispatch = useDispatch();

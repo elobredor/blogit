@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getArticles } from "../../redux/actions";
 import { iconOptions } from "../../utils/iconOptions";
 import { useNavigation } from "@react-navigation/native";
+import { useFonts, Arimo_700Bold } from '@expo-google-fonts/arimo';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -19,6 +20,9 @@ const HomeScreen = () => {
   const img = useSelector((state) => state.loggedUser.profileImage);
   const [modalVisibility, setModalVisibility] = useState(false);
   const { navigate } = useNavigation();
+  let [fontsLoaded] = useFonts({
+    Arimo_700Bold,
+  });
 
   useEffect(() => {
     console.log(Dimensions.get('window').width)
@@ -28,6 +32,7 @@ const HomeScreen = () => {
     dispatch(getArticles());
   }, []);
 
+  if(!fontsLoaded) return <View style={{ backgroundColor: '#020123' }}></View>
   return (
     <>
       <View style={styles.container}>

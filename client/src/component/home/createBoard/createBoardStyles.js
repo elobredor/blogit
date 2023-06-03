@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     height: "65%",
     width: "95%",
     borderRadius: 15,
-    backgroundColor: "#555",
+    backgroundColor: "#090841",
     gap: 10,
     elevation: 5,
   },
@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     textAlign: "center",
-    color: "white",
+    color: "#f5f5f5",
     fontWeight: "500",
   },
 
@@ -35,15 +35,14 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 10,
-    backgroundColor: "#aaa",
+    backgroundColor: "#3A3969",
   },
 
   input: {
     fontSize: 18,
-    color: "white",
-    borderBottomColor: "white",
-    borderColor: "#555",
-    borderWidth: 2,
+    color: "#f5f5f5",
+    borderBottomColor: "#f5f5f5",
+    borderBottomWidth: 2,
     width: "90%",
     alignSelf: "center",
     padding: 4,

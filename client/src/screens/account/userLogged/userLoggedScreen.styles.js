@@ -26,7 +26,10 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-start',
     width: '85%',
+    height: 120,
+    // 6 pharagraphs
     borderWidth: 1,
     borderColor: '#f5f5f5',
     marginBottom: 30,

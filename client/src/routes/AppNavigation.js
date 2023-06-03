@@ -23,7 +23,7 @@ const AppNavigation = () => {
         name='homeTab'
         component={HomeStack}
         options={{
-          title: 'Home',
+          title: 'Inicio',
           tabBarIcon: ({ focused }) =>
             focused ? iconOptions.home.focused : iconOptions.home.default,
         }}
@@ -32,7 +32,7 @@ const AppNavigation = () => {
         name='searchTab'
         component={SearchStack}
         options={{
-          title: 'Search',
+          title: 'Descubre',
           tabBarIcon: ({focused}) => 
             focused ? iconOptions.search.focused : iconOptions.search.default,
         }}

@@ -68,7 +68,7 @@ const CreateBoard = ({ showCreate, setShowCreate, data }) => {
 
             <Text
               onPress={handleSubmit}
-              style={{ color: "#3B79BE", fontSize: 22 }}
+              style={{ color: "#37B4A1", fontSize: 22 }}
             >
               Crear
             </Text>

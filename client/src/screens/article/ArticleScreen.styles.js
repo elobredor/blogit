@@ -6,21 +6,18 @@ export const tagsStyles = {
     fontWeight: 'normal',
     color: '#f5f5f5',
     fontFamily: 'Arimo_700Bold',
-    // fontFamily: 'JosefinSans_700Bold',
   },
   h2: {
     fontSize: '26px',
     fontWeight: 'normal',
     color: '#f5f5f5',
-    fontFamily: 'Arimo_700Bold',
-    // fontFamily: 'JosefinSans_700Bold',
+    fontFamily: 'Nunito_500Medium',
   },
   p: {
     lineHeight: '2.4rem',
     fontSize: '22px',
     color: '#f5f5f5',
     fontFamily: 'Nunito_500Medium',
-    // fontFamily: 'JosefinSans_500Medium',
   },
   li: {
     lineHeight: '2.4rem',
@@ -56,6 +53,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: 8
   },
   authorName: {
+    fontFamily: 'Arimo_700Bold',
     fontSize: 22,
     color: '#f5f5f5'
   },

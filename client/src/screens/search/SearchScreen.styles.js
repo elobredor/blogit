@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   inputGradient: {
     marginVertical: 20,
     minHeight: 46,
-    borderRadius: 18,    
+    borderRadius: 18,
   },
   inputContainer: {
     flex: 1,
@@ -42,21 +42,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   sortBtn: {
-    paddingHorizontal: 17,
-    paddingVertical: 5,
-    borderRadius: 15,
+    paddingHorizontal: 12,
+    height: 34,
+    justifyContent: 'center',
+    borderRadius: 12,
     backgroundColor: '#007764',
   },
   sortBtnActive: {
-    paddingHorizontal: 17,
-    paddingVertical: 5,
-    borderRadius: 15,
+    paddingHorizontal: 12,
+    height: 34,
+    justifyContent: 'center',
+    borderRadius: 12,
     backgroundColor: '#37b4a1',
   },
   sortBtnText: {
     color: '#020123',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontFamily: 'Arimo_400Regular',
   },
   noResults: {
     color: '#f5f5f5',

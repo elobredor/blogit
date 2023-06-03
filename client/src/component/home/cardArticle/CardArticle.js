@@ -168,7 +168,6 @@ const CardArticle = ({ item, setModalVisibility }) => {
                   >
                     <Text style={styles.btnFilter}>{item.category}</Text>
                   </View>
-
                   <View>
                     <Text style={styles.title}>{item.title}</Text>
                     <View
@@ -192,8 +191,8 @@ const CardArticle = ({ item, setModalVisibility }) => {
                     }
                     style={styles.favorite}
                   >
-                    {favorite ? iconsCard.heart.empty : iconsCard.heart.filled}
-                    <Text style={{ color: "white", fontSize: 18 }}>
+                    {favorite ? iconsCard.heart.filled : iconsCard.heart.empty}
+                    <Text style={{ color: "#f5f5f5", fontSize: 14 }}>
                       {item.postLikes.length}
                     </Text>
                   </TouchableOpacity>

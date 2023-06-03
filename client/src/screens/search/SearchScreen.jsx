@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import CardArticle from '../../component/home/cardArticle/CardArticle';
 import { simpleTimeLapse } from '../../utils/timeLapse';
 import { ModalLogin } from '../../component/shared/ModalLogin';
+import { useFonts, Arimo_400Regular, Arimo_500Medium } from '@expo-google-fonts/arimo';
 
 export const SearchScreen = () => {
   const articles = useSelector((state) =>
@@ -24,6 +25,10 @@ export const SearchScreen = () => {
   const [sort, setSort] = useState('all');
   const [touched, setTouched] = useState(false);
   const [modalVisibility, setModalVisibility] = useState(false);
+  let [loadedFonts] = useFonts({
+    Arimo_400Regular,
+    Arimo_500Medium
+  });
 
   const handleChange = (text) => {
     setTouched(true);
@@ -83,29 +88,32 @@ export const SearchScreen = () => {
           </TouchableOpacity>
         </View>
       </LinearGradient>
-      <View style={styles.sortBtnsContainer}>
-        <TouchableOpacity
-          style={sort === 'all' ? styles.sortBtnActive : styles.sortBtn}
-          onPress={() => setSort('all')}
-          activeOpacity={0.6}
-        >
-          <Text style={styles.sortBtnText}>Todos</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={sort === 'date' ? styles.sortBtnActive : styles.sortBtn}
-          onPress={() => setSort('date')}
-          activeOpacity={0.6}
-        >
-          <Text style={styles.sortBtnText}>Más Recientes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={sort === 'popularity' ? styles.sortBtnActive : styles.sortBtn}
-          onPress={() => setSort('popularity')}
-          activeOpacity={0.6}
-        >
-          <Text style={styles.sortBtnText}>Populares</Text>
-        </TouchableOpacity>
-      </View>
+      {loadedFonts
+        ? <View style={styles.sortBtnsContainer}>
+            <TouchableOpacity
+              style={sort === 'all' ? styles.sortBtnActive : styles.sortBtn}
+              onPress={() => setSort('all')}
+              activeOpacity={0.6}
+            >
+              <Text style={styles.sortBtnText}>Todos</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={sort === 'date' ? styles.sortBtnActive : styles.sortBtn}
+              onPress={() => setSort('date')}
+              activeOpacity={0.6}
+            >
+              <Text style={styles.sortBtnText}>Más Recientes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={sort === 'popularity' ? styles.sortBtnActive : styles.sortBtn}
+              onPress={() => setSort('popularity')}
+              activeOpacity={0.6}
+            >
+              <Text style={styles.sortBtnText}>Populares</Text>
+            </TouchableOpacity>
+          </View>
+        : null
+      }
       {!searchArticles.length ? (
         <View style={{ alignItems: 'center' }}>
           {touched && <Text style={styles.noResults}>No se encontraron</Text>}
