@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
   textInput: {
     width: '80%',
     color: '#f5f5f5',
-    fontSize: 16
+    fontFamily: 'Nunito_400Regular',
+    fontSize: 18
   },
   sortBtnsContainer: {
     borderTopColor: '#102962',
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
   noResults: {
     color: '#f5f5f5',
     fontSize: 20,
-    fontWeight: 'bold'
+    fontFamily: 'Arimo_400Regular',
   }
 });
 

@@ -14,7 +14,8 @@ import { useSelector } from 'react-redux';
 import CardArticle from '../../component/home/cardArticle/CardArticle';
 import { simpleTimeLapse } from '../../utils/timeLapse';
 import { ModalLogin } from '../../component/shared/ModalLogin';
-import { useFonts, Arimo_400Regular, Arimo_500Medium } from '@expo-google-fonts/arimo';
+import { useFonts, Arimo_400Regular } from '@expo-google-fonts/arimo';
+import { Nunito_400Regular } from '@expo-google-fonts/nunito';
 
 export const SearchScreen = () => {
   const articles = useSelector((state) =>
@@ -27,7 +28,7 @@ export const SearchScreen = () => {
   const [modalVisibility, setModalVisibility] = useState(false);
   let [loadedFonts] = useFonts({
     Arimo_400Regular,
-    Arimo_500Medium
+    Nunito_400Regular
   });
 
   const handleChange = (text) => {
@@ -61,33 +62,36 @@ export const SearchScreen = () => {
   if (!articles) return <View style={styles.container}></View>;
   return (
     <View style={styles.container}>
-      <LinearGradient
-        style={styles.inputGradient}
-        colors={['#34aba6', '#131af8', '#9344ca']}
-        start={[0, 0]}
-        end={[1, 0]}
-        locations={[0, 0.5, 1]}
-      >
-        <View style={styles.inputContainer}>
-          {touched ? iconsSearch.glass.shaded : iconsSearch.glass.default}
-          <TextInput
-            style={styles.textInput}
-            onChangeText={handleChange}
-            placeholder='Blogs...'
-            placeholderTextColor={'#f5f5f5'}
-            value={search}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              Keyboard.dismiss();
-              setTouched(false);
-              setSearch('');
-            }}
+      {loadedFonts
+        ? <LinearGradient
+            style={styles.inputGradient}
+            colors={['#34aba6', '#131af8', '#9344ca']}
+            start={[0, 0]}
+            end={[1, 0]}
+            locations={[0, 0.5, 1]}
           >
-            {iconsSearch.cross}
-          </TouchableOpacity>
-        </View>
-      </LinearGradient>
+            <View style={styles.inputContainer}>
+              {touched ? iconsSearch.glass.shaded : iconsSearch.glass.default}
+              <TextInput
+                style={styles.textInput}
+                onChangeText={handleChange}
+                placeholder='Blogs...'
+                placeholderTextColor={'#f5f5f5'}
+                value={search}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  Keyboard.dismiss();
+                  setTouched(false);
+                  setSearch('');
+                }}
+              >
+                {iconsSearch.cross}
+              </TouchableOpacity>
+            </View>
+          </LinearGradient>
+        : null
+      }
       {loadedFonts
         ? <View style={styles.sortBtnsContainer}>
             <TouchableOpacity
@@ -115,9 +119,12 @@ export const SearchScreen = () => {
         : null
       }
       {!searchArticles.length ? (
-        <View style={{ alignItems: 'center' }}>
-          {touched && <Text style={styles.noResults}>No se encontraron</Text>}
-          {touched && <Text style={styles.noResults}>resultados...</Text>}
+        <View style={{flex: 1, paddingTop: 70 }}>
+          <View style={{ alignItems: 'center' }}>
+            {touched && <Text style={styles.noResults}>👾</Text>}
+            {touched && <Text style={styles.noResults}>No encontramos</Text>}
+            {touched && <Text style={styles.noResults}>resultados...</Text>}
+          </View>
         </View>
       ) : (
         <FlatList
