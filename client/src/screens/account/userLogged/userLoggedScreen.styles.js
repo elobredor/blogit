@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   userName: {
     color: '#f5f5f5',
     fontSize: 22,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   subContainer: {
     marginTop: 60,

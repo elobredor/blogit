@@ -21,7 +21,7 @@ export class UsersService {
     try {
       //check if user already exist
       const userExist = await this.userModel.findOne({ email });
-      if (userExist || userExist.userId.toString() === body.userId) {
+      if (userExist || userExist?.userId.toString() === body.userId) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
           message: `User with ${email} or ${body.userId} already exist`,

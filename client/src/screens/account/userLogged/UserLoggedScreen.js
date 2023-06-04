@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { iconsProfile } from '../../../utils/iconOptions';
 import { useNavigation } from '@react-navigation/native';
 import { MY_IP } from 'react-native-dotenv';
+import { useAuth0 } from 'react-native-auth0';
 
 const UserLoggedScreen = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const UserLoggedScreen = () => {
   const [withAbout, setWithAbout] = useState(false);
   const loggedUser = useSelector(state => state.loggedUser);
   const navigation = useNavigation();
+  const { clearSession } = useAuth0();
 
   useEffect(() => {
     loggedUser.about && setWithAbout(true);
@@ -43,10 +45,16 @@ const UserLoggedScreen = () => {
     Keyboard.dismiss();
   };
 
+  const handleLogOut = async () => {
+    await clearSession({ customScheme: 'blogit' });
+    navigation.goBack();
+    dispatch(logOut());
+  };
+
   return (
     <View style={styles.container}>
       <Image source={{ uri: loggedUser.profileImage }} style={styles.profileImage} />
-      <Text style={styles.userName}>{loggedUser.userName}</Text>
+      <Text style={styles.userName}>{`${loggedUser.userName[0].toUpperCase()}${loggedUser.userName.slice(1)}`}</Text>
       {loggedUser.about &&
         <View style={{width: '75%'}}>
           <Text style={{ color: '#f5f5f5', marginTop: 30 }}>{loggedUser.about}</Text>
@@ -82,10 +90,7 @@ const UserLoggedScreen = () => {
             <Text style={styles.linksText}>Guardados</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {
-          navigation.goBack();
-          dispatch(logOut());
-        }}>
+        <TouchableOpacity onPress={handleLogOut}>
           <View style={styles.links}>
             {iconsProfile.logout}
             <Text style={styles.linksText}>Cerrar Sesión</Text>

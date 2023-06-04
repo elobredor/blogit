@@ -39,7 +39,7 @@ class SavedPostDto {
 
 export class CreateUserDto {
   @IsString()
-  @MaxLength(25)
+  @MaxLength(40)
   @IsNotEmpty()
   userId: string;
 

@@ -1,22 +1,22 @@
-import { View, Text, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Image, Button } from "react-native";
 import Filters from "../../component/home/filtersHome/FiltersHome";
 import CardArticle from "../../component/home/cardArticle/CardArticle";
 import { ModalLogin } from "../../component/shared/ModalLogin";
 import React, { useEffect, useState } from "react";
 import { styles } from "./homeScreen.styles";
 import { useDispatch, useSelector } from "react-redux";
-import { getArticles } from "../../redux/actions";
+import { getArticles, logToDb } from "../../redux/actions";
 import { iconOptions } from "../../utils/iconOptions";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts, Arimo_700Bold } from '@expo-google-fonts/arimo';
+import { useAuth0 } from "react-native-auth0";
 
 const HomeScreen = () => {
+  const { user } = useAuth0();
   const dispatch = useDispatch();
   const articles = useSelector((state) => state.articles);
   const filtered = useSelector((state) => state.filtered);
-  const isLogged = useSelector((state) => {
-    state.logged;
-  });
+  const isLogged = useSelector((state) => state.logged);
   const img = useSelector((state) => state.loggedUser.profileImage);
   const [modalVisibility, setModalVisibility] = useState(false);
   const { navigate } = useNavigation();
@@ -25,8 +25,11 @@ const HomeScreen = () => {
   });
 
   useEffect(() => {
-    console.log(Dimensions.get('window').width)
-  }, [])
+    if (user) {
+      setModalVisibility(false);
+      dispatch(logToDb(user.sub, user));
+    }
+  }, [user]);
 
   useEffect(() => {
     dispatch(getArticles());

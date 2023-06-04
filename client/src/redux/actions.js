@@ -67,16 +67,40 @@ export const getCategory = (category) => {
 };
 
 // LOG_TO_DB
-export const logToDb = (id) => (dispatch) => {
+export const logToDb = (id, user) => (dispatch) => {
   fetch(`http://${MY_IP}:4000/api/users/profile/${id}`)
     .then((res) => {
       if (!res.ok) throw new Error("Sin respuesta del servidor");
       return res.json();
     })
     .then((data) => {
-      dispatch({ type: LOG_TO_DB, payload: data.usersProfile });
+      if (!data.usersProfile) {
+        console.log('NEW_USER');
+        const newUserBody = {
+          userId: user.sub,
+          userName: user.given_name ? user.given_name : user.nickname,
+          email: user.email,
+          profileImage: user.picture,
+        };
+        fetch(`http://${MY_IP}:4000/api/users/create`, {
+          method: 'POST',
+          headers: {
+            'Content-Type':'application/json'
+          },
+          body: JSON.stringify(newUserBody)
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error("Sin respuesta del servidor");
+            return res.json();
+          })
+          .then(data => dispatch({ type: LOG_TO_DB, payload: data.newUser }))
+          .catch(error => console.error(error));
+      } else {
+        console.log('FOUND_USER!!');
+        return dispatch({ type: LOG_TO_DB, payload: data.usersProfile });
+      }
     })
-    .catch((error) => console.log(error));
+    .catch((error) => console.error(error));
 };
 
 // LOG_OUT
