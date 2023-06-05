@@ -156,7 +156,7 @@ export class PostsService {
           message: `Post with ID: ${postId} not found`,
         });
       }
-
+      console.log(post[0]);
       return post[0];
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);

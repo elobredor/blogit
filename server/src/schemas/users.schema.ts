@@ -3,6 +3,9 @@ import { ROLES } from 'src/constants/roles';
 
 @Schema()
 export class User {
+  @Prop({ default: null })
+  _id: string;
+
   @Prop({ required: true })
   userId: string;
 
