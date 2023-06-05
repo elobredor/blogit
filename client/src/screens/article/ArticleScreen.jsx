@@ -17,23 +17,22 @@ import RenderHtml, { defaultSystemFonts } from 'react-native-render-html';
 import { formatDate, setReadingTime } from '../../utils/formatData';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDetails, setArticleLike, getArticles, logToDb } from '../../redux/actions';
-import {
-  useFonts,
-  JosefinSans_500Medium,
-  JosefinSans_700Bold,
-} from '@expo-google-fonts/josefin-sans';
+import { useFonts, Nunito_500Medium, Nunito_700Bold } from '@expo-google-fonts/nunito';
+import { Arimo_700Bold } from '@expo-google-fonts/arimo';
 const systemFonts = [
   ...defaultSystemFonts,
-  'JosefinSans_500Medium',
-  'JosefinSans_700Bold',
+  'Nunito_500Medium',
+  'Nunito_700Bold',
+  'Arimo_700Bold'
 ];
 //SAVED_IMPORTS
 import ModalSave from '../../component/home/ModalSave/ModalSave.js';
 
 export default function ArticleScreen({ route }) {
   let [fontsLoaded] = useFonts({
-    JosefinSans_500Medium,
-    JosefinSans_700Bold,
+    Nunito_500Medium,
+    Nunito_700Bold,
+    Arimo_700Bold
   });
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -47,6 +46,14 @@ export default function ArticleScreen({ route }) {
   });
   //SAVED_STATES
   const [alert, setAlert] = useState(false);
+  const data = useSelector((state) => {
+    return {
+      userId: state.loggedUser.userId,
+      postId: state.details._id,
+      images: state.details.images,
+      saved: state.loggedUser.saved,
+    }
+  });
 
   // MOUNT_DETAILS
   useEffect(() => {    
@@ -96,31 +103,33 @@ export default function ArticleScreen({ route }) {
 
   // SAVE_ARTICLE
   const savedArticle = () => {
-    const savedBody = {
-      postId: article._id,
-      title: "Leer más tarde",
-      images: article.images,
-    };
+    if (!saved) {
+      const savedBody = {
+        postId: article._id,
+        title: "Leer más tarde",
+        images: article.images,
+      };
 
-    fetch(`http://${MY_IP}:4000/api/users/saved/${loggedUser.userId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(savedBody),
-    })
-      .then((res) => {
-        if (res.ok) {
-          dispatch(logToDb(loggedUser.userId));
-          setSaved(true);
-        } else {
-          throw new Error("ha habido un error");
-        }
+      fetch(`http://${MY_IP}:4000/api/users/saved/${loggedUser.userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(savedBody),
       })
-      .catch((err) => console.error(err));
-
-    if (saved === false) {
-      setAlert(true);
+        .then((res) => {
+          if (res.ok) {
+            dispatch(logToDb(loggedUser.userId));
+            setAlert(true); //Mostrar el modal alert
+            setSaved(true); // Rellenar el ícono
+            console.log("Se ha agregado a Leer mas tarde");
+          } else {
+            throw new Error("ha habido un error");
+          }
+        })
+        .catch((err) => console.error(err));
+    } else {
+      deleteSaved(article._id);
     }
   };
 
@@ -132,24 +141,6 @@ export default function ArticleScreen({ route }) {
       setSaved(answer);
     }
   }, [loggedUser]);
-
-  let data = {
-    userId: loggedUser.userId,
-    postId: article._id,
-    images: article.images,
-    saved: loggedUser.saved,
-  };
-  // useEffect(() => {
-  //   if (loggedUser && Object.entries(article).length) {
-  //     data = {
-  //       userId: loggedUser.userId,
-  //       postId: article._id,
-  //       images: article.images,
-  //       saved: loggedUser.saved,
-  //     };
-  //   }
-  // }, [article, loggedUser]);
-  
 
   // LOADING_RENDER
   if (fetchStatus.status === 'loading' || !fontsLoaded)
@@ -178,6 +169,45 @@ export default function ArticleScreen({ route }) {
         <Text style={{ fontSize: 30, color: '#f5f5f5' }}>{fetchStatus.error}</Text>
       </View>
     );
+
+    const getFolderName = (postId) => {
+      let folderName = null;
+      loggedUser.saved.forEach((folder) => {
+        const post = folder.posts.some((post) => post.postId === postId);
+        if (post) {
+          folderName = folder.title;
+        }
+      });
+      return folderName;
+    };
+  
+    const deleteSaved = (id) => {
+      let folder = getFolderName(id);
+      const deleteBody = {
+        postId: id,
+        title: folder,
+      };
+  
+      fetch(`http://${MY_IP}:4000/api/users/delete-saved/${loggedUser.userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(deleteBody),
+      })
+        .then((res) => {
+          if (res.ok) {
+            dispatch(logToDb(loggedUser.userId));
+            setSaved(false); //Vaciar el ícono
+            console.log("fue eliminado correctamente de " + folder);
+          } else {
+            throw new Error("ha habido un error");
+          }
+        })
+        .catch((err) => console.error(err));
+    };
+
+
   // ARTICLE_RENDER
   if (fetchStatus.status === 'success')
     return (
@@ -240,7 +270,7 @@ export default function ArticleScreen({ route }) {
           alert={alert}
           setAlert={setAlert}
           data={data}
-          savedFn={savedArticle}
+          deleteSaved={deleteSaved}
       />
       </>
     );

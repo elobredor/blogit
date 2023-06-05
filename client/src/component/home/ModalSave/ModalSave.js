@@ -2,9 +2,8 @@ import { Modal, View, Text } from "react-native";
 import { styles } from "./ModalSaveStyles";
 import { useState, useEffect } from "react";
 import SelectBoard from "../selectBoard/SelectBoard.js";
-import { useDispatch } from "react-redux";
 
-const ModalSave = ({ alert, setAlert, data, savedFn }) => {
+const ModalSave = ({ alert, setAlert, data, deleteSaved }) => {
   const [visible, setVisible] = useState(false); // estado de SelectModal// Elegir tablero
 
   useEffect(() => {
@@ -13,36 +12,9 @@ const ModalSave = ({ alert, setAlert, data, savedFn }) => {
     }, 3800);
   }, [alert]);
 
-  const dispacth = useDispatch();
-
-  //Eliminar de guardado
-
-  // const savedFn = () => {
-  //   const bodyBoard = {
-  //     postId: data.postId,
-  //     title: "Leer más tarde",
-  //     images: data.images,
-  //   };
-  //   fetch(`http://${MY_IP}:4000/api/users/saved/${data.userId}`, {
-  //     method: "PUT",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(bodyBoard),
-  //   })
-  //     .then((res) => {
-  //       if (res.ok) {
-  //         console.log(`ELIMINADO DE leer mas tarde`);
-  //         dispacth(logToDb(data.userId));
-  //       } else {
-  //         throw new Error("something went wrong");
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-
   const handleLink = () => {
-    savedFn();
+    console.log(deleteSaved);
+    deleteSaved(data.postId); //Se elimina de leer más tarde.
     setVisible(true);
   };
 

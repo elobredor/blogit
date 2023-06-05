@@ -1071,10 +1071,20 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
+"@expo-google-fonts/arimo@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/arimo/-/arimo-0.2.3.tgz#ccdd38121203e3d7be5445691adaa14bdf0aeea0"
+  integrity sha512-78N2hdCPU3Iu4huKNVD4V1dxjQfQRSS3Xg8VXoXqRwXBgqVPM0X4N3nbkUHC9Nwh+VVQ0h5Ogf9BWsSGzzh6PA==
+
 "@expo-google-fonts/josefin-sans@^0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@expo-google-fonts/josefin-sans/-/josefin-sans-0.2.3.tgz#f17ee524c5bd38f1e93e7095c4a714f0545812de"
   integrity sha512-JZvUDnecgTzwYV6onl/ud2fUp3v0/7qPyxgzBA2uzgpvRm2QGTIm7Rg8LASNY61jHcf7C31b89mZ4E3d5h0HuA==
+
+"@expo-google-fonts/nunito@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/nunito/-/nunito-0.2.3.tgz#d226372ab582bc285873a61382d619c17abd5c19"
+  integrity sha512-z+Bx3IuT0t3jguoMxiyWuC7pW3wDVNHgYko/G9V23QhR/yDSjEsT+Kx+VGDT/hu9TXSxw3CtpQ5MFHikqSVDYw==
 
 "@expo/bunyan@4.0.0", "@expo/bunyan@^4.0.0":
   version "4.0.0"

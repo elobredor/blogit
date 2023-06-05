@@ -4,23 +4,26 @@ export const tagsStyles = {
   h1: {
     fontSize: '32px',
     fontWeight: 'normal',
-    color: '#f5f5f5'
-    // fontFamily: 'JosefinSans_700Bold'
+    color: '#f5f5f5',
+    fontFamily: 'Arimo_700Bold',
+    // fontFamily: 'JosefinSans_700Bold',
   },
   h2: {
     fontSize: '26px',
     fontWeight: 'normal',
-    color: '#f5f5f5'
-    // fontFamily: 'JosefinSans_700Bold'
+    color: '#f5f5f5',
+    fontFamily: 'Arimo_700Bold',
+    // fontFamily: 'JosefinSans_700Bold',
   },
   p: {
     lineHeight: '2.4rem',
     fontSize: '22px',
-    color: '#f5f5f5'
-    // fontFamily: 'JosefinSans_500Medium'
+    color: '#f5f5f5',
+    fontFamily: 'Nunito_500Medium',
+    // fontFamily: 'JosefinSans_500Medium',
   },
   li: {
-    lineHeight: '2rem',
+    lineHeight: '2.4rem',
     fontSize: '22px',
     color: '#f5f5f5'
   },

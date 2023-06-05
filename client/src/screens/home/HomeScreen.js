@@ -1,4 +1,4 @@
-import { View, Text, FlatList, TouchableOpacity, Image } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 import Filters from "../../component/home/filtersHome/FiltersHome";
 import CardArticle from "../../component/home/cardArticle/CardArticle";
 import { ModalLogin } from "../../component/shared/ModalLogin";
@@ -19,6 +19,10 @@ const HomeScreen = () => {
   const img = useSelector((state) => state.loggedUser.profileImage);
   const [modalVisibility, setModalVisibility] = useState(false);
   const { navigate } = useNavigation();
+
+  useEffect(() => {
+    console.log(Dimensions.get('window').width)
+  }, [])
 
   useEffect(() => {
     dispatch(getArticles());

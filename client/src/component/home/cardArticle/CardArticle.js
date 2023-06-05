@@ -15,8 +15,10 @@ import { logToDb, setArticleLike2 } from "../../../redux/actions";
 import { MY_IP } from "react-native-dotenv";
 import ModalSave from "../ModalSave/ModalSave";
 import { LinearGradient } from "expo-linear-gradient";
+import { useFonts, Arimo_700Bold } from '@expo-google-fonts/arimo';
 
 const CardArticle = ({ item, setModalVisibility }) => {
+  let [fontsLoaded] = useFonts({ Arimo_700Bold });
   const [favorite, setFavorite] = useState();
   const [saved, setSaved] = useState(false);
   const [alert, setAlert] = useState(false); // visibilidad del modal save
@@ -66,35 +68,73 @@ const CardArticle = ({ item, setModalVisibility }) => {
       setSaved(answer);
     }
   }, [hasLogged]);
-  //agregar guardados
+
   const savedArticle = () => {
-    const savedBody = {
-      postId: item._id,
-      title: "Leer más tarde",
-      images: item.images,
+    if (!saved) {
+      const savedBody = {
+        postId: item._id,
+        title: "Leer más tarde",
+        images: item.images,
+      };
+
+      fetch(`http://${MY_IP}:4000/api/users/saved/${hasLogged.userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(savedBody),
+      })
+        .then((res) => {
+          if (res.ok) {
+            dispatch(logToDb(hasLogged.userId));
+            setAlert(true); //Mostrar el modal alert
+            setSaved(true); // Rellenar el ícono
+            console.log("Se ha agregado a Leer mas tarde");
+          } else {
+            throw new Error("ha habido un error");
+          }
+        })
+        .catch((err) => console.error(err));
+    } else {
+      deleteSaved(item._id);
+    }
+  };
+  const getFolderName = (postId) => {
+    let folderName = null;
+    hasLogged.saved.forEach((folder) => {
+      const post = folder.posts.some((post) => post.postId === postId);
+      if (post) {
+        folderName = folder.title;
+      }
+    });
+    return folderName;
+  };
+
+  const deleteSaved = (id) => {
+    let folder = getFolderName(id);
+    const deleteBody = {
+      postId: id,
+      title: folder,
     };
 
-    fetch(`http://${MY_IP}:4000/api/users/saved/${hasLogged.userId}`, {
+    fetch(`http://${MY_IP}:4000/api/users/delete-saved/${hasLogged.userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(savedBody),
+      body: JSON.stringify(deleteBody),
     })
       .then((res) => {
         if (res.ok) {
           dispatch(logToDb(hasLogged.userId));
+          setSaved(false); //Vaciar el ícono
+          console.log("fue eliminado correctamente de " + folder);
         } else {
           throw new Error("ha habido un error");
         }
       })
       .catch((err) => console.error(err));
-
-    if (saved === false) {
-      setAlert(true);
-    }
   };
-
   //data importante para los modales de creacion de tableros
   const data = {
     userId: hasLogged.userId,
@@ -103,6 +143,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
     saved: hasLogged.saved,
   };
 
+  if(!fontsLoaded) return null;
   return (
     <>
       <TouchableWithoutFeedback
@@ -111,7 +152,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
         <View style={styles.card}>
           <ImageBackground
             source={{ uri: item.images }}
-            imageStyle={{ borderRadius: 25 }}
+            imageStyle={{ borderRadius: 10 }}
           >
             <LinearGradient
               colors={["rgba(0,0,0,0.3)", "rgba(0,0,0,0.9)"]}
@@ -174,7 +215,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
         alert={alert}
         setAlert={setAlert}
         data={data}
-        savedFn={savedArticle}
+        deleteSaved={deleteSaved}
       />
     </>
   );

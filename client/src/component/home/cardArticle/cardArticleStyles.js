@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   card: {
-    borderRadius: 20,
+    borderRadius: 10,
     marginVertical: 9,
     elevation: 10,
     width: 355,
@@ -10,25 +10,27 @@ export const styles = StyleSheet.create({
   content: {
     flexDirection: "row",
     justifyContent: "space-between",
-    height: 156,
+    height: 180,
     paddingHorizontal: 18,
     paddingVertical: 12,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     marginBottom: 6,
     color: "white",
-    fontWeight: "bold",
+    fontWeight: 'normal',
+    fontFamily: 'Arimo_700Bold',
     maxWidth: 270,
   },
   btnFilter: {
-    borderRadius: 8,
+    borderRadius: 6,
     backgroundColor: "white",
-    fontSize: 15,
+    fontSize: 12,
     fontWeight: "500",
     paddingHorizontal: 10,
     paddingVertical: 2,
     textAlign: "center",
+    
   },
   profileImg: {
     width: 30,

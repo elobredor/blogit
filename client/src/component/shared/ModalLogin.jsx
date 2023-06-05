@@ -42,10 +42,7 @@ export function ModalLogin({ modalVisibility, setModalVisibility }) {
           <Button title="TENBU_HORIN" onPress={() => logIn(TENBU_HORIN)} />
           <Button title="YEMONJA" onPress={() => logIn(YEMONJA)} />
           <Button title="NORVEGICUS" onPress={() => logIn(NORVEGICUS)} />
-          <Button
-            title="DIGITAL_DREAMER"
-            onPress={() => logIn(DIGITAL_DREAMER)}
-          />
+          <Button title="DIGITAL_DREAMER" onPress={() => logIn(DIGITAL_DREAMER)} />
           <Button title="NO_COUNTRY" onPress={() => logIn(NO_COUNTRY)} />
         </View>
       </View>
