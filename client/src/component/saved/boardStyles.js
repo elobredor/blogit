@@ -9,11 +9,15 @@ export const styles = StyleSheet.create({
     padding: 10,
     width: 365,
   },
+  containerHeader: { flexDirection: "row", justifyContent: "space-between" },
+  dots: {
+    alignSelf: "center",
+  },
   //prev articles
   boardTitle: {
-    color: '#f5f5f5',
+    color: "#f5f5f5",
     fontWeight: "500",
-    fontSize: 20
+    fontSize: 20,
   },
   prevContainer: {
     flexDirection: "row",

@@ -1,9 +1,10 @@
 import { Text, View, FlatList } from "react-native";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import CardArticle from "../../../component/home/cardArticle/CardArticle";
 import { styles } from "./collectionStyles";
 import { iconsCard } from "../../../utils/iconOptions";
+import { logToDb } from "../../../redux/actions";
 
 const CollectionScreen = ({ route }) => {
   const data = route.params;
@@ -11,11 +12,25 @@ const CollectionScreen = ({ route }) => {
   const [board, setBoard] = useState([]);
   const articles = useSelector((state) => state.articles);
   const savedArticles = articles.filter((obj) => ids.includes(obj._id));
+  const userId = useSelector((state) => state.hasLogged._id);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setBoard(savedArticles);
   }, [articles]);
-  //Sacar la carpeta Leer mas tarde del flatList
+  // Función editar
+  // Función eliminar
+  // const deleteBoard = () => {
+  //   fetch(`http://${MY_IP}:4000/api/users/delete-folder/${data._id}`, {
+  //     method: "DELETE",
+  //     headers: { "Content-Type": "application/json" },
+  //   })
+  //     .then((res) => {
+  //       if (res.ok) dispatch(logToDb(userId));
+  //       else throw new Error("No response from server");
+  //     })
+  //     .catch((err) => console.error(err));
+  // };
 
   return (
     <View style={styles.colecctionContainer}>
@@ -25,6 +40,7 @@ const CollectionScreen = ({ route }) => {
           <Text style={styles.descri}>{data.description}</Text>
         </View>
         <Text style={styles.dots}>{iconsCard.account.dots}</Text>
+        {/* Esto me muestra los botones de edit and delete  */}
       </View>
       <FlatList
         showsVerticalScrollIndicator={false}
