@@ -22,7 +22,7 @@ export class PostsController {
   }
 
   //function to get all posts order by date
-  @Roles('CREATOR')
+  @PublicAccess()
   @Get('all/:page')
   public async getAllPosts(@Param('page') page: number) {
     const posts = await this.postsService.getAllPosts(page);

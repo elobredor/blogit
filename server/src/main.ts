@@ -1,7 +1,7 @@
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import * as morgan from 'morgan';
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { CORS } from './constants/cors';
 
@@ -19,12 +19,6 @@ async function bootstrap() {
       },
     }),
   );
-
-  /* The `Reflector` class is used
-  to retrieve metadata associated with classes, methods, and properties in a NestJS application. */
-  // const reflector = app.get(Reflector);
-
-  // app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
   // Get config service
   const configService = app.get(ConfigService);
