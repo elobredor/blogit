@@ -18,8 +18,8 @@ export class CommentsController {
   @Roles('BASIC')
   @Post('create')
   public async createBlog(@Body() body: CreateCommentDTO) {
-    const newComment = await this.commentsService.createComment(body);
-    return newComment;
+    await this.commentsService.createComment(body);
+    return { message: 'Comment has been created successfully' };
   }
 
   //function to get all comments by postID

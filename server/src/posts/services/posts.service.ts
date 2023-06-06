@@ -6,12 +6,14 @@ import { CreatePostsDTO, CreateUpdatePostDTO } from '../dto/posts.dto';
 import { ErrorManager } from 'src/utils/error.manager';
 import { BlogInterface } from 'src/interfaces/blog.interface';
 import { CreatePostsLikesDTO } from '../dto/postLikes.dto';
+import { NotificationsService } from 'src/notification/services/notifications.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     @InjectModel('posts') private readonly postsModel: Model<PostsInterface>,
     @InjectModel('blogs') private readonly blogsModel: Model<BlogInterface>,
+    private readonly notificationsService: NotificationsService,
   ) {}
   //This function creates a new post in a database using the provided data and returns the created post.
   public async createPost(body: CreatePostsDTO): Promise<PostsInterface> {
@@ -178,6 +180,16 @@ export class PostsService {
       if (!post.postLikes.includes(userId)) {
         post.postLikes.push(userId);
         await post.save();
+
+        //create a notification for the user that liked the post
+        await this.notificationsService.createNotification({
+          postId: postId,
+          content: 'le gusta tu artículo',
+          recipient: '',
+          origin: userId,
+          notificationType: 'like',
+        });
+
         return;
       } else {
         await this.postsModel.findByIdAndUpdate({ _id: postId }, { $pull: { postLikes: userId } });

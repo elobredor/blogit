@@ -8,10 +8,14 @@ import { ErrorManager } from 'src/utils/error.manager';
 import { CreateCommentLikesDTO } from '../dto/commentLikes.dto';
 import { ReplyCommentInterface } from 'src/interfaces/replyComment.interface';
 import { CreateReplyCommentLikesDTO, UpdateReplyCommentDTO } from '../dto/replyComment.dto';
+import { NotificationsService } from 'src/notification/services/notifications.service';
 
 @Injectable()
 export class CommentsService {
-  constructor(@InjectModel('posts') private readonly postsModel: Model<PostsInterface>) {}
+  constructor(
+    @InjectModel('posts') private readonly postsModel: Model<PostsInterface>,
+    private readonly notificationsService: NotificationsService,
+  ) {}
   //This function creates a new comment in a database using the provided data and returns the created comment.
   public async createComment(body: CreateCommentDTO): Promise<CommentInterface> {
     const { postId } = body;
@@ -27,6 +31,16 @@ export class CommentsService {
       }
       //If the user is found, create a new blog and save it to the database.
       await this.postsModel.findByIdAndUpdate({ _id: postId }, { $push: { comments: body } });
+
+      //create a notification for the user that commented on the post
+      await this.notificationsService.createNotification({
+        postId: postId,
+        content: 'ha comentado tu artículo',
+        recipient: '',
+        origin: body.userId,
+        notificationType: 'comment',
+      });
+
       return;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
@@ -69,6 +83,16 @@ export class CommentsService {
         //if the user has not liked the comment, add the user to the commentLikes array.
         comment.commentLikes.push(userId);
         await postComment.save();
+
+        //create a notification for the user that liked the comment
+        await this.notificationsService.createNotification({
+          postId: postId,
+          content: 'le gusta tu comentario',
+          recipient: comment.userId,
+          origin: userId,
+          notificationType: 'like',
+        });
+
         return;
       } else {
         //if the user has already liked the comment, remove the user from the commentLikes array.
@@ -97,6 +121,16 @@ export class CommentsService {
       const comment = comments.comments.find((c) => c._id.toString() === commentId);
       comment.replyComment.push(body);
       await comments.save();
+
+      //create a notification for the user that liked the comment
+      await this.notificationsService.createNotification({
+        postId: comments._id,
+        content: 'ha respondido tu comentario',
+        recipient: comment.userId,
+        origin: body.userId,
+        notificationType: 'comment',
+      });
+
       return;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
@@ -131,6 +165,16 @@ export class CommentsService {
         //if the user has not liked the comment, add the user to the commentLikes array.
         replyComment?.commentLikes.push(userId);
         await comments.save();
+
+        //create a notification for the user that liked the comment
+        await this.notificationsService.createNotification({
+          postId: comments._id,
+          content: 'le gusta tu comentario',
+          recipient: replyComment.userId,
+          origin: userId,
+          notificationType: 'like',
+        });
+
         return;
       } else {
         //if the user has already liked the comment, remove the user from the commentLikes array.
