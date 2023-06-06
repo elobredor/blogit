@@ -4,7 +4,6 @@ import HomeStack from './HomeStack';
 import NotificationStack from './NotificationStack';
 import SavedStack from './SavedStack';
 import { SearchStack } from './SearchStack';
-import { View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 

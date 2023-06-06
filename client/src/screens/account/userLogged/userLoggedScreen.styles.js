@@ -15,8 +15,8 @@ const styles = StyleSheet.create({
   },
   userName: {
     color: '#f5f5f5',
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontFamily: 'Arimo_700Bold'
   },
   subContainer: {
     marginTop: 60,
@@ -29,26 +29,25 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     width: '85%',
     height: 120,
-    // 6 pharagraphs
-    borderWidth: 1,
-    borderColor: '#f5f5f5',
     marginBottom: 30,
+    backgroundColor: '#3A3969',
+    borderRadius: 12
   },
   textInput: {
     width: '85%',
-    // borderWidth: 1,
-    // borderColor: '#f5f5f5',
-    // marginBottom: 30,
     color: '#f5f5f5',
+    fontFamily: 'Nunito_400Regular',
+    fontSize: 16,
     paddingHorizontal: 10,
   },
   links: {
     flexDirection: 'row',
-    gap: 10
+    gap: 10,
   },
   linksText: {
     color: '#f5f5f5',
-    fontSize: 20
+    fontSize: 16,
+    fontFamily: 'Nunito_400Regular',
   }
 });
 

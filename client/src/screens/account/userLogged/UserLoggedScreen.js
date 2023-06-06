@@ -7,8 +7,15 @@ import { iconsProfile } from '../../../utils/iconOptions';
 import { useNavigation } from '@react-navigation/native';
 import { MY_IP } from 'react-native-dotenv';
 import { useAuth0 } from 'react-native-auth0';
+import { useFonts, Arimo_400Regular, Arimo_700Bold } from '@expo-google-fonts/arimo';
+import { Nunito_400Regular } from '@expo-google-fonts/nunito';
 
 const UserLoggedScreen = () => {
+  let [loadedFonts] = useFonts({
+    Arimo_400Regular,
+    Nunito_400Regular,
+    Arimo_700Bold,
+  });
   const dispatch = useDispatch();
   const [about, setAbout] = useState('');
   const [withAbout, setWithAbout] = useState(false);
@@ -51,6 +58,7 @@ const UserLoggedScreen = () => {
     dispatch(logOut());
   };
 
+  if (!loadedFonts) return null;
   return (
     <View style={styles.container}>
       <Image source={{ uri: loggedUser.profileImage }} style={styles.profileImage} />

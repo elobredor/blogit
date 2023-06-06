@@ -258,7 +258,7 @@ export default function ArticleScreen({ route }) {
           <View style={styles.imageView}>
             <ImageBackground
               source={{ uri: article.images }}
-              imageStyle={{ borderRadius: 10, height: 156 }}
+              imageStyle={{ borderRadius: 10, height: 180 }}
             ></ImageBackground>
           </View>
           <RenderHtml
