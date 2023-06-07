@@ -33,6 +33,12 @@ export class RolesGuard implements CanActivate {
 
       if (req['user'].role === ROLES.ADMIN) return true;
 
+      const isCreator = roles.some((role) => {
+        if (role === ROLES.BASIC && req['user'].role === ROLES.CREATOR) return true;
+      });
+
+      if (isCreator) return true;
+
       const isAuth = roles.some((role) => role === req['user'].role);
 
       if (!isAuth) throw new UnauthorizedException(`don't have permission to access`);
