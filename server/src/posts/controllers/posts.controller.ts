@@ -76,4 +76,12 @@ export class PostsController {
     await this.postsService.updatePost(postId, body);
     return { message: 'Post has been updated successfully' };
   }
+
+  //method to get liked posts of a user
+  @Roles('BASIC')
+  @Get('favorites/:user_Id')
+  public async getLikedPosts(@Param('user_Id', ParseObjectIdPipe) user_Id: string) {
+    const posts = await this.postsService.getLikedPosts(user_Id);
+    return posts;
+  }
 }

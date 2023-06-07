@@ -309,4 +309,66 @@ export class PostsService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
+  //function to get all liked posts of a user
+  public async getLikedPosts(user_Id: string): Promise<PostsInterface[]> {
+    try {
+      //transform the postId to a mongoose ObjectId
+      const userObjectId = new Types.ObjectId(user_Id);
+
+      const posts = await this.postsModel.aggregate([
+        {
+          $match: {
+            postLikes: { $in: [userObjectId] },
+          },
+        },
+        {
+          $lookup: {
+            from: 'blogs',
+            localField: 'blogId',
+            foreignField: '_id',
+            as: 'blogs',
+          },
+        },
+        {
+          $unwind: '$blogs',
+        },
+        {
+          $sort: {
+            createdAt: -1,
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'blogs.userId',
+            foreignField: '_id',
+            as: 'users',
+          },
+        },
+        {
+          $unwind: '$users',
+        },
+        {
+          $group: {
+            _id: '$_id',
+            userId: { $first: '$users.userId' },
+            userName: { $first: '$users.userName' },
+            profileImage: { $first: '$users.profileImage' },
+            blogId: { $first: '$blogId' },
+            category: { $first: '$blogs.category' },
+            title: { $first: '$title' },
+            comments: { $first: '$comments' },
+            images: { $first: '$images' },
+            postLikes: { $first: '$postLikes' },
+            createdAt: { $first: '$createdAt' },
+          },
+        },
+      ]);
+
+      return posts;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
 }
