@@ -266,3 +266,18 @@ Blog Site App orientada al sector IT.
 #### PUT
 
     http://localhost:4000/api/users/delete-folder/:savedId //el _id de un saved
+
+## login
+
+#### POST
+
+    http://localhost:4000/api/auth/login
+    {
+        "email": "email@email.com
+    }
+
+## obtener todos los posts al que un usuario le ha dado like
+
+#### GET
+
+    http://localhost:4000/api/posts/favorites/user_id //el _id de mongoDB (requiere login)
