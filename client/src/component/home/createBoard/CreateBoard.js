@@ -3,7 +3,7 @@ import { styles } from "./createBoardStyles";
 import { iconsArticle } from "../../../utils/iconOptions";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { logToDb } from "../../../redux/actions";
+import { updateSaved } from "../../../redux/actions";
 import { MY_IP } from "react-native-dotenv";
 
 const CreateBoard = ({ showCreate, setShowCreate, data }) => {
@@ -41,13 +41,13 @@ const CreateBoard = ({ showCreate, setShowCreate, data }) => {
           .then((res) => {
             if (res.ok) {
               console.log(`la carpeta ${title} ha sido creada exitosamente`);
-              dispacth(logToDb(data.userId));
+              dispacth(updateSaved(data.userId));
               setShowCreate(false);
             } else {
               throw new Error("something went wrong");
             }
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.error(err));
       }
     } else {
       console.log("Olvidaste poner el nombre de la carpeta");

@@ -10,8 +10,7 @@ const SavedScreen = () => {
     state.logged ? state.loggedUser : false
   );
 
-  useEffect(() => {}, [hasLogged, modalVisibility]);
-
+  useEffect(() => {}, [hasLogged]);
   return (
     <View style={styles.savedContainer}>
       {hasLogged !== false ? (

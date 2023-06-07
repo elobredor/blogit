@@ -5,12 +5,13 @@ import { RenderPrevArticle } from "./prevArticles";
 import { iconsCard } from "../../utils/iconOptions";
 import styles from "./boardStyles";
 import { MY_IP } from "react-native-dotenv";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { logToDb, updateSaved } from "../../redux/actions";
 
 const BoardSaved = ({ item }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const userId = useSelector((state) => state.loggedUser._id);
+  const userId = useSelector((state) => state.loggedUser.userId);
   const ids = item.posts.map((obj) => obj.postId);
   const lastArticles = ids.length < 2 ? ids.slice(-1) : ids.slice(-2);
   const articles = useSelector((state) =>
@@ -25,17 +26,17 @@ const BoardSaved = ({ item }) => {
     setVisible(!visible);
   };
   const deleteBoard = () => {
-    // fetch(`http://${MY_IP}:4000/api/users/delete-folder/${item._id}`, {
-    //   method: "DELETE",
-    //   headers: { "Content-Type": "application/json" },
-    // })
-    //   .then((res) => {
-    //     if (res.ok) {
-    //       dispatch(logToDb(userId));
-    //       console.log("Folder has been deleted succesfully");
-    //     } else throw new Error("No response from server");
-    //   })
-    //   .catch((err) => console.error(err));
+    fetch(`http://${MY_IP}:4000/api/users/delete-folder/${item._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => {
+        if (res.ok) {
+          dispatch(updateSaved(userId));
+          console.log("Folder" + item.title + "has been deleted succesfully");
+        } else throw new Error("No response from server");
+      })
+      .catch((err) => console.error(err));
     console.log("Has eliminado la carpeta: " + item.title);
   };
 
@@ -45,24 +46,24 @@ const BoardSaved = ({ item }) => {
     console.log("Has entrado en modo edicion");
   };
 
-  // const submEdit = (title, desc) => {
-  //   const bodyEdit = {
-  //     title: title ? title : item.title,
-  //     description: desc ? desc : item.description,
-  //   };
-  //   fetch(`http://${MY_IP}:4000/api/users/updateSaved/${item._id}`, {
-  //     method: "PUT",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify(bodyEdit),
-  //   })
-  //     .then((res) => {
-  //       if (res.ok) {
-  //         dispatch(logToDb(userId));
-  //         console.log("Folder has been updated succesfully");
-  //       } else throw new Error("no response from server");
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
+  const submEdit = (title, desc) => {
+    const bodyEdit = {
+      title: title ? title : item.title,
+      description: desc ? desc : item.description,
+    };
+    fetch(`http://${MY_IP}:4000/api/users/updateSaved/${item._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(bodyEdit),
+    })
+      .then((res) => {
+        if (res.ok) {
+          dispatch(logToDb(userId));
+          console.log("Folder has been updated succesfully");
+        } else throw new Error("no response from server");
+      })
+      .catch((err) => console.log(err));
+  };
 
   //Crear un overInput
 

@@ -1,6 +1,4 @@
-import axios from "axios";
 import { MY_IP } from "react-native-dotenv";
-
 export const GET_ARTICLES = "GET_ARTICLES";
 export const CATEGORY_BTN = "CATEGORY_BTN";
 export const TOGGLE_LOGGED = "TOGGLE_LOGGED";
@@ -12,8 +10,9 @@ export const DETAILS_REJECTED = "DETAILS_REJECTED";
 export const SET_ARTICLE_LIKE = "SET_ARTICLE_LIKE";
 export const SET_ARTICLE_LIKE2 = "SET_ARTICLE_LIKE2";
 export const LOG_TO_DB = "LOG_TO_DB";
-export const LOG_OUT = 'LOG_OUT';
+export const LOG_OUT = "LOG_OUT";
 export const GET_CATEGORY = "GET_CATEGORY";
+export const UPDATE_SAVED = "UPDATE_SAVED";
 
 export const categoryBtn = () => {
   fetch(`http://${MY_IP}:4000/api/blogs/category/No Code`);
@@ -79,16 +78,20 @@ export const logToDb = (id) => (dispatch) => {
     .catch((error) => console.log(error));
 };
 
-// LOG_OUT
-export const logOut = () => {
-  return { type: LOG_OUT }
+// UPDATE_SAVED
+export const updateSaved = (id) => (dispatch) => {
+  fetch(`http://${MY_IP}:4000/api/users/profile/${id}`)
+    .then((res) => {
+      if (!res.ok) throw new Error("Sin respuesta del servidor");
+      return res.json();
+    })
+    .then((data) => {
+      dispatch({ type: UPDATE_SAVED, payload: data.usersProfile.saved });
+    })
+    .catch((error) => console.error(error));
 };
 
-//Handle board:
-//1. Move to another board
-//2. Create new board
-//3. unsaved (?) only if I send the same data
-
-export const handleBoard = (data) => (dispatch) => {
-  fetch(`http://${MY_IP}:4000/api/users/saved/${data.userId}`);
+// LOG_OUT
+export const logOut = () => {
+  return { type: LOG_OUT };
 };

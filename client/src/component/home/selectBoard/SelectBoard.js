@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import CreateBoard from "../createBoard/CreateBoard";
 import { useDispatch, useSelector } from "react-redux";
 import { MY_IP } from "react-native-dotenv";
-import { logToDb } from "../../../redux/actions";
+import { updateSaved } from "../../../redux/actions";
 
 const ModalSave = ({ visible, setVisible, data }) => {
   const [showCreate, setShowCreate] = useState(false); // Estado de CreateBoard
@@ -39,7 +39,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
       .then((res) => {
         if (res.ok) {
           console.log(`se ha guardado exitosament en ${title}`);
-          dispacth(logToDb(data.userId));
+          dispacth(updateSaved(data.userId));
           setVisible(false);
         } else {
           throw new Error("something went wrong");

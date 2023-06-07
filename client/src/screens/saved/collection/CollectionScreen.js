@@ -8,15 +8,12 @@ import { iconsCard } from "../../../utils/iconOptions";
 const CollectionScreen = ({ route }) => {
   const data = route.params;
   const ids = data.posts.map((obj) => obj.postId);
-  const [board, setBoard] = useState([]);
-  const articles = useSelector((state) => state.articles);
-  const savedArticles = articles.filter((obj) => ids.includes(obj._id));
+  const savedArticles = useSelector((state) =>
+    state.articles.filter((obj) => ids.includes(obj._id))
+  );
   const [visible, setVisible] = useState(false);
   const [edit, setEdit] = useState(false);
   const [title, setTitle] = useState(data.title);
-  useEffect(() => {
-    setBoard(savedArticles);
-  }, [articles]);
 
   const handleDots = () => {
     setVisible(!visible);
@@ -30,12 +27,12 @@ const CollectionScreen = ({ route }) => {
 
   const deleteBoard = () => {
     // fetch(`http://${MY_IP}:4000/api/users/delete-folder/${data._id}`, {
-    //   method: "DELETE",
+    //   method: "PUT",
     //   headers: { "Content-Type": "application/json" },
     // })
     //   .then((res) => {
     //     if (res.ok) {
-    //       dispatch(logToDb(userId));
+    //       dispatch(updateSaved(userId));
     //       console.log("Folder has been deleted succesfully");
     //     } else throw new Error("No response from server");
     //   })
@@ -81,7 +78,7 @@ const CollectionScreen = ({ route }) => {
       </View>
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={board}
+        data={savedArticles}
         renderItem={({ item }) => (
           <CardArticle
             item={item}
