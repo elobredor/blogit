@@ -9,11 +9,23 @@ export const styles = StyleSheet.create({
     padding: 10,
     width: 365,
   },
+  containerHeader: { flexDirection: "row", justifyContent: "space-between" },
+  dots: {
+    alignSelf: "center",
+  },
+  input: {
+    backgroundColor: "white",
+    paddingRight: 60,
+    color: "#222143",
+    fontSize: 20,
+    borderRadius: 5,
+  },
+
   //prev articles
   boardTitle: {
-    color: '#f5f5f5',
+    color: "#f5f5f5",
     fontWeight: "500",
-    fontSize: 20
+    fontSize: 20,
   },
   prevContainer: {
     flexDirection: "row",

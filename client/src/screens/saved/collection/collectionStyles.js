@@ -18,6 +18,14 @@ export const styles = StyleSheet.create({
     textAlign: "left",
     alignSelf: "flex-start",
   },
+  input: {
+    backgroundColor: "white",
+    paddingRight: 60,
+    color: "#222143",
+    fontSize: 20,
+    borderRadius: 5,
+  },
+
   title: {
     color: "#f5f5f5",
     fontSize: 26,
@@ -27,5 +35,4 @@ export const styles = StyleSheet.create({
     color: "#f5f5f5",
     fontSize: 14,
   },
-  dots: { alignSelf: "center", marginRight: 10 },
 });
