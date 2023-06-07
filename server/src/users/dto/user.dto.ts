@@ -33,7 +33,7 @@ class SavedPostDto {
 
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
+  //@IsString({ each: true })
   posts: object[];
 }
 
@@ -58,14 +58,10 @@ export class CreateUserDto {
   @IsNotEmpty()
   profileImage: string;
 
-  @IsOptional()
-  @IsEnum(ROLES)
   @IsEmpty({ message: 'El campo no debe tener valor cuando se envía como predeterminado.' })
   role: ROLES;
 
-  @IsOptional()
   @IsEmpty({ message: 'El campo no debe tener valor cuando se envía como predeterminado.' })
-  @IsNumber()
   status: number;
 
   @IsOptional()
@@ -85,15 +81,12 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => SavedPostDto)
+  //@ValidateNested({ each: true })
+  //@Type(() => SavedPostDto)
   saved: SavedPostDto[];
 }
 
 export class UserUpdateDTO {
-  @IsString()
-  @MaxLength(25)
-  @IsOptional()
   @IsEmpty({ message: 'El campo userId no debe tener valor cuando se envía como predeterminado.' })
   userId: string;
 
@@ -102,9 +95,6 @@ export class UserUpdateDTO {
   @IsOptional()
   userName: string;
 
-  @IsString()
-  @MaxLength(70)
-  @IsOptional()
   @IsEmpty({ message: 'El campo email no debe tener valor cuando se envía como predeterminado.' })
   email: string;
 
@@ -113,14 +103,10 @@ export class UserUpdateDTO {
   @IsOptional()
   profileImage: string;
 
-  @IsOptional()
-  @IsEnum(ROLES)
   @IsEmpty({ message: 'El campo role no debe tener valor cuando se envía como predeterminado.' })
   role: ROLES;
 
-  @IsOptional()
   @IsEmpty({ message: 'El campo status no debe tener valor cuando se envía como predeterminado.' })
-  @IsNumber()
   status: number;
 
   @IsOptional()
@@ -165,7 +151,7 @@ export class UserUpdateDTO {
 
   @IsOptional()
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => SavedPostDto)
+  //@ValidateNested({ each: true })
+  //@Type(() => SavedPostDto)
   saved: SavedPostDto[];
 }

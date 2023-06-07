@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { styles } from './ModalLogin.styles.js';
 import { View, Text, Button, Modal, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { logToDb } from '../../redux/actions.js';
+import { logIn } from '../../redux/actions.js';
 // import {
 //   ALECTO,
 //   CHRONOS64,
@@ -18,6 +18,7 @@ import { logToDb } from '../../redux/actions.js';
 import { useAuth0 } from 'react-native-auth0';
 
 export function ModalLogin({ modalVisibility, setModalVisibility }) {
+  const dispatch = useDispatch();
   const { authorize } = useAuth0();
 
   const login = async () => {
@@ -26,6 +27,8 @@ export function ModalLogin({ modalVisibility, setModalVisibility }) {
         { scope: 'openid profile email' },
         { customScheme: 'blogit' }
       );
+      dispatch(logIn(user.email));
+      setModalVisibility(false);
     } catch (error) {
       console.error(error);
     }

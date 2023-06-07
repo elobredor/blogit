@@ -17,6 +17,7 @@ const HomeScreen = () => {
   const articles = useSelector((state) => state.articles);
   const filtered = useSelector((state) => state.filtered);
   const isLogged = useSelector((state) => state.logged);
+  const token = useSelector((state) => state.token);
   const img = useSelector((state) => state.loggedUser.profileImage);
   const [modalVisibility, setModalVisibility] = useState(false);
   const { navigate } = useNavigation();
@@ -25,11 +26,10 @@ const HomeScreen = () => {
   });
 
   useEffect(() => {
-    if (user) {
-      setModalVisibility(false);
-      dispatch(logToDb(user.sub, user));
+    if (token) {
+      dispatch(logToDb(user.sub));
     }
-  }, [user]);
+  }, [token]);
 
   useEffect(() => {
     dispatch(getArticles());
