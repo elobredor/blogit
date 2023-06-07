@@ -26,7 +26,7 @@ const HomeStack = () => {
         options={{
           headerTitle: () => null,
           headerLeft: () => <ArticleHeader />,
-          headerStyle: { backgroundColor: '#090841' },
+          headerStyle: { backgroundColor: '#020123' },
         }}
       />
       <Stack.Screen

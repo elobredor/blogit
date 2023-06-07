@@ -120,6 +120,7 @@ export default function CommentsScreen() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          // 'Authorization': `Bearer ${access_token}`
         },
         body: JSON.stringify(commentBody),
       })

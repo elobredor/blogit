@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { iconOptions } from '../utils/iconOptions';
 import HomeStack from './HomeStack';
-import NotificationStack from './NotificationStack';
+// import NotificationStack from './NotificationStack';
 import SavedStack from './SavedStack';
 import { SearchStack } from './SearchStack';
 
@@ -15,7 +15,7 @@ const AppNavigation = () => {
         tabBarInactiveTintColor: '#f5f5f5',
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        tabBarStyle: { backgroundColor: '#020123', height: 45 },
+        tabBarStyle: { backgroundColor: '#020123', height: 50, paddingTop: 5, paddingBottom: 5 },
       })}
     >
       <Tab.Screen
@@ -45,7 +45,7 @@ const AppNavigation = () => {
             focused ? iconOptions.saved.focused : iconOptions.saved.default,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name='notificationTab'
         component={NotificationStack}
         options={{
@@ -55,7 +55,7 @@ const AppNavigation = () => {
               ? iconOptions.notifications.focused
               : iconOptions.notifications.default,
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };

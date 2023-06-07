@@ -39,7 +39,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    backgroundColor: '#090841',
+    backgroundColor: '#020123',
+    borderBottomWidth: 1,
+    borderBottomColor: '#102962',
     paddingVertical: '2%',
   },
   authorView: {
