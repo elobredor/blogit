@@ -12,12 +12,18 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
   //function to create a comment
   @Post('create')
+<<<<<<< HEAD
   public async createBlog(@Res() response: Response, @Body() body: CreateCommentDTO) {
     const newComment = await this.commentsService.createComment(body);
     return response.status(HttpStatus.CREATED).json({
       message: 'Comment has been created successfully',
       newComment,
     });
+=======
+  public async createBlog(@Body() body: CreateCommentDTO) {
+    await this.commentsService.createComment(body);
+    return { message: 'Comment has been created successfully' };
+>>>>>>> 9868046a722c0344919fe04246d04b5ad3ed8b4f
   }
   //function to get all comments by postID
   @Get('all/:postId')
