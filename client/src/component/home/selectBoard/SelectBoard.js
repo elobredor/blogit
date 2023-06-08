@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import CreateBoard from "../createBoard/CreateBoard";
 import { useDispatch, useSelector } from "react-redux";
 import { MY_IP } from "react-native-dotenv";
+import { updateSaved } from "../../../redux/actions";
 import { logToDb } from "../../../redux/actions";
 import { Nunito_400Regular, useFonts } from '@expo-google-fonts/nunito';
 
@@ -43,7 +44,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
       .then((res) => {
         if (res.ok) {
           console.log(`se ha guardado exitosament en ${title}`);
-          dispacth(logToDb(data.userId));
+          dispacth(updateSaved(data.userId));
           setVisible(false);
         } else {
           throw new Error("something went wrong");
@@ -70,7 +71,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
         )}
       />
     ) : (
-      <CreateItem setShowCreate={setShowCreate} />
+      <CreateItem setShowCreate={setShowCreate} setVisible={setVisible} />
     );
   };
 
@@ -130,7 +131,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
   );
 };
 
-const CreateItem = ({ setShowCreate }) => {
+const CreateItem = ({ setShowCreate, setVisible }) => {
   return (
     <View style={styles.boardContainer}>
       <View style={styles.leftSide}>
@@ -145,6 +146,7 @@ const CreateItem = ({ setShowCreate }) => {
         <Text
           onPress={() => {
             setShowCreate(true);
+            setVisible(false);
           }}
           style={styles.text}
         >

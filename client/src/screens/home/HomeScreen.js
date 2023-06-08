@@ -1,3 +1,4 @@
+
 import { View, Text, FlatList, TouchableOpacity, Image, Button } from "react-native";
 import Filters from "../../component/home/filtersHome/FiltersHome";
 import CardArticle from "../../component/home/cardArticle/CardArticle";
@@ -41,7 +42,7 @@ const HomeScreen = () => {
               {iconOptions.account.focused}
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity onPress={() => navigate('account')}>
+            <TouchableOpacity onPress={() => navigate("account")}>
               <Image source={{ uri: img }} style={styles.profilePh} />
             </TouchableOpacity>
           )}

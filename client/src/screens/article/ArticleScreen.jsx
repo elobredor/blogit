@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   ScrollView,
   View,
@@ -30,7 +30,7 @@ const systemFonts = [
   'Raleway_700Bold'
 ];
 //SAVED_IMPORTS
-import ModalSave from '../../component/home/ModalSave/ModalSave.js';
+import ModalSave from "../../component/home/ModalSave/ModalSave.js";
 
 export default function ArticleScreen({ route }) {
   let [fontsLoaded] = useFonts({
@@ -59,12 +59,12 @@ export default function ArticleScreen({ route }) {
       postId: state.details._id,
       images: state.details.images,
       saved: state.loggedUser.saved,
-    }
+    };
   });
 
   // MOUNT_DETAILS
-  useEffect(() => {    
-      dispatch(getDetails(route.params));
+  useEffect(() => {
+    dispatch(getDetails(route.params));
   }, []);
 
   // NAVIGATE_TO_COMMENTS
@@ -72,13 +72,13 @@ export default function ArticleScreen({ route }) {
     if (!loggedUser) {
       setModalVisibility(true);
     } else {
-      navigation.navigate('comments');
+      navigation.navigate("comments");
     }
   };
 
   // SET_FAVORITES_LOCALLY
   useEffect(() => {
-    if (fetchStatus.status === 'success' && loggedUser) {
+    if (fetchStatus.status === "success" && loggedUser) {
       if (article.postLikes.includes(loggedUser._id)) {
         setFavorite(true);
       } else {
@@ -94,11 +94,10 @@ export default function ArticleScreen({ route }) {
     } else {
       const body = { userId: loggedUser._id };
       fetch(`http://${MY_IP}:4000/api/posts/like/${article._id}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
-
         },
         body: JSON.stringify(body),
       }).then((res) => {
@@ -129,7 +128,7 @@ export default function ArticleScreen({ route }) {
       })
         .then((res) => {
           if (res.ok) {
-            dispatch(logToDb(loggedUser.userId));
+            dispatch(updateSaved(loggedUser.userId));
             setAlert(true); //Mostrar el modal alert
             setSaved(true); // Rellenar el ícono
             console.log("Se ha agregado a Leer mas tarde");
@@ -153,32 +152,37 @@ export default function ArticleScreen({ route }) {
   }, [loggedUser]);
 
   // LOADING_RENDER
-  if (fetchStatus.status === 'loading' || !fontsLoaded)
+  if (fetchStatus.status === "loading" || !fontsLoaded)
     return (
       <View
         style={{
           paddingTop: 150,
-          backgroundColor: '#090841',
-          alignItems: 'center',
+          backgroundColor: "#090841",
+          alignItems: "center",
           flex: 1,
         }}
       ></View>
     );
   // ERROR_RENDER
-  if (fetchStatus.status === 'rejected')
+  if (fetchStatus.status === "rejected")
     return (
       <View
         style={{
-          backgroundColor: '#090841',
-          justifyContent: 'center',
-          alignItems: 'center',
+          backgroundColor: "#090841",
+          justifyContent: "center",
+          alignItems: "center",
           flex: 1,
         }}
       >
-        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#f5f5f5' }}>Error:</Text>
-        <Text style={{ fontSize: 30, color: '#f5f5f5' }}>{fetchStatus.error}</Text>
+        <Text style={{ fontSize: 30, fontWeight: "bold", color: "#f5f5f5" }}>
+          Error:
+        </Text>
+        <Text style={{ fontSize: 30, color: "#f5f5f5" }}>
+          {fetchStatus.error}
+        </Text>
       </View>
     );
+
 
     const getFolderName = (postId) => {
       let folderName = null;
@@ -218,9 +222,27 @@ export default function ArticleScreen({ route }) {
         .catch((err) => console.error(err));
     };
 
+    fetch(`http://${MY_IP}:4000/api/users/delete-saved/${loggedUser.userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(deleteBody),
+    })
+      .then((res) => {
+        if (res.ok) {
+          dispatch(updateSaved(loggedUser.userId));
+          setSaved(false); //Vaciar el ícono
+          console.log("fue eliminado correctamente de " + folder);
+        } else {
+          throw new Error("ha habido un error");
+        }
+      })
+      .catch((err) => console.error(err));
+  };
 
   // ARTICLE_RENDER
-  if (fetchStatus.status === 'success')
+  if (fetchStatus.status === "success")
     return (
       <>
         <View style={styles.headerView}>
@@ -240,21 +262,27 @@ export default function ArticleScreen({ route }) {
             </View>
           </View>
           <View style={styles.icons}>
-            <View style={{ flexDirection: 'row', gap: 2 }}>
+            <View style={{ flexDirection: "row", gap: 2 }}>
               <TouchableWithoutFeedback onPress={handleNavigateToComments}>
                 {iconsArticle.comment}
               </TouchableWithoutFeedback>
               <Text style={styles.iconCounters}>{article.comments.length}</Text>
             </View>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: "row" }}>
               <TouchableWithoutFeedback onPress={handleFavorite}>
                 {!favorite
                   ? iconsArticle.heart.empty
                   : iconsArticle.heart.filled}
               </TouchableWithoutFeedback>
-              <Text style={styles.iconCounters}>{article.postLikes.length}</Text>
+              <Text style={styles.iconCounters}>
+                {article.postLikes.length}
+              </Text>
             </View>
-            <TouchableWithoutFeedback onPress={() => loggedUser ? savedArticle() : setModalVisibility(true)}>
+            <TouchableWithoutFeedback
+              onPress={() =>
+                loggedUser ? savedArticle() : setModalVisibility(true)
+              }
+            >
               {saved ? iconsArticle.saved.focused : iconsArticle.saved.default}
             </TouchableWithoutFeedback>
           </View>
@@ -267,7 +295,7 @@ export default function ArticleScreen({ route }) {
             ></ImageBackground>
           </View>
           <RenderHtml
-            contentWidth={Dimensions.get('window').width}
+            contentWidth={Dimensions.get("window").width}
             source={{ html: article.content }}
             tagsStyles={tagsStyles}
             systemFonts={systemFonts}
@@ -282,7 +310,7 @@ export default function ArticleScreen({ route }) {
           setAlert={setAlert}
           data={data}
           deleteSaved={deleteSaved}
-      />
+        />
       </>
     );
 }

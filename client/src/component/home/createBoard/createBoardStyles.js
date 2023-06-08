@@ -2,14 +2,15 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   modalBg: {
     justifyContent: "flex-end",
+    marginBottom: 0,
     backgroundColor: 'rgba(0,0,0,0.5)',
     alignItems: "center",
     flex: 1,
   },
-  modalContainer: {
+  modalContainer: 
+    height: "45%",
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    height: "65%",
     width: "95%",
     backgroundColor: "#090841",
     gap: 10,
