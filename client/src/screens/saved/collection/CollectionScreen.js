@@ -30,7 +30,7 @@ const CollectionScreen = ({ route }) => {
   const handleDots = () => {
     setShowDots(!showDots);
   };
-
+  //ALERTA DEL MISMO CODIGO DESPROLIJO
   const ContainerEdit = () => {
     const [title, setTitle] = useState(data.title);
     const handleChange = (text) => {
