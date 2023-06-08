@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { updateSaved } from "../../../redux/actions";
 import { MY_IP } from "react-native-dotenv";
 
-const CreateBoard = ({ showCreate, setShowCreate, data }) => {
+const CreateBoard = ({ showCreate, setShowCreate, data, setVisible }) => {
   const dispacth = useDispatch();
   const [title, setTitle] = useState("");
   const [descri, setDescri] = useState("");
@@ -42,6 +42,7 @@ const CreateBoard = ({ showCreate, setShowCreate, data }) => {
             if (res.ok) {
               console.log(`la carpeta ${title} ha sido creada exitosamente`);
               dispacth(updateSaved(data.userId));
+              setVisible(false);
               setShowCreate(false);
             } else {
               throw new Error("something went wrong");

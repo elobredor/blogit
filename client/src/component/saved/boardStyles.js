@@ -39,7 +39,39 @@ export const styles = StyleSheet.create({
     backgroundColor: "#222143",
     borderRadius: 14,
   },
-  //prevCon
+  //modalDelete
+  modalDeleteBack: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    alignItems: "center",
+  },
+  modalDeleteFront: {
+    backgroundColor: "#3A3969",
+    position: "relative",
+    top: 300,
+    width: "50%",
+    justifyContent: "flex-end",
+    borderRadius: 15,
+    overflow: "hidden",
+    paddingTop: 20,
+  },
+  modalDeleteBtn: {
+    height: 31,
+    backgroundColor: "#3A3969",
+    justifyContent: "center",
+    borderTopWidth: 1,
+    borderColor: "#302962",
+  },
+  modalDeleteText1: {
+    textAlign: "center",
+    color: "#f5f5f5",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  modalDeleteText2: {
+    textAlign: "center",
+    color: "#f5f5f5",
+  },
 });
 
 export default styles;

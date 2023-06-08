@@ -35,4 +35,60 @@ export const styles = StyleSheet.create({
     color: "#f5f5f5",
     fontSize: 14,
   },
+  dots: {
+    alignSelf: "center",
+  },
+  //inputEdit
+  containerEdit: {
+    width: "100%",
+    padding: 20,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    borderRadius: 15,
+    backgroundColor: "#3A3969",
+    gap: 10,
+    elevation: 5,
+    display: "flex",
+  },
+  inputEdit: {
+    backgroundColor: "white",
+    width: "70%",
+    color: "#222143",
+    fontSize: 20,
+    borderRadius: 5,
+    fontWeight: "bold",
+  },
+  //modalDelete
+  modalDeleteBack: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    alignItems: "center",
+  },
+  modalDeleteFront: {
+    backgroundColor: "#3A3969",
+    position: "relative",
+    top: 300,
+    width: "50%",
+    justifyContent: "flex-end",
+    borderRadius: 15,
+    overflow: "hidden",
+    paddingTop: 20,
+  },
+  modalDeleteBtn: {
+    height: 31,
+    backgroundColor: "#3A3969",
+    justifyContent: "center",
+    borderTopWidth: 1,
+    borderColor: "#302962",
+  },
+  modalDeleteText1: {
+    textAlign: "center",
+    color: "#f5f5f5",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  modalDeleteText2: {
+    textAlign: "center",
+    color: "#f5f5f5",
+  },
 });

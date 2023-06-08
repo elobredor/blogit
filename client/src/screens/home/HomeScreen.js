@@ -1,4 +1,4 @@
-import { View, Text, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Image } from "react-native";
 import Filters from "../../component/home/filtersHome/FiltersHome";
 import CardArticle from "../../component/home/cardArticle/CardArticle";
 import { ModalLogin } from "../../component/shared/ModalLogin";
@@ -21,10 +21,6 @@ const HomeScreen = () => {
   const { navigate } = useNavigation();
 
   useEffect(() => {
-    console.log(Dimensions.get('window').width)
-  }, [])
-
-  useEffect(() => {
     dispatch(getArticles());
   }, []);
 
@@ -39,7 +35,7 @@ const HomeScreen = () => {
               {iconOptions.account.focused}
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity onPress={() => navigate('account')}>
+            <TouchableOpacity onPress={() => navigate("account")}>
               <Image source={{ uri: img }} style={styles.profilePh} />
             </TouchableOpacity>
           )}

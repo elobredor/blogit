@@ -1,16 +1,17 @@
-import { Text, View, TouchableOpacity, TextInput } from "react-native";
+import { Text, View, TouchableOpacity, Modal } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import { RenderPrevArticle } from "./prevArticles";
-import { iconsCard } from "../../utils/iconOptions";
+import { iconsCard, iconsComments } from "../../utils/iconOptions";
 import styles from "./boardStyles";
 import { MY_IP } from "react-native-dotenv";
 import { useState } from "react";
-import { logToDb, updateSaved } from "../../redux/actions";
+import { updateSaved } from "../../redux/actions";
 
-const BoardSaved = ({ item }) => {
+const BoardSaved = ({ item, setData }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [deteleVisibility, setDeteleVisibility] = useState(false);
   const userId = useSelector((state) => state.loggedUser.userId);
   const ids = item.posts.map((obj) => obj.postId);
   const lastArticles = ids.length < 2 ? ids.slice(-1) : ids.slice(-2);
@@ -18,11 +19,8 @@ const BoardSaved = ({ item }) => {
     state.articles.filter((obj) => lastArticles.includes(obj._id))
   );
   const [visible, setVisible] = useState(false); //Edit and delete options visibility
-  const [edit, setEdit] = useState(false);
-  const [title, setTitle] = useState(item.title);
 
   const handleDots = () => {
-    console.log("Ahora puedes editar o eliminar ");
     setVisible(!visible);
   };
   const deleteBoard = () => {
@@ -41,47 +39,25 @@ const BoardSaved = ({ item }) => {
   };
 
   const editBoard = () => {
-    // Btn submit
-    setEdit(!edit);
-    console.log("Has entrado en modo edicion");
-  };
-
-  const submEdit = (title, desc) => {
-    const bodyEdit = {
-      title: title ? title : item.title,
-      description: desc ? desc : item.description,
-    };
-    fetch(`http://${MY_IP}:4000/api/users/updateSaved/${item._id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(bodyEdit),
-    })
-      .then((res) => {
-        if (res.ok) {
-          dispatch(logToDb(userId));
-          console.log("Folder has been updated succesfully");
-        } else throw new Error("no response from server");
-      })
-      .catch((err) => console.log(err));
+    setData({ title: item.title, folderId: item._id });
   };
 
   //Crear un overInput
 
   const OptionsBoard = () => {
     return (
-      <View style={{ flexDirection: "row", gap: 10 }}>
-        <Text onPress={editBoard} style={{ color: "white" }}>
-          Edit
+      <View style={{ flexDirection: "row", gap: 40 }}>
+        <Text
+          onPress={() => setDeteleVisibility(true)}
+          style={{ color: "white" }}
+        >
+          {iconsComments.trash}
         </Text>
-        <Text onPress={deleteBoard} style={{ color: "white" }}>
-          Delete
+        <Text onPress={editBoard} style={{ color: "white" }}>
+          {iconsComments.edit}
         </Text>
       </View>
     );
-  };
-
-  const handleChange = (text) => {
-    setTitle(text);
   };
 
   return (
@@ -91,16 +67,8 @@ const BoardSaved = ({ item }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate("Collection", item)}
           >
-            {edit ? (
-              <TextInput
-                style={styles.input}
-                value={title}
-                onChangeText={handleChange}
-                autoFocus
-              />
-            ) : (
-              <Text style={styles.boardTitle}>{item.title}</Text>
-            )}
+            <Text style={styles.boardTitle}>{item.title}</Text>
+
             <Text style={{ color: "#f5f5f5" }}>
               {item.posts.length} artículo(s)
             </Text>
@@ -111,6 +79,31 @@ const BoardSaved = ({ item }) => {
         </View>
         <RenderPrevArticle articles={articles} />
       </View>
+      <Modal visible={deteleVisibility} transparent>
+        <View style={styles.modalDeleteBack}>
+          <View style={styles.modalDeleteFront}>
+            <Text style={styles.modalDeleteText1}>¿Deseas eliminar</Text>
+            <Text style={styles.modalDeleteText1}>esta carpeta?{"\n"}</Text>
+
+            <View style={{ alignItems: "stretch", backgroundColor: "#37b4a1" }}>
+              <TouchableOpacity
+                onPress={deleteBoard}
+                activeOpacity={0.5}
+                style={styles.modalDeleteBtn}
+              >
+                <Text style={styles.modalDeleteText1}>Si</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setDeteleVisibility(false)}
+                activeOpacity={0.5}
+                style={styles.modalDeleteBtn}
+              >
+                <Text style={styles.modalDeleteText1}>No</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 };
