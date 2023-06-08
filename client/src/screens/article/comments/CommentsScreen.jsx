@@ -71,7 +71,7 @@ export default function CommentsScreen() {
       Keyboard.dismiss();
       const editBody = { comment: articleComment };
       setArticleComment('');
-      fetch(`http://${MY_IP}:4000/api/comments/update/${editing.editingId}`, {
+      fetch(`https://blogit.up.railway.app/api/comments/update/${editing.editingId}`, {
         method: 'PUT',
         headers: {
           'Content-Type':'application/json',
@@ -92,7 +92,7 @@ export default function CommentsScreen() {
       Keyboard.dismiss();
       const editBody = { comment: articleComment };
       setArticleComment('');
-      fetch(`http://${MY_IP}:4000/api/comments/reply-update/${editing.editingId}`, {
+      fetch(`https://blogit.up.railway.app/api/comments/reply-update/${editing.editingId}`, {
         method: 'PUT',
         headers: {
           'Content-Type':'application/json',
@@ -119,7 +119,7 @@ export default function CommentsScreen() {
         profileImage: loggedUser.profileImage,
       };
       setArticleComment('');
-      fetch(`http://${MY_IP}:4000/api/comments/create`, {
+      fetch(`https://blogit.up.railway.app/api/comments/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ export default function CommentsScreen() {
       userId: loggedUser._id,
       commentId,
     };
-    fetch(`http://${MY_IP}:4000/api/comments/like/${_id}`, {
+    fetch(`https://blogit.up.railway.app/api/comments/like/${_id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ export default function CommentsScreen() {
       replyCommentId,
     };
 
-    fetch(`http://${MY_IP}:4000/api/comments/reply/like/${commentId}`, {
+    fetch(`https://blogit.up.railway.app/api/comments/reply/like/${commentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -224,7 +224,7 @@ export default function CommentsScreen() {
       comment: reply,
       profileImage: loggedUser.profileImage,
     };
-    fetch(`http://${MY_IP}:4000/api/comments/reply/${replying.commentId}`, {
+    fetch(`https://blogit.up.railway.app/api/comments/reply/${replying.commentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -244,7 +244,7 @@ export default function CommentsScreen() {
   // DELETE_COMMENT/REPLY
   const deleteComment = () => {
     if (deletionType === 'comment') {
-      fetch(`http://${MY_IP}:4000/api/comments/delete/${editDelete}`, {
+      fetch(`https://blogit.up.railway.app/api/comments/delete/${editDelete}`, {
         method: 'DELETE',
         headers: {
           'Content-Type':'application/json',
@@ -256,7 +256,7 @@ export default function CommentsScreen() {
         })
         .catch(error => console.error(error));
     } else if (deletionType === 'reply') {
-      fetch(`http://${MY_IP}:4000/api/comments/reply-delete/${editDelete}`, {
+      fetch(`https://blogit.up.railway.app/api/comments/reply-delete/${editDelete}`, {
       method: 'DELETE',
       headers: {
         'Content-Type':'application/json',

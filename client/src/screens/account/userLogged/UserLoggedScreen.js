@@ -35,7 +35,7 @@ const UserLoggedScreen = () => {
     const aboutBody = {
       about,
     }
-    fetch(`http://${MY_IP}:4000/api/users/update/${loggedUser.userId}`, {
+    fetch(`https://blogit.up.railway.app/api/users/update/${loggedUser.userId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

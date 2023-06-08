@@ -41,7 +41,7 @@ const SavedScreen = () => {
       const bodyEdit = {
         title: title,
       };
-      fetch(`http://${MY_IP}:4000/api/users/updateSaved/${data.folderId}`, {
+      fetch(`https://blogit.up.railway.app/api/users/updateSaved/${data.folderId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

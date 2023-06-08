@@ -44,7 +44,7 @@ const CollectionScreen = ({ route }) => {
       const bodyEdit = {
         title: title,
       };
-      fetch(`http://${MY_IP}:4000/api/users/updateSaved/${data._id}`, {
+      fetch(`https://blogit.up.railway.app/api/users/updateSaved/${data._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -142,7 +142,7 @@ const CollectionScreen = ({ route }) => {
   };
   //Delete FN
   const deleteBoard = () => {
-    fetch(`http://${MY_IP}:4000/api/users/delete-folder/${data._id}`, {
+    fetch(`https://blogit.up.railway.app/api/users/delete-folder/${data._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

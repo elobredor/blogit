@@ -41,7 +41,7 @@ const CreateBoard = ({ showCreate, setShowCreate, data, setVisible }) => {
             ? descri
             : "Aquí puedes añadir una breve descripción",
         };
-        fetch(`http://${MY_IP}:4000/api/users/saved/${data.userId}`, {
+        fetch(`https://blogit.up.railway.app/api/users/saved/${data.userId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

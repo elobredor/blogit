@@ -94,7 +94,7 @@ export default function ArticleScreen({ route }) {
       setModalVisibility(true);
     } else {
       const body = { userId: loggedUser._id };
-      fetch(`http://${MY_IP}:4000/api/posts/like/${article._id}`, {
+      fetch(`https://blogit.up.railway.app/api/posts/like/${article._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ export default function ArticleScreen({ route }) {
         images: article.images,
       };
 
-      fetch(`http://${MY_IP}:4000/api/users/saved/${loggedUser.userId}`, {
+      fetch(`https://blogit.up.railway.app/api/users/saved/${loggedUser.userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -198,7 +198,7 @@ export default function ArticleScreen({ route }) {
         title: folder,
       };
   
-      fetch(`http://${MY_IP}:4000/api/users/delete-saved/${loggedUser.userId}`, {
+      fetch(`https://blogit.up.railway.app/api/users/delete-saved/${loggedUser.userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

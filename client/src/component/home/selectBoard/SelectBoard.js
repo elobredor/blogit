@@ -35,7 +35,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
       title: title,
       images: data.images,
     };
-    fetch(`http://${MY_IP}:4000/api/users/saved/${data.userId}`, {
+    fetch(`https://blogit.up.railway.app/api/users/saved/${data.userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

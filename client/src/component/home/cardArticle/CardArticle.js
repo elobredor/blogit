@@ -52,7 +52,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
     const favoriteBody = {
       userId: hasLogged._id,
     };
-    fetch(`http://${MY_IP}:4000/api/posts/like/${item._id}`, {
+    fetch(`https://blogit.up.railway.app/api/posts/like/${item._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -86,7 +86,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
         title: "Leer más tarde",
         images: item.images,
       };
-      fetch(`http://${MY_IP}:4000/api/users/saved/${hasLogged.userId}`, {
+      fetch(`https://blogit.up.railway.app/api/users/saved/${hasLogged.userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

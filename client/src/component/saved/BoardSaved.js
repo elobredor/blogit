@@ -32,7 +32,7 @@ const BoardSaved = ({ item, setData }) => {
     setVisible(!visible);
   };
   const deleteBoard = () => {
-    fetch(`http://${MY_IP}:4000/api/users/delete-folder/${item._id}`, {
+    fetch(`https://blogit.up.railway.app/api/users/delete-folder/${item._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
