@@ -1,8 +1,5 @@
-import { useEffect } from 'react';
 import { styles } from './ModalLogin.styles.js';
 import { View, Text, Button, Modal, TouchableOpacity } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { logIn } from '../../redux/actions.js';
 // import {
 //   ALECTO,
 //   CHRONOS64,
@@ -18,17 +15,15 @@ import { logIn } from '../../redux/actions.js';
 import { useAuth0 } from 'react-native-auth0';
 
 export function ModalLogin({ modalVisibility, setModalVisibility }) {
-  const dispatch = useDispatch();
   const { authorize } = useAuth0();
 
   const login = async () => {
     try {
+      setModalVisibility(false);
       await authorize(
         { scope: 'openid profile email' },
         { customScheme: 'blogit' }
       );
-      dispatch(logIn(user.email));
-      setModalVisibility(false);
     } catch (error) {
       console.error(error);
     }

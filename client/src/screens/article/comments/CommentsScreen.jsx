@@ -51,6 +51,7 @@ export default function CommentsScreen() {
   const [deletionType, setDeletionType] = useState('');
   const [deteleVisibility, setDeteleVisibility] = useState(false);
   const [editing, setEditing] = useState(editInitialState);
+  const token = useSelector(state => state.token);
 
   // COMMENT_SCROLLING (EVALUATE)
   useEffect(() => {
@@ -73,7 +74,8 @@ export default function CommentsScreen() {
       fetch(`http://${MY_IP}:4000/api/comments/update/${editing.editingId}`, {
         method: 'PUT',
         headers: {
-          'Content-Type':'application/json'
+          'Content-Type':'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(editBody)
       })
@@ -93,7 +95,8 @@ export default function CommentsScreen() {
       fetch(`http://${MY_IP}:4000/api/comments/reply-update/${editing.editingId}`, {
         method: 'PUT',
         headers: {
-          'Content-Type':'application/json'
+          'Content-Type':'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(editBody)
       })
@@ -120,6 +123,7 @@ export default function CommentsScreen() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
           // 'Authorization': `Bearer ${access_token}`
         },
         body: JSON.stringify(commentBody),
@@ -142,6 +146,7 @@ export default function CommentsScreen() {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(likeCommentBody),
     })
@@ -163,6 +168,7 @@ export default function CommentsScreen() {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(likeReplyBody),
     })
@@ -222,6 +228,7 @@ export default function CommentsScreen() {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(replyBody),
     })
@@ -240,7 +247,8 @@ export default function CommentsScreen() {
       fetch(`http://${MY_IP}:4000/api/comments/delete/${editDelete}`, {
         method: 'DELETE',
         headers: {
-          'Content-Type':'application/json'
+          'Content-Type':'application/json',
+          'Authorization': `Bearer ${token}`
         }})
         .then(res => {
           if (res.ok) dispatch(getDetails(_id));
@@ -251,7 +259,8 @@ export default function CommentsScreen() {
       fetch(`http://${MY_IP}:4000/api/comments/reply-delete/${editDelete}`, {
       method: 'DELETE',
       headers: {
-        'Content-Type':'application/json'
+        'Content-Type':'application/json',
+        'Authorization': `Bearer ${token}`
       }})
       .then(res => {
         if (res.ok) dispatch(getDetails(_id));

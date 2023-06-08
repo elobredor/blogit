@@ -91,7 +91,7 @@ export const logIn = (user) => (dispatch) => {
     body: JSON.stringify({ email: user.email })
   })
     .then((res) => {
-      if (!res.ok) throw new Error("Sin respuesta del servidor");
+      if (!res.ok) throw new Error("Sin respuexta del servidor");
       return res.json();
     })
     .then((data) => {
@@ -123,10 +123,11 @@ export const logIn = (user) => (dispatch) => {
                 if (!res.ok) throw new Error("Sin respuesta del servidor");
                 return res.json();
               })
-          })
-          .then(data => {
-            if(!data.access_token) throw new Error('Something went wrong');
-            dispatch({ type: LOG_IN, payload: data.access_token });
+              .then(data => {
+                if (!data.access_token) throw new Error('Something went wrong');
+                dispatch({ type: LOG_IN, payload: data.access_token });
+              })
+              .catch(error => console.error(error));
           })
           .catch(error => console.error(error));
       } else {

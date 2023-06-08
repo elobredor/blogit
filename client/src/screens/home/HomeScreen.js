@@ -10,6 +10,7 @@ import { iconOptions } from "../../utils/iconOptions";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts, Arimo_700Bold } from '@expo-google-fonts/arimo';
 import { useAuth0 } from "react-native-auth0";
+import MyAuthProvider from "../../component/auth/MyAuthProvider";
 
 const HomeScreen = () => {
   const { user } = useAuth0();
@@ -17,7 +18,6 @@ const HomeScreen = () => {
   const articles = useSelector((state) => state.articles);
   const filtered = useSelector((state) => state.filtered);
   const isLogged = useSelector((state) => state.logged);
-  const token = useSelector((state) => state.token);
   const img = useSelector((state) => state.loggedUser.profileImage);
   const [modalVisibility, setModalVisibility] = useState(false);
   const { navigate } = useNavigation();
@@ -26,18 +26,12 @@ const HomeScreen = () => {
   });
 
   useEffect(() => {
-    if (token) {
-      dispatch(logToDb(user.sub));
-    }
-  }, [token]);
-
-  useEffect(() => {
     dispatch(getArticles());
   }, []);
 
   if(!fontsLoaded) return <View style={{ backgroundColor: '#020123' }}></View>
   return (
-    <>
+    <MyAuthProvider>
       <View style={styles.container}>
         <View style={styles.header}>
           {img === undefined ? (
@@ -68,7 +62,7 @@ const HomeScreen = () => {
         modalVisibility={modalVisibility}
         setModalVisibility={setModalVisibility}
       />
-    </>
+    </MyAuthProvider>
   );
 };
 

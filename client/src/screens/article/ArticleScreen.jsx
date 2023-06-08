@@ -50,6 +50,7 @@ export default function ArticleScreen({ route }) {
   const loggedUser = useSelector((state) => {
     return state.logged ? state.loggedUser : null;
   });
+  const token = useSelector(state => state.token);
   //SAVED_STATES
   const [alert, setAlert] = useState(false);
   const data = useSelector((state) => {
@@ -96,6 +97,8 @@ export default function ArticleScreen({ route }) {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+
         },
         body: JSON.stringify(body),
       }).then((res) => {
@@ -120,6 +123,7 @@ export default function ArticleScreen({ route }) {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(savedBody),
       })
@@ -198,6 +202,7 @@ export default function ArticleScreen({ route }) {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(deleteBody),
       })
