@@ -3,47 +3,51 @@ export const styles = StyleSheet.create({
   modalBg: {
     justifyContent: "flex-end",
     marginBottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
     alignItems: "center",
     flex: 1,
   },
-  modalContainer: {
+  modalContainer: 
     height: "45%",
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
     width: "95%",
-    borderRadius: 15,
-    backgroundColor: "#555",
+    backgroundColor: "#090841",
     gap: 10,
     elevation: 5,
   },
-  // Focus Board
-
+  // Focus Board  
   leftSide: {
     justifyContent: "center",
     flexDirection: "row",
     alignItems: "center",
     gap: 20,
   },
-
+  
   text: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: "center",
-    color: "white",
+    fontFamily: 'Arimo_400Regular',
+    color: "#f5f5f5",
     fontWeight: "500",
   },
-
+  
   //Info
   infoContainer: {
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 10,
-    backgroundColor: "#aaa",
+    padding: 10,    
+    backgroundColor: "#3A3969",
   },
-
+  
   input: {
-    fontSize: 18,
-    color: "white",
-    borderBottomColor: "white",
-    borderColor: "#555",
-    borderWidth: 2,
+    fontSize: 16,
+    fontFamily: 'Nunito_400Regular',
+    color: "#f5f5f5",
+    borderBottomColor: "#f5f5f5",
+    borderBottomWidth: 1,
     width: "90%",
     alignSelf: "center",
     padding: 4,

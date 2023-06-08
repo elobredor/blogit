@@ -1,10 +1,9 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { iconOptions } from '../utils/iconOptions';
 import HomeStack from './HomeStack';
-import NotificationStack from './NotificationStack';
+// import NotificationStack from './NotificationStack';
 import SavedStack from './SavedStack';
 import { SearchStack } from './SearchStack';
-import { View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,14 +15,14 @@ const AppNavigation = () => {
         tabBarInactiveTintColor: '#f5f5f5',
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        tabBarStyle: { backgroundColor: '#020123', height: 45 },
+        tabBarStyle: { backgroundColor: '#020123', height: 50, paddingTop: 5, paddingBottom: 5 },
       })}
     >
       <Tab.Screen
         name='homeTab'
         component={HomeStack}
         options={{
-          title: 'Home',
+          title: 'Inicio',
           tabBarIcon: ({ focused }) =>
             focused ? iconOptions.home.focused : iconOptions.home.default,
         }}
@@ -32,7 +31,7 @@ const AppNavigation = () => {
         name='searchTab'
         component={SearchStack}
         options={{
-          title: 'Search',
+          title: 'Descubre',
           tabBarIcon: ({focused}) => 
             focused ? iconOptions.search.focused : iconOptions.search.default,
         }}
@@ -46,7 +45,7 @@ const AppNavigation = () => {
             focused ? iconOptions.saved.focused : iconOptions.saved.default,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name='notificationTab'
         component={NotificationStack}
         options={{
@@ -56,7 +55,7 @@ const AppNavigation = () => {
               ? iconOptions.notifications.focused
               : iconOptions.notifications.default,
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };

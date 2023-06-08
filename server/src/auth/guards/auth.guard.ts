@@ -1,52 +1,42 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { Reflector } from '@nestjs/core';
 import { PUBLIC_KEY } from 'src/constants/key.decorators';
-import { UsersService } from 'src/users/services/users.service';
-import { IUseToken } from '../interfaces/auth.interface';
-import { useToken } from 'src/utils/use.token';
+import { jwtConstants } from 'src/constants/jwtKey';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly userService: UsersService, private readonly reflector: Reflector) {}
-  async canActivate(context: ExecutionContext) {
-    const isPublic = this.reflector.get<boolean>(PUBLIC_KEY, context.getHandler());
-    /* checking if the route is marked as public using the `PUBLIC_KEY` */
-    if (isPublic) return true;
+  constructor(private jwtService: JwtService, private reflector: Reflector) {}
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC_KEY, [context.getHandler(), context.getClass()]);
 
-    /* The `req` variable is then used to access the
-    headers of the request object to retrieve the token. */
-    const req = context.switchToHttp().getRequest<Request>();
-    const token = req.headers['bearer'];
-
-    /* checking if the `token` variable is falsy or an array. */
-    if (!token || Array.isArray(token)) {
-      throw new UnauthorizedException('Invalid token');
+    if (isPublic) {
+      // 💡 See this condition
+      return true;
     }
 
-    /*  is calling the `useToken` function*/
-    const manageToken: IUseToken | string = useToken(token);
-
-    if (typeof manageToken === 'string') {
-      throw new UnauthorizedException(manageToken);
+    const request = context.switchToHttp().getRequest();
+    const token = this.extractTokenFromHeader(request);
+    if (!token) {
+      throw new UnauthorizedException();
     }
 
-    if (manageToken.isExpired) {
-      throw new UnauthorizedException('Token expired');
+    try {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: jwtConstants.secret,
+      });
+      // 💡 We're assigning the payload to the request object here
+      // so that we can access it in our route handlers
+      request['user'] = payload;
+    } catch {
+      throw new UnauthorizedException();
     }
-
-    const { sub } = manageToken;
-
-    const user = await this.userService.findOne(sub);
-
-    if (!user) {
-      throw new UnauthorizedException('Invalid user');
-    }
-
-    /* These properties can then be accessed in subsequent middleware or route handlers to perform further actions 
-    based on the user's identity and role. */
-    req.idUser = user.userId;
-    req.roleUser = user.role;
     return true;
+  }
+
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }

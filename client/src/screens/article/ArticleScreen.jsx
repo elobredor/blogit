@@ -7,33 +7,27 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   Image,
-} from "react-native";
-import { MY_IP } from "react-native-dotenv";
-import { ModalLogin } from "../../component/shared/ModalLogin.jsx";
-import { iconsArticle } from "client/src/utils/iconOptions.js";
-import { styles, tagsStyles } from "./ArticleScreen.styles";
-import { useNavigation } from "@react-navigation/native";
-import RenderHtml, { defaultSystemFonts } from "react-native-render-html";
-import { formatDate, setReadingTime } from "../../utils/formatData";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  getDetails,
-  setArticleLike,
-  getArticles,
-  logToDb,
-  updateSaved,
-} from "../../redux/actions";
-import {
-  useFonts,
-  Nunito_500Medium,
-  Nunito_700Bold,
-} from "@expo-google-fonts/nunito";
-import { Arimo_700Bold } from "@expo-google-fonts/arimo";
+} from 'react-native';
+import { MY_IP } from 'react-native-dotenv';
+import { ModalLogin } from '../../component/shared/ModalLogin.jsx';
+import { iconsArticle } from 'client/src/utils/iconOptions.js';
+import { styles, tagsStyles } from './ArticleScreen.styles';
+import { useNavigation } from '@react-navigation/native';
+import RenderHtml, { defaultSystemFonts } from 'react-native-render-html';
+import { formatDate, setReadingTime } from '../../utils/formatData';
+import { useSelector, useDispatch } from 'react-redux';
+import { getDetails, setArticleLike, getArticles, logToDb } from '../../redux/actions';
+import { useFonts, Nunito_500Medium, Nunito_700Bold } from '@expo-google-fonts/nunito';
+import { Arimo_700Bold } from '@expo-google-fonts/arimo';
+import { OpenSans_500Medium } from '@expo-google-fonts/open-sans';
+import { Raleway_700Bold } from '@expo-google-fonts/raleway';
 const systemFonts = [
   ...defaultSystemFonts,
-  "Nunito_500Medium",
-  "Nunito_700Bold",
-  "Arimo_700Bold",
+  'Nunito_500Medium',
+  'Nunito_700Bold',
+  'Arimo_700Bold',
+  'OpenSans_500Medium',
+  'Raleway_700Bold'
 ];
 //SAVED_IMPORTS
 import ModalSave from "../../component/home/ModalSave/ModalSave.js";
@@ -43,6 +37,8 @@ export default function ArticleScreen({ route }) {
     Nunito_500Medium,
     Nunito_700Bold,
     Arimo_700Bold,
+    OpenSans_500Medium,
+    Raleway_700Bold
   });
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -54,6 +50,7 @@ export default function ArticleScreen({ route }) {
   const loggedUser = useSelector((state) => {
     return state.logged ? state.loggedUser : null;
   });
+  const token = useSelector(state => state.token);
   //SAVED_STATES
   const [alert, setAlert] = useState(false);
   const data = useSelector((state) => {
@@ -99,7 +96,8 @@ export default function ArticleScreen({ route }) {
       fetch(`http://${MY_IP}:4000/api/posts/like/${article._id}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(body),
       }).then((res) => {
@@ -124,6 +122,7 @@ export default function ArticleScreen({ route }) {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(savedBody),
       })
@@ -184,22 +183,43 @@ export default function ArticleScreen({ route }) {
       </View>
     );
 
-  const getFolderName = (postId) => {
-    let folderName = null;
-    loggedUser.saved.forEach((folder) => {
-      const post = folder.posts.some((post) => post.postId === postId);
-      if (post) {
-        folderName = folder.title;
-      }
-    });
-    return folderName;
-  };
 
-  const deleteSaved = (id) => {
-    let folder = getFolderName(id);
-    const deleteBody = {
-      postId: id,
-      title: folder,
+    const getFolderName = (postId) => {
+      let folderName = null;
+      loggedUser.saved.forEach((folder) => {
+        const post = folder.posts.some((post) => post.postId === postId);
+        if (post) {
+          folderName = folder.title;
+        }
+      });
+      return folderName;
+    };
+  
+    const deleteSaved = (id) => {
+      let folder = getFolderName(id);
+      const deleteBody = {
+        postId: id,
+        title: folder,
+      };
+  
+      fetch(`http://${MY_IP}:4000/api/users/delete-saved/${loggedUser.userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(deleteBody),
+      })
+        .then((res) => {
+          if (res.ok) {
+            dispatch(logToDb(loggedUser.userId));
+            setSaved(false); //Vaciar el ícono
+            console.log("fue eliminado correctamente de " + folder);
+          } else {
+            throw new Error("ha habido un error");
+          }
+        })
+        .catch((err) => console.error(err));
     };
 
     fetch(`http://${MY_IP}:4000/api/users/delete-saved/${loggedUser.userId}`, {
@@ -271,7 +291,7 @@ export default function ArticleScreen({ route }) {
           <View style={styles.imageView}>
             <ImageBackground
               source={{ uri: article.images }}
-              imageStyle={{ borderRadius: 10, height: 156 }}
+              imageStyle={{ borderRadius: 10, height: 180 }}
             ></ImageBackground>
           </View>
           <RenderHtml

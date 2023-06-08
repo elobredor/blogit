@@ -7,12 +7,19 @@ import styles from "./boardStyles";
 import { MY_IP } from "react-native-dotenv";
 import { useState, useEffect } from "react";
 import { updateSaved } from "../../redux/actions";
+import { useFonts, Arimo_400Regular } from '@expo-google-fonts/arimo';
+import { Nunito_400Regular } from '@expo-google-fonts/nunito';
 
 const BoardSaved = ({ item, setData }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [deteleVisibility, setDeteleVisibility] = useState(false);
   const userId = useSelector((state) => state.loggedUser.userId);
+  let [loadedFonts] = useFonts({
+    Arimo_400Regular,
+    Nunito_400Regular,
+  });
+
   const ids = item.posts.map((obj) => obj.postId);
   const lastArticles = ids.length < 2 ? ids.slice(-1) : ids.slice(-2);
   const articles = useSelector((state) =>
@@ -62,16 +69,16 @@ const BoardSaved = ({ item, setData }) => {
     navigation.navigate("Collection", item);
   };
 
+  if (!loadedFonts) return <View style={styles.containerBoard}></View>
   return (
     <>
       <View style={styles.containerBoard}>
         <View style={styles.containerHeader}>
           <TouchableOpacity onPress={() => handleNavigate()}>
             <Text style={styles.boardTitle}>{item.title}</Text>
-
-            <Text style={{ color: "#f5f5f5" }}>
-              {item.posts.length} artículo(s)
-            </Text>
+            <Text style={{ color: "#a7a7a7", marginLeft: 16, fontFamily: 'Nunito_400Regular' }}>
+            {item.posts.length} artículo(s)
+          </Text>            
           </TouchableOpacity>
           <TouchableOpacity onPress={handleDots} style={styles.dots}>
             {visible ? <OptionsBoard /> : iconsCard.account.dots}

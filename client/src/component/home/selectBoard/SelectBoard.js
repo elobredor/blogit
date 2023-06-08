@@ -13,12 +13,17 @@ import CreateBoard from "../createBoard/CreateBoard";
 import { useDispatch, useSelector } from "react-redux";
 import { MY_IP } from "react-native-dotenv";
 import { updateSaved } from "../../../redux/actions";
+import { logToDb } from "../../../redux/actions";
+import { Nunito_400Regular, useFonts } from '@expo-google-fonts/nunito';
 
 const ModalSave = ({ visible, setVisible, data }) => {
   const [showCreate, setShowCreate] = useState(false); // Estado de CreateBoard
   const [saved, setSaved] = useState(true);
   const [boards, setBoards] = useState([]);
   const savedB = useSelector((state) => state.loggedUser.saved); //Acceder a las carpetas
+  let [fontsLoaded] = useFonts({
+    Nunito_400Regular
+  });
 
   const dispacth = useDispatch();
 
@@ -70,6 +75,8 @@ const ModalSave = ({ visible, setVisible, data }) => {
     );
   };
 
+  if (!fontsLoaded) return null;
+  if (fontsLoaded)
   return (
     <>
       <Modal visible={visible} transparent animationType="fade">
@@ -105,12 +112,11 @@ const ModalSave = ({ visible, setVisible, data }) => {
                   setShowCreate(true);
                   setVisible(false);
                 }}
-                style={{ color: "#37B4A1" }}
+                style={{ color: "#37B4A1", fontFamily: 'Nunito_400Regular' }}
               >
                 Nueva Coleccion
               </Text>
             </View>
-
             {renderBoards(boards)}
           </View>
         </View>

@@ -44,6 +44,7 @@ export class BlogsService {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
   //function to get blogs by category
   public async getBlogsByCategory(category: string): Promise<BlogInterface[]> {
     try {
@@ -52,5 +53,31 @@ export class BlogsService {
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
+  }
+
+  //function to get all blogs
+  public async getAllBlogs(): Promise<BlogInterface[]> {
+    try {
+      const blogs = await this.blogModel.find().select('-__v');
+      return blogs;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  //function to get blog by id
+  public async getBlogById(id: string): Promise<BlogInterface> {
+    try {
+      const blog = await this.blogModel.findById(id).select('-__v');
+      return blog;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  //function to get blog by user id
+  public async getBlogsByUserId(userId: string): Promise<BlogInterface[]> {
+    const blogs = await this.blogModel.find({ userId }).select('-__v');
+    return blogs;
   }
 }

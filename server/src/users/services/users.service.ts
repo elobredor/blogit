@@ -21,7 +21,8 @@ export class UsersService {
     try {
       //check if user already exist
       const userExist = await this.userModel.findOne({ email });
-      if (userExist || userExist.userId.toString() === body.userId) {
+
+      if (userExist || userExist?.userId.toString() === body.userId) {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
           message: `User with ${email} or ${body.userId} already exist`,
@@ -308,6 +309,34 @@ export class UsersService {
         });
       }
       return;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  //function to get user by email
+  public async getUserByEmail(email: string): Promise<any> {
+    try {
+      const user = await this.userModel.findOne({ email: email });
+      //if user not exist throw error
+      if (!user) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'User not found',
+        });
+      }
+
+      const getUser = {
+        _id: user._id,
+        email: user.email,
+        name: user.userName,
+        status: user.status,
+        userId: user.userId,
+        role: user.role,
+        profileImage: user.profileImage,
+      };
+
+      return getUser;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

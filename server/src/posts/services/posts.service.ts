@@ -6,12 +6,14 @@ import { CreatePostsDTO, CreateUpdatePostDTO } from '../dto/posts.dto';
 import { ErrorManager } from 'src/utils/error.manager';
 import { BlogInterface } from 'src/interfaces/blog.interface';
 import { CreatePostsLikesDTO } from '../dto/postLikes.dto';
+import { NotificationsService } from 'src/notification/services/notifications.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     @InjectModel('posts') private readonly postsModel: Model<PostsInterface>,
     @InjectModel('blogs') private readonly blogsModel: Model<BlogInterface>,
+    private readonly notificationsService: NotificationsService,
   ) {}
   //This function creates a new post in a database using the provided data and returns the created post.
   public async createPost(body: CreatePostsDTO): Promise<PostsInterface> {
@@ -156,7 +158,7 @@ export class PostsService {
           message: `Post with ID: ${postId} not found`,
         });
       }
-
+      console.log(post[0]);
       return post[0];
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
@@ -178,6 +180,16 @@ export class PostsService {
       if (!post.postLikes.includes(userId)) {
         post.postLikes.push(userId);
         await post.save();
+
+        //create a notification for the user that liked the post
+        await this.notificationsService.createNotification({
+          postId: postId,
+          content: 'le gusta tu artículo',
+          recipient: '',
+          origin: userId,
+          notificationType: 'like',
+        });
+
         return;
       } else {
         await this.postsModel.findByIdAndUpdate({ _id: postId }, { $pull: { postLikes: userId } });
@@ -293,6 +305,68 @@ export class PostsService {
         });
       }
       return;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  //function to get all liked posts of a user
+  public async getLikedPosts(user_Id: string): Promise<PostsInterface[]> {
+    try {
+      //transform the postId to a mongoose ObjectId
+      const userObjectId = new Types.ObjectId(user_Id);
+
+      const posts = await this.postsModel.aggregate([
+        {
+          $match: {
+            postLikes: { $in: [userObjectId] },
+          },
+        },
+        {
+          $lookup: {
+            from: 'blogs',
+            localField: 'blogId',
+            foreignField: '_id',
+            as: 'blogs',
+          },
+        },
+        {
+          $unwind: '$blogs',
+        },
+        {
+          $sort: {
+            createdAt: -1,
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'blogs.userId',
+            foreignField: '_id',
+            as: 'users',
+          },
+        },
+        {
+          $unwind: '$users',
+        },
+        {
+          $group: {
+            _id: '$_id',
+            userId: { $first: '$users.userId' },
+            userName: { $first: '$users.userName' },
+            profileImage: { $first: '$users.profileImage' },
+            blogId: { $first: '$blogId' },
+            category: { $first: '$blogs.category' },
+            title: { $first: '$title' },
+            comments: { $first: '$comments' },
+            images: { $first: '$images' },
+            postLikes: { $first: '$postLikes' },
+            createdAt: { $first: '$createdAt' },
+          },
+        },
+      ]);
+
+      return posts;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
