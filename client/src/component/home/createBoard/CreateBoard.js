@@ -76,6 +76,7 @@ const CreateBoard = ({ showCreate, setShowCreate, data, setVisible }) => {
           </View>
 
           <TextInput
+            autoFocus
             style={title.length < 30 ? styles.input : styles.inputError}
             placeholder="Nombre de la coleccion"
             placeholderTextColor="white"

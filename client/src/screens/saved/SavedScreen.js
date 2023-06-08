@@ -6,6 +6,8 @@ import {
   Button,
   TextInput,
   Keyboard,
+  TouchableOpacity,
+  Image,
 } from "react-native";
 import { styles } from "./savedScreen.styles";
 import BoardSaved from "../../component/saved/BoardSaved.js";
@@ -13,6 +15,7 @@ import { MY_IP } from "react-native-dotenv";
 import { useDispatch, useSelector } from "react-redux";
 import { ModalLogin } from "../../component/shared/ModalLogin";
 import { updateSaved } from "../../redux/actions";
+import { LinearGradient } from "expo-linear-gradient";
 
 const SavedScreen = () => {
   const initialState = {
@@ -26,7 +29,7 @@ const SavedScreen = () => {
   const hasLogged = useSelector((state) =>
     state.logged ? state.loggedUser : false
   );
-  //Alerta: código de baja calidad
+
   const ContainerEdit = () => {
     const [title, setTitle] = useState(data.title);
     const handleChange = (text) => {
@@ -59,11 +62,12 @@ const SavedScreen = () => {
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              width: "100%",
+              alignItems: "center",
+              width: "95%",
             }}
           >
-            <Text style={{ color: "white", fontSize: 20 }}>
-              Renombrando carpeta:
+            <Text style={{ color: "white", fontSize: 18 }}>
+              Estás renombrando la carpeta:
             </Text>
 
             <Text
@@ -71,36 +75,51 @@ const SavedScreen = () => {
                 Keyboard.dismiss();
                 setData(initialState);
               }}
-              style={{ fontSize: 18, color: "#f5f5f5" }}
+              style={{ fontSize: 28, color: "#f5f5f5" }}
             >
               x
             </Text>
           </View>
 
           <View
+            style={{ height: 1, width: "120%", backgroundColor: "white" }}
+          ></View>
+
+          <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              width: "100%",
+              width: "95%",
+              marginVertical: 5,
             }}
           >
-            <TextInput
-              value={title}
-              onChangeText={handleChange}
-              style={styles.inputEdit}
-              autoFocus
-            />
-
-            <Text
+            <LinearGradient
+              colors={["#34aba6", "#131af8", "#9344ca"]}
+              start={[0, 0]}
+              end={[1, 0]}
+              locations={[0, 0.5, 1]}
               style={{
-                fontSize: 18,
-                color: "#f5f5f5",
-                backgroundColor: "#0ca",
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 10,
+                maxWidth: "80%",
               }}
-              onPress={handleSubmit}
             >
-              SUBMIT
-            </Text>
+              <TextInput
+                value={title}
+                onChangeText={handleChange}
+                style={styles.inputEdit}
+                autoFocus
+              />
+            </LinearGradient>
+
+            <TouchableOpacity onPress={handleSubmit}>
+              <Image
+                source={require("../../../assets/send-active.png")}
+                style={{ width: 40, height: 40 }}
+              />
+            </TouchableOpacity>
           </View>
         </View>
       );

@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
   //inputEdit
   containerEdit: {
     width: "100%",
-    padding: 20,
+    padding: 5,
     justifyContent: "flex-end",
     alignItems: "center",
     borderRadius: 15,
@@ -51,12 +51,14 @@ export const styles = StyleSheet.create({
     display: "flex",
   },
   inputEdit: {
-    backgroundColor: "white",
-    width: "70%",
-    color: "#222143",
+    width: "99%",
+    backgroundColor: "#090841",
+    color: "#f5f5f5",
     fontSize: 20,
-    borderRadius: 5,
+    borderRadius: 10,
     fontWeight: "bold",
+    paddingVertical: 4,
+    paddingHorizontal: 2,
   },
   //modalDelete
   modalDeleteBack: {

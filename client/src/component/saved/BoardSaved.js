@@ -5,7 +5,7 @@ import { RenderPrevArticle } from "./prevArticles";
 import { iconsCard, iconsComments } from "../../utils/iconOptions";
 import styles from "./boardStyles";
 import { MY_IP } from "react-native-dotenv";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { updateSaved } from "../../redux/actions";
 
 const BoardSaved = ({ item, setData }) => {
@@ -18,7 +18,7 @@ const BoardSaved = ({ item, setData }) => {
   const articles = useSelector((state) =>
     state.articles.filter((obj) => lastArticles.includes(obj._id))
   );
-  const [visible, setVisible] = useState(false); //Edit and delete options visibility
+  const [visible, setVisible] = useState(false); //Edit and delete visibility
 
   const handleDots = () => {
     setVisible(!visible);
@@ -42,8 +42,6 @@ const BoardSaved = ({ item, setData }) => {
     setData({ title: item.title, folderId: item._id });
   };
 
-  //Crear un overInput
-
   const OptionsBoard = () => {
     return (
       <View style={{ flexDirection: "row", gap: 40 }}>
@@ -60,13 +58,15 @@ const BoardSaved = ({ item, setData }) => {
     );
   };
 
+  const handleNavigate = () => {
+    navigation.navigate("Collection", item);
+  };
+
   return (
     <>
       <View style={styles.containerBoard}>
         <View style={styles.containerHeader}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Collection", item)}
-          >
+          <TouchableOpacity onPress={() => handleNavigate()}>
             <Text style={styles.boardTitle}>{item.title}</Text>
 
             <Text style={{ color: "#f5f5f5" }}>
@@ -79,6 +79,7 @@ const BoardSaved = ({ item, setData }) => {
         </View>
         <RenderPrevArticle articles={articles} />
       </View>
+      {/*MODAL DELETE*/}
       <Modal visible={deteleVisibility} transparent>
         <View style={styles.modalDeleteBack}>
           <View style={styles.modalDeleteFront}>

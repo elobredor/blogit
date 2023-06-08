@@ -66,7 +66,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
         )}
       />
     ) : (
-      <CreateItem setShowCreate={setShowCreate} />
+      <CreateItem setShowCreate={setShowCreate} setVisible={setVisible} />
     );
   };
 
@@ -125,7 +125,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
   );
 };
 
-const CreateItem = ({ setShowCreate }) => {
+const CreateItem = ({ setShowCreate, setVisible }) => {
   return (
     <View style={styles.boardContainer}>
       <View style={styles.leftSide}>
@@ -140,6 +140,7 @@ const CreateItem = ({ setShowCreate }) => {
         <Text
           onPress={() => {
             setShowCreate(true);
+            setVisible(false);
           }}
           style={styles.text}
         >
