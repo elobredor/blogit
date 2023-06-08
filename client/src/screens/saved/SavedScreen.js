@@ -29,6 +29,7 @@ const SavedScreen = () => {
   const hasLogged = useSelector((state) =>
     state.logged ? state.loggedUser : false
   );
+  const token = useSelector(state => state.token);
 
   const ContainerEdit = () => {
     const [title, setTitle] = useState(data.title);
@@ -42,7 +43,10 @@ const SavedScreen = () => {
       };
       fetch(`http://${MY_IP}:4000/api/users/updateSaved/${data.folderId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(bodyEdit),
       })
         .then((res) => {
@@ -51,7 +55,7 @@ const SavedScreen = () => {
             console.log("Folder has been updated successfully");
           } else throw new Error("No response from server");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
       setData(initialState);
     };
 

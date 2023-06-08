@@ -95,7 +95,6 @@ export const logIn = (user) => (dispatch) => {
     })
     .then((data) => {
       if (!data.access_token) {
-        console.log('NEW_USER');
         const newUserBody = {
           userId: user.sub,
           userName: user.given_name ? user.given_name : user.nickname,
@@ -130,7 +129,6 @@ export const logIn = (user) => (dispatch) => {
           })
           .catch(error => console.error(error));
       } else {
-        console.log('FOUND_USER!!');
         return dispatch({ type: LOG_IN, payload: data.access_token });
       }
     })
@@ -145,7 +143,7 @@ export const updateSaved = (id) => (dispatch) => {
       return res.json();
     })
     .then((data) => {
-      dispatch({ type: UPDATE_SAVED, payload: data.usersProfile.saved });
+      dispatch({ type: UPDATE_SAVED, payload: data.saved });
     })
     .catch((error) => console.error(error));
 };

@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
-  modalContainer: 
+  modalContainer: {
     height: "45%",
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,

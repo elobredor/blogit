@@ -24,6 +24,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
   let [fontsLoaded] = useFonts({
     Nunito_400Regular
   });
+  const token = useSelector(state => state.token);
 
   const dispacth = useDispatch();
 
@@ -38,6 +39,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(bodyBoard),
     })
@@ -50,7 +52,7 @@ const ModalSave = ({ visible, setVisible, data }) => {
           throw new Error("something went wrong");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {

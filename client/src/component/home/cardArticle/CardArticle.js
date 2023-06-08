@@ -25,6 +25,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
   const hasLogged = useSelector((state) =>
     state.logged ? state.loggedUser : false
   );
+  const token = useSelector(state => state.token);
   const dispatch = useDispatch();
   //data importante para los modales de creacion de tableros
   const data = useSelector((state) => {
@@ -51,11 +52,11 @@ const CardArticle = ({ item, setModalVisibility }) => {
     const favoriteBody = {
       userId: hasLogged._id,
     };
-
     fetch(`http://${MY_IP}:4000/api/posts/like/${item._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(favoriteBody),
     })
@@ -63,7 +64,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
         if (res.ok) {
           dispatch(setArticleLike2(hasLogged._id, item._id));
         } else {
-          throw new Error("ha habido un error");
+          throw new Error("Ha habido un error");
         }
       })
       .catch((err) => console.error(err));
@@ -85,11 +86,11 @@ const CardArticle = ({ item, setModalVisibility }) => {
         title: "Leer más tarde",
         images: item.images,
       };
-
       fetch(`http://${MY_IP}:4000/api/users/saved/${hasLogged.userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(savedBody),
       })
@@ -102,12 +103,15 @@ const CardArticle = ({ item, setModalVisibility }) => {
           } else {
             throw new Error("ha habido un error");
           }
+          return res.json()
         })
+        .then(data => console.log(data))
         .catch((err) => console.error(err));
     } else {
       deleteSaved(item._id);
     }
   };
+
   const getFolderName = (postId) => {
     let folderName = null;
     hasLogged.saved.forEach((folder) => {
@@ -126,10 +130,11 @@ const CardArticle = ({ item, setModalVisibility }) => {
       title: folder,
     };
 
-    fetch(`http://${MY_IP}:4000/api/users/delete-saved/${hasLogged.userId}`, {
+    fetch(`https://blogit.up.railway.app/api/users/delete-saved/${hasLogged.userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(deleteBody),
     })
@@ -138,10 +143,12 @@ const CardArticle = ({ item, setModalVisibility }) => {
           dispatch(updateSaved(hasLogged.userId));
           setSaved(false); //Vaciar el ícono
           console.log("fue eliminado correctamente de " + folder);
+          return res.json()
         } else {
           throw new Error("ha habido un error");
         }
       })
+      .then(data => console.log(data))
       .catch((err) => console.error(err));
   };
 

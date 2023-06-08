@@ -26,6 +26,7 @@ const CollectionScreen = ({ route }) => {
   const savedArticles = useSelector((state) =>
     state.articles.filter((obj) => ids.includes(obj._id))
   );
+  const token = useSelector(state => state.token);
 
   const [showDots, setShowDots] = useState(false); //Show edit and delete icons
   const [visible, setVisible] = useState(false);
@@ -45,15 +46,20 @@ const CollectionScreen = ({ route }) => {
       };
       fetch(`http://${MY_IP}:4000/api/users/updateSaved/${data._id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(bodyEdit),
       })
         .then((res) => {
           if (res.ok) {
             dispatch(updateSaved(userId));
             console.log("Folder has been updated successfully");
+            return res.json()
           } else throw new Error("No response from server");
         })
+        .then(data => console.log(data))
         .catch((err) => console.log(err));
       setVisible(false);
     };
@@ -138,7 +144,10 @@ const CollectionScreen = ({ route }) => {
   const deleteBoard = () => {
     fetch(`http://${MY_IP}:4000/api/users/delete-folder/${data._id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
+      },
     })
       .then((res) => {
         if (res.ok) {
