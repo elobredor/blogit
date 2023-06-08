@@ -2,30 +2,38 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   containerBoard: {
-    height: 195,
+    // height: 195,
     backgroundColor: "#3a3969",
-    marginBottom: 10,
     borderRadius: 10,
-    padding: 10,
-    width: 365,
+    width: 358,
+    paddingTop: 12,
+    paddingBottom: 8,
+    marginBottom: 18,
   },
   //prev articles
   boardTitle: {
+    fontFamily: 'Arimo_400Regular',
     color: '#f5f5f5',
     fontWeight: "500",
-    fontSize: 20
+    fontSize: 18,
+    marginLeft: 16,
   },
   prevContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 20,
+    marginTop: 12,
+    marginHorizontal: 6,
+    gap: 6,
   },
-  textEmpty: { marginTop: 50, fontSize: 22, textAlign: "center" },
+  textEmpty: {
+    fontSize: 22,
+    textAlign: "center",
+  },
   prevArticle: {
     height: 100,
     width: 170,
     backgroundColor: "#222143",
-    borderRadius: 14,
+    borderRadius: 8,
   },
   //prevCon
 });

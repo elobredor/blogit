@@ -3,9 +3,16 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { RenderPrevArticle } from "./prevArticles";
 import styles from "./boardStyles";
+import { useFonts, Arimo_400Regular } from '@expo-google-fonts/arimo';
+import { Nunito_400Regular } from '@expo-google-fonts/nunito';
+
 
 const BoardSaved = ({ item }) => {
   const navigation = useNavigation();
+  let [loadedFonts] = useFonts({
+    Arimo_400Regular,
+    Nunito_400Regular,
+  });
 
   const ids = item.posts.map((obj) => obj.postId);
 
@@ -18,6 +25,7 @@ const BoardSaved = ({ item }) => {
   //Crear funcion deleteBoard
   //Boton editar, edita enseguida.
 
+  if (!loadedFonts) return <View style={styles.containerBoard}></View>
   return (
     <>
       <View style={styles.containerBoard}>
@@ -25,7 +33,7 @@ const BoardSaved = ({ item }) => {
           onPress={() => navigation.navigate("Collection", item)}
         >
           <Text style={styles.boardTitle}>{item.title}</Text>
-          <Text style={{ color: "#f5f5f5" }}>
+          <Text style={{ color: "#a7a7a7", marginLeft: 16, fontFamily: 'Nunito_400Regular' }}>
             {item.posts.length} artículo(s)
           </Text>
         </TouchableOpacity>
