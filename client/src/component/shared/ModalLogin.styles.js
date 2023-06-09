@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
   },
   loginText: {
     color: '#f5f5f5',
-    fontSize: 25,
+    fontSize: 20,
     textAlign: "center"
   },
   closeBtn: {

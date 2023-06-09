@@ -3,10 +3,15 @@ import { View, ScrollView, TouchableOpacity, Text, Button } from "react-native";
 import { styles } from "./filtersHomeStyles";
 import { getCategory } from "../../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
+import { useFonts, Arimo_400Regular, Arimo_500Medium } from '@expo-google-fonts/arimo';
 
 const Filters = () => {
   const dispatch = useDispatch();
   const articles = useSelector((state) => state.articles);
+  let [fontsLoaded] = useFonts({
+    Arimo_400Regular,
+    Arimo_500Medium,
+  });
 
   const [currentCategory, setCurrentCategory] = useState("ALL");
   const sendData = (category) => {
@@ -24,6 +29,8 @@ const Filters = () => {
   useEffect(() => {
     dispatch(getCategory(currentCategory));
   }, [currentCategory]);
+
+  if(!fontsLoaded) return null;
   return (
     <View style={styles.containerFilter}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>

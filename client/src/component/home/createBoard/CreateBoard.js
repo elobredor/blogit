@@ -3,10 +3,19 @@ import { styles } from "./createBoardStyles";
 import { iconsArticle } from "../../../utils/iconOptions";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { logToDb } from "../../../redux/actions";
+import { updateSaved } from "../../../redux/actions";
 import { MY_IP } from "react-native-dotenv";
+import { useFonts, Arimo_400Regular, Arimo_500Medium } from '@expo-google-fonts/arimo';
+import { Nunito_400Regular } from '@expo-google-fonts/nunito';
 
-const CreateBoard = ({ showCreate, setShowCreate, data }) => {
+
+const CreateBoard = ({ showCreate, setShowCreate, data, setVisible }) => {
+  let [fontsLoaded] = useFonts({
+    Arimo_400Regular,
+    Nunito_400Regular,
+    Arimo_500Medium
+  });
+
   const dispacth = useDispatch();
   const [title, setTitle] = useState("");
   const [descri, setDescri] = useState("");
@@ -41,20 +50,23 @@ const CreateBoard = ({ showCreate, setShowCreate, data }) => {
           .then((res) => {
             if (res.ok) {
               console.log(`la carpeta ${title} ha sido creada exitosamente`);
-              dispacth(logToDb(data.userId));
+              dispacth(updateSaved(data.userId));
+              setVisible(false);
               setShowCreate(false);
             } else {
               throw new Error("something went wrong");
             }
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.error(err));
       }
     } else {
       console.log("Olvidaste poner el nombre de la carpeta");
     }
   };
+
+  if (!fontsLoaded) return null;
   return (
-    <Modal visible={showCreate} transparent animationType="fade">
+    <Modal visible={showCreate} transparent animationType="slide">
       <View style={styles.modalBg}>
         <View style={styles.modalContainer}>
           {/* See Later Board */}
@@ -68,13 +80,14 @@ const CreateBoard = ({ showCreate, setShowCreate, data }) => {
 
             <Text
               onPress={handleSubmit}
-              style={{ color: "#3B79BE", fontSize: 22 }}
+              style={{ color: "#37B4A1", fontSize: 20, marginRight: 10, fontFamily: 'Arimo_500Medium' }}
             >
               Crear
             </Text>
           </View>
 
           <TextInput
+            autoFocus
             style={title.length < 30 ? styles.input : styles.inputError}
             placeholder="Nombre de la coleccion"
             placeholderTextColor="white"
