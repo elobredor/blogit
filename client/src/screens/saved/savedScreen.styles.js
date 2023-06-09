@@ -26,10 +26,10 @@ export const styles = StyleSheet.create({
     width: "99%",
     backgroundColor: "#090841",
     color: "#f5f5f5",
-    fontSize: 20,
+    fontSize: 16,
+    fontFamily: 'Nunito_400Regular',
     borderRadius: 10,
-    fontWeight: "bold",
     paddingVertical: 4,
-    paddingHorizontal: 2,
+    paddingHorizontal: 12,
   },
 });

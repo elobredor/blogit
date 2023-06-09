@@ -11,11 +11,12 @@ import {
 } from "react-native";
 import { styles } from "./savedScreen.styles";
 import BoardSaved from "../../component/saved/BoardSaved.js";
-import { MY_IP } from "react-native-dotenv";
 import { useDispatch, useSelector } from "react-redux";
 import { ModalLogin } from "../../component/shared/ModalLogin";
 import { updateSaved } from "../../redux/actions";
 import { LinearGradient } from "expo-linear-gradient";
+import { useFonts, Arimo_400Regular, Arimo_700Bold } from '@expo-google-fonts/arimo';
+import { Nunito_400Regular } from '@expo-google-fonts/nunito';
 
 const SavedScreen = () => {
   const initialState = {
@@ -30,6 +31,11 @@ const SavedScreen = () => {
     state.logged ? state.loggedUser : false
   );
   const token = useSelector(state => state.token);
+  let [loadedFonts] = useFonts({
+    Arimo_400Regular,
+    Nunito_400Regular,
+    Arimo_700Bold,
+  });
 
   const ContainerEdit = () => {
     const [title, setTitle] = useState(data.title);
@@ -59,6 +65,7 @@ const SavedScreen = () => {
       setData(initialState);
     };
 
+    if(!loadedFonts) return null;
     if (data.title !== null) {
       return (
         <View style={styles.containerEdit}>
@@ -70,7 +77,7 @@ const SavedScreen = () => {
               width: "95%",
             }}
           >
-            <Text style={{ color: "white", fontSize: 18 }}>
+            <Text style={{ color: "white", fontSize: 16, fontFamily: 'Arimo_400Regular' }}>
               Estás renombrando la carpeta:
             </Text>
 
@@ -79,14 +86,14 @@ const SavedScreen = () => {
                 Keyboard.dismiss();
                 setData(initialState);
               }}
-              style={{ fontSize: 28, color: "#f5f5f5" }}
+              style={{ fontSize: 20, color: "#f5f5f5" }}
             >
               x
             </Text>
           </View>
 
           <View
-            style={{ height: 1, width: "120%", backgroundColor: "white" }}
+            style={{ height: 1, width: "102%", backgroundColor: "#302962" }}
           ></View>
 
           <View

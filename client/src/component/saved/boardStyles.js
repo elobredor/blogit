@@ -12,7 +12,8 @@ export const styles = StyleSheet.create({
   },
   containerHeader: { flexDirection: "row", justifyContent: "space-between" },
   dots: {
-    alignSelf: "center",
+    marginTop: 5,
+    marginRight: 15
   },
   input: {
     backgroundColor: "white",

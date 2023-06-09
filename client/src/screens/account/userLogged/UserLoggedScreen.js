@@ -5,12 +5,12 @@ import { logOut, logToDb } from '../../../redux/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { iconsProfile } from '../../../utils/iconOptions';
 import { useNavigation } from '@react-navigation/native';
-import { MY_IP } from 'react-native-dotenv';
 import { useAuth0 } from 'react-native-auth0';
 import { useFonts, Arimo_400Regular, Arimo_700Bold } from '@expo-google-fonts/arimo';
 import { Nunito_400Regular } from '@expo-google-fonts/nunito';
 
 const UserLoggedScreen = () => {
+  const token = useSelector((state) => state.token);
   let [loadedFonts] = useFonts({
     Arimo_400Regular,
     Nunito_400Regular,
@@ -38,7 +38,8 @@ const UserLoggedScreen = () => {
     fetch(`https://blogit.up.railway.app/api/users/update/${loggedUser.userId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(aboutBody)
     })
