@@ -14,10 +14,27 @@ export const LOG_OUT = "LOG_OUT";
 export const GET_CATEGORY = "GET_CATEGORY";
 export const UPDATE_SAVED = "UPDATE_SAVED";
 export const LOG_IN = 'LOG_IN';
+export const GET_FAVORITES = 'GET_FAVORITES';
 
 export const categoryBtn = () => {
   fetch(`https://blogit.up.railway.app/api/blogs/category/No Code`);
 };
+
+export const getFavorites = (userId, token) => (dispatch) => {
+  fetch(`https://blogit.up.railway.app/api/posts/favorites/${userId}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error('Something went wrong');
+      console.log('FAVORITES')
+      return res.json();
+    })
+    .then((payload) => dispatch({ type: GET_FAVORITES, payload }))
+    .catch((error) => console.error(error));
+}
 
 // GET_ARTICLES
 export const getArticles = () => (dispatch) => {

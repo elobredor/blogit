@@ -26,10 +26,6 @@ const HomeScreen = () => {
   });
 
   useEffect(() => {
-    console.log(fetchStatus);
-  }, [fetchStatus])
-
-  useEffect(() => {
     dispatch(getArticles());
   }, []);
 

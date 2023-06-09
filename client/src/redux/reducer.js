@@ -11,13 +11,15 @@ import {
   LOG_OUT,
   GET_CATEGORY,
   UPDATE_SAVED,
-  LOG_IN
+  LOG_IN,
+  GET_FAVORITES
 } from "./actions";
 
 const initialState = {
   authors: [],
   blogs: [],
   articles: [],
+  favorites: [],
   filtered: [],
   articles_fetch: {
     status: "idle",
@@ -67,6 +69,11 @@ export default function rootReducer(state = initialState, action) {
         details_fetch: { status: "success", error: null },
         details: action.payload,
       };
+    case GET_FAVORITES: 
+      return {
+        ...state,
+        favorites: action.payload
+      }
     case LOG_TO_DB:
       return {
         ...state,

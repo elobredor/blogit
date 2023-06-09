@@ -24,6 +24,12 @@ const AccountStack = () => {
       <Stack.Screen
         name='favoritesStack'
         component={FavoritesScreen}
+        options={{
+          headerTintColor: '#f5f5f5',
+          headerStyle: {backgroundColor: '#020123'},
+          headerTitleStyle: { fontFamily: 'Arimo_500Medium', fontSize: 22 },
+          title: 'Me Gusta',
+        }}
       />
     </Stack.Navigator>
   );

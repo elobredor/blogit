@@ -86,7 +86,7 @@ const UserLoggedScreen = () => {
             <Text style={styles.linksText}>Agrega tus enlaces</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('favoritesStack', loggedUser._id)}>
           <View style={styles.links}>
             {iconsProfile.heart}
             <Text style={styles.linksText}>Me gusta</Text>
