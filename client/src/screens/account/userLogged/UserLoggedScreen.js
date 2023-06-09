@@ -1,5 +1,5 @@
 import { View, Text, Image, TextInput, TouchableOpacity, Keyboard } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styles from './userLoggedScreen.styles';
 import { logOut, logToDb } from '../../../redux/actions';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,6 +10,7 @@ import { useFonts, Arimo_400Regular, Arimo_700Bold } from '@expo-google-fonts/ar
 import { Nunito_400Regular } from '@expo-google-fonts/nunito';
 
 const UserLoggedScreen = () => {
+  const aboutInput = useRef(null);
   const token = useSelector((state) => state.token);
   let [loadedFonts] = useFonts({
     Arimo_400Regular,
@@ -59,18 +60,32 @@ const UserLoggedScreen = () => {
     dispatch(logOut());
   };
 
+  const handleEditAbout = () => {
+    setAbout(loggedUser.about);
+    setWithAbout(false);
+    setTimeout(() => {
+      aboutInput.current.focus();
+    }, 1000)
+  };
+
   if (!loadedFonts) return null;
   return (
     <View style={styles.container}>
       <Image source={{ uri: loggedUser.profileImage }} style={styles.profileImage} />
       <Text style={styles.userName}>{`${loggedUser.userName[0].toUpperCase()}${loggedUser.userName.slice(1)}`}</Text>
       {loggedUser.about &&
-        <View style={{width: '75%'}}>
-          <Text style={{ color: '#f5f5f5', marginTop: 30 }}>{loggedUser.about}</Text>
+        <View style={{ width: '75%' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={{ color: '#f5f5f5' }}>{loggedUser.about}</Text>
+            <TouchableOpacity onPress={handleEditAbout}>
+              {iconsProfile.edit}
+            </TouchableOpacity>
+          </View>
         </View>}
       <View style={styles.subContainer}>
         {!withAbout && <View style={styles.inputContainer}>
           <TextInput
+            ref={aboutInput}
             placeholderTextColor={'#f5f5f5'}
             placeholder='Habla de tí...' multiline
             style={styles.textInput}
@@ -78,14 +93,21 @@ const UserLoggedScreen = () => {
             onChangeText={handleAboutChange}
           />
           <TouchableOpacity onPress={handleAboutSubmit}>
-            {iconsProfile.submit}
+            {about.length ? <Image
+              source={require('../../../../assets/send-active.png')}
+              style={{ width: 22, height: 22, marginTop: 5, marginRight: 5 }}
+            /> :
+              <Image
+                source={require('../../../../assets/send-inactive.png')}
+                style={{ width: 22, height: 22, marginTop: 5, marginRight: 5 }}
+              />}
           </TouchableOpacity>
         </View>}
         <TouchableOpacity>
-          <View style={styles.links}>
+          {/* <View style={styles.links}>
             {iconsProfile.plus}
             <Text style={styles.linksText}>Agrega tus enlaces</Text>
-          </View>
+          </View> */}
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('favoritesStack', loggedUser._id)}>
           <View style={styles.links}>
@@ -93,7 +115,7 @@ const UserLoggedScreen = () => {
             <Text style={styles.linksText}>Me gusta</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('savedTab')}>
           <View style={styles.links}>
             {iconsProfile.saved}
             <Text style={styles.linksText}>Guardados</Text>

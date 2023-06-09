@@ -34,7 +34,6 @@ const SavedScreen = () => {
   let [loadedFonts] = useFonts({
     Arimo_400Regular,
     Nunito_400Regular,
-    Arimo_700Bold,
   });
 
   const ContainerEdit = () => {
@@ -50,7 +49,7 @@ const SavedScreen = () => {
       fetch(`https://blogit.up.railway.app/api/users/updateSaved/${data.folderId}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(bodyEdit),
@@ -65,7 +64,7 @@ const SavedScreen = () => {
       setData(initialState);
     };
 
-    if(!loadedFonts) return null;
+    if (!loadedFonts) return null;
     if (data.title !== null) {
       return (
         <View style={styles.containerEdit}>
@@ -139,6 +138,13 @@ const SavedScreen = () => {
     }
   };
 
+  if (!hasLogged.saved.length) return (
+    <View style={{ flex: 1, backgroundColor: '#020123', alignItems: 'center', paddingTop: 150 }}>
+      <Text style={{ fontFamily: 'Arimo_400Regular', color: '#f5f5f5', fontSize: 18 }}>Aquí aparecerán tus carpetas</Text>
+      <Text style={{ fontFamily: 'Arimo_400Regular', color: '#f5f5f5', fontSize: 18 }}>cuando agregues una {'\n'}</Text>
+      <Text style={{ fontSize: 25 }}>🙃</Text>
+    </View>
+  );
   return (
     <View style={styles.savedContainer}>
       {hasLogged !== false ? (

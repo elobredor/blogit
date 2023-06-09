@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "client",
-    "slug": "client",
+    "slug": "blog-it",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -35,6 +35,12 @@
           "customScheme": "blogit"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "7b848b5b-5259-4957-bbd2-2eccd31cf1f2"
+      }
+    },
+    "owner": "zoranbow"
   }
 }

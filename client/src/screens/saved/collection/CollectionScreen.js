@@ -8,12 +8,11 @@ import {
   Keyboard,
   Image,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CardArticle from "../../../component/home/cardArticle/CardArticle";
 import { styles } from "./collectionStyles";
 import { iconsCard, iconsComments } from "../../../utils/iconOptions";
-import { MY_IP } from "react-native-dotenv";
 import { updateSaved } from "../../../redux/actions";
 import { LinearGradient } from "expo-linear-gradient";
 

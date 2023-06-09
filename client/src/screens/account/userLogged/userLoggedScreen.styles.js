@@ -38,11 +38,15 @@ const styles = StyleSheet.create({
     color: '#f5f5f5',
     fontFamily: 'Nunito_400Regular',
     fontSize: 16,
+    height: 120,
+    paddingTop: 5,
+    textAlignVertical: 'top',
     paddingHorizontal: 10,
   },
   links: {
     flexDirection: 'row',
     gap: 10,
+    marginVertical: 5,
   },
   linksText: {
     color: '#f5f5f5',

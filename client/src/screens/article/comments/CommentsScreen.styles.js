@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
     borderTopColor: '#102962',
     flex: 1,
     backgroundColor: '#020123',
-    // backgroundColor: '#090841',
   },
   noCommentView: {
     flex: 1,
@@ -34,15 +33,18 @@ export const styles = StyleSheet.create({
   authorName: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#f5f5f5'
+    color: '#f5f5f5',
+    fontFamily: 'Arimo_700Bold'
   },
   timeLapse: {
     fontSize: 12,
-    color: '#f5f5f5'
+    color: '#f5f5f5',
+    fontFamily: 'Nunito_400Regular'
   },
   commentText: {
     fontSize: 16,
-    color: '#f5f5f5'
+    color: '#f5f5f5',
+    fontFamily: 'Nunito_400Regular'
   },
   footerIcons: {
     flexDirection: 'row',
@@ -62,7 +64,8 @@ export const styles = StyleSheet.create({
   },
   replyText: {
     color: '#f5f5f5',
-    fontSize: 16
+    fontSize: 16,
+    fontFamily: 'Nunito_400Regular'
   },
   overInput: {
     flexDirection: 'row',
@@ -76,7 +79,8 @@ export const styles = StyleSheet.create({
     backgroundColor: '#3a3969',
   },
   overInputText: {
-    color: '#f5f5f5'
+    color: '#f5f5f5',
+    fontFamily: 'Nunito_400Regular'
   },
   commentContainer: {
     flexDirection: 'row',
@@ -95,6 +99,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#090841',
     paddingHorizontal: 15,
     fontSize: 16,
+    fontFamily: 'Nunito_400Regular',
     color: '#f5f5f5',
   },  
   modalDeleteBack: {
@@ -122,11 +127,12 @@ export const styles = StyleSheet.create({
   modalDeleteText1: {
     textAlign: 'center',
     color: '#f5f5f5',
-    fontWeight: 'bold',
+    fontFamily: 'Nunito_700Bold',
     fontSize: 16
   },
   modalDeleteText2: {
     textAlign: 'center',
+    fontFamily: 'Nunito_400Regular',
     color: '#f5f5f5',
   }
 });
