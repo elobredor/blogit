@@ -134,3 +134,8 @@ export const iconsSocialMedia = {
   facebook: <AntDesign name="facebook-square" size={24} color="#f5f5f5" />,
   instagram: <AntDesign name="instagram" size={24} color="#f5f5f5" />,
 };
+
+export const iconsNotifications = {
+  like: <AntDesign name="like2" size={15} color="#f5f5f5" style={{ marginRight: 6, marginTop: 2 }} />,
+  comment: <FontAwesome5 name="comment" size={15} color="#f5f5f5" style={{ marginRight: 6, marginTop: 2 }} />
+}
