@@ -31,7 +31,7 @@ const CreateBoard = ({ showCreate, setShowCreate, data, setVisible }) => {
   const handleSubmit = () => {
     if (title !== "") {
       if (descri.length > 50 || title.length > 30) {
-        console.log("Este espacio no es para escribir un nuevo libro sagrado."); // modal de aviso o texto debajo del respectivo input
+        // modal de aviso o texto debajo del respectivo input
       } else {
         const bodyBoard = {
           postId: data.postId,

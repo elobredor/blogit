@@ -1,4 +1,4 @@
-import { View, Text, Image, TextInput, TouchableOpacity, Keyboard } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, Keyboard, Linking } from 'react-native';
 import { useEffect, useState, useRef } from 'react';
 import styles from './userLoggedScreen.styles';
 import { logOut, logToDb } from '../../../redux/actions';
@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth0 } from 'react-native-auth0';
 import { useFonts, Arimo_400Regular, Arimo_700Bold } from '@expo-google-fonts/arimo';
 import { Nunito_400Regular } from '@expo-google-fonts/nunito';
+import socialMediaIconize from '../../../utils/socialMediaIconize';
 
 const UserLoggedScreen = () => {
   const aboutInput = useRef(null);
@@ -63,19 +64,34 @@ const UserLoggedScreen = () => {
   const handleEditAbout = () => {
     setAbout(loggedUser.about);
     setWithAbout(false);
-    setTimeout(() => {
-      aboutInput.current.focus();
-    }, 1000)
   };
+
+  useEffect(() => {
+    if (aboutInput.current) {
+      setTimeout(() => {
+        aboutInput.current.focus();
+      }, 10)
+    }
+  }, [withAbout])
 
   if (!loadedFonts) return null;
   return (
     <View style={styles.container}>
       <Image source={{ uri: loggedUser.profileImage }} style={styles.profileImage} />
       <Text style={styles.userName}>{`${loggedUser.userName[0].toUpperCase()}${loggedUser.userName.slice(1)}`}</Text>
-      {loggedUser.about &&
-        <View style={{ width: '75%' }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <View style={{ justifyContent: 'center', alignItems: 'center', gap: 10 }}>
+        {loggedUser.socialNetwork1 &&
+          <TouchableOpacity onPress={() => Linking.openURL(loggedUser.socialNetwork1)}>
+            {socialMediaIconize(loggedUser.socialNetwork1)}
+          </TouchableOpacity>}
+        {loggedUser.socialNetwork2 &&
+          <TouchableOpacity onPress={() => Linking.openURL(loggedUser.socialNetwork2)}>
+            {socialMediaIconize(loggedUser.socialNetwork2)}
+          </TouchableOpacity>}
+      </View>
+      {loggedUser.about && withAbout === true &&
+        <View style={styles.aboutContainer}>
+          <View style={styles.aboutSubContainer}>
             <Text style={{ color: '#f5f5f5' }}>{loggedUser.about}</Text>
             <TouchableOpacity onPress={handleEditAbout}>
               {iconsProfile.edit}
@@ -103,11 +119,11 @@ const UserLoggedScreen = () => {
               />}
           </TouchableOpacity>
         </View>}
-        <TouchableOpacity>
-          {/* <View style={styles.links}>
+        <TouchableOpacity onPress={() => navigation.navigate('socialMedia')}>
+          <View style={styles.links}>
             {iconsProfile.plus}
             <Text style={styles.linksText}>Agrega tus enlaces</Text>
-          </View> */}
+          </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('favoritesStack', loggedUser._id)}>
           <View style={styles.links}>

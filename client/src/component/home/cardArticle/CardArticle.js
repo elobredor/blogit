@@ -103,9 +103,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
           } else {
             throw new Error("ha habido un error");
           }
-          return res.json()
         })
-        .then(data => console.log(data))
         .catch((err) => console.error(err));
     } else {
       deleteSaved(item._id);
@@ -143,12 +141,10 @@ const CardArticle = ({ item, setModalVisibility }) => {
           dispatch(updateSaved(hasLogged.userId));
           setSaved(false); //Vaciar el ícono
           console.log("fue eliminado correctamente de " + folder);
-          return res.json()
         } else {
           throw new Error("ha habido un error");
         }
       })
-      .then(data => console.log(data))
       .catch((err) => console.error(err));
   };
 

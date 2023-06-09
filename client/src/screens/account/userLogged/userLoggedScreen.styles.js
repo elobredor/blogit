@@ -19,8 +19,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Arimo_700Bold'
   },
   subContainer: {
-    marginTop: 60,
     width: '70%',
+    gap: 10
+  },
+  aboutContainer: {
+    width: '60%',
+    marginBottom: 30
+  },
+  aboutSubContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     gap: 10
   },
   inputContainer: {

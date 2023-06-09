@@ -122,4 +122,15 @@ export const iconsSearch = {
     default: <MaterialIcons name="search" size={20} color="#f5f5f5" style={{marginRight: 5}} />,
     shaded: <MaterialIcons name="search" size={20} color="#959595" style={{marginRight: 5}} />
   },
-}
+};
+
+export const iconsSocialMedia = {
+  cross: <Feather name="x" size={24} color="#f5f5f5" style={{ marginTop: 5 }}/>,
+  check: <Feather name="check" size={24} color="#f5f5f5" style={{ marginTop: 5 }}/>,
+  linkedin: <AntDesign name="linkedin-square" size={24} color="#f5f5f5" />,
+  github: <AntDesign name="github" size={24} color="#f5f5f5" />,
+  behance: <AntDesign name="behance" size={24} color="#f5f5f5" />,
+  figma: <Feather name="figma" size={24} color="#f5f5f5" />,
+  facebook: <AntDesign name="facebook-square" size={24} color="#f5f5f5" />,
+  instagram: <AntDesign name="instagram" size={24} color="#f5f5f5" />,
+};

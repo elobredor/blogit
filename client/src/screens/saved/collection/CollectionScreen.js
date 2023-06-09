@@ -55,10 +55,8 @@ const CollectionScreen = ({ route }) => {
           if (res.ok) {
             dispatch(updateSaved(userId));
             console.log("Folder has been updated successfully");
-            return res.json()
           } else throw new Error("No response from server");
         })
-        .then(data => console.log(data))
         .catch((err) => console.log(err));
       setVisible(false);
     };

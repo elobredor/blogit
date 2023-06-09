@@ -17,8 +17,10 @@ import { updateSaved } from "../../redux/actions";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFonts, Arimo_400Regular, Arimo_700Bold } from '@expo-google-fonts/arimo';
 import { Nunito_400Regular } from '@expo-google-fonts/nunito';
+import { useAuth0 } from "react-native-auth0";
 
 const SavedScreen = () => {
+  const { authorize } = useAuth0();
   const initialState = {
     title: null,
     folderId: null,
@@ -138,7 +140,18 @@ const SavedScreen = () => {
     }
   };
 
-  if (!hasLogged.saved.length) return (
+  const handleLogin = async () => {
+    try {
+      await authorize(
+        { scope: 'openid profile email' },
+        { customScheme: 'blogit' }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (hasLogged && !hasLogged.saved.length) return (
     <View style={{ flex: 1, backgroundColor: '#020123', alignItems: 'center', paddingTop: 150 }}>
       <Text style={{ fontFamily: 'Arimo_400Regular', color: '#f5f5f5', fontSize: 18 }}>Aquí aparecerán tus carpetas</Text>
       <Text style={{ fontFamily: 'Arimo_400Regular', color: '#f5f5f5', fontSize: 18 }}>cuando agregues una {'\n'}</Text>
@@ -170,12 +183,12 @@ const SavedScreen = () => {
             gap: 10,
           }}
         >
-          <Text style={{ color: "white", fontSize: 22, textAlign: "center" }}>
-            Oops! para guardar artículos aquí primero debes loguearte
+          <Text style={{ color: "#f5f5f5", fontSize: 20, textAlign: "center", fontFamily: 'Arimo_400Regular' }}>
+            Para guardar artículos aquí {'\n'} primero debes loguearte
           </Text>
           <Button
-            title="ingresar con Google"
-            onPress={() => setModalVisibility(true)}
+            title="Log In"
+            onPress={handleLogin}
           />
 
           <ModalLogin
