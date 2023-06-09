@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { ROLES } from 'src/constants/roles';
 
 export interface UserInterface extends Document {
@@ -19,5 +19,5 @@ interface SavedPost {
   _id: string;
   description: string;
   title: string;
-  posts: { postId: string; images: string }[];
+  posts: { postId: string; images: string; _id: mongoose.Types.ObjectId }[];
 }

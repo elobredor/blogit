@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { UserInterface } from 'src/interfaces/user.interface';
 import { CreateUserDto, UserUpdateDTO } from '../dto/user.dto';
 import { ErrorManager } from 'src/utils/error.manager';
@@ -145,7 +145,7 @@ export class UsersService {
   //function to save posts
   public async savePosts(userId: string, body: UserUpdateDTO): Promise<UserInterface> {
     try {
-      let user: UserInterface;
+      let user: any;
       //check if user exist
       user = await this.userModel.findOne({ userId });
       //if user not exist throw error
@@ -170,7 +170,7 @@ export class UsersService {
               saved: {
                 title: body.title,
                 description: body.description,
-                posts: { postId: body.postId, images: body.images },
+                posts: { _id: new mongoose.Types.ObjectId(), postId: body.postId, images: body.images },
               },
             },
           },
@@ -187,10 +187,20 @@ export class UsersService {
         }
         //check if postId is already exist in posts array
         const postId = postTitle.posts.some((post) => post.postId === body.postId);
+
         if (!postId) {
-          //if postId is not exist in posts array then push postId in posts array
-          postTitle.posts.push({ postId: body.postId, images: body.images });
-          await user.save();
+          user = await this.userModel.findOneAndUpdate(
+            {
+              userId: userId,
+              'saved.title': body.title,
+            },
+            {
+              $push: {
+                'saved.$.posts': { _id: new mongoose.Types.ObjectId(), postId: body.postId, images: body.images },
+              },
+            },
+            { new: true },
+          );
         }
       }
       return user;
@@ -213,21 +223,18 @@ export class UsersService {
         });
       }
 
-      //if post title is already exist, find the object
-      const postTitle = user.saved.find((post) => post.title === body.title);
-      if (!postTitle) {
-        throw new ErrorManager({
-          type: 'NOT_FOUND',
-          message: 'Post title not found',
-        });
-      }
-      //check if postId is already exist in posts array
-      const postId = postTitle.posts.some((post) => post.postId === body.postId);
-      if (postId) {
-        //if postId is already exist in posts array then remove postId from posts array
-        postTitle.posts = postTitle.posts.filter((post) => post.postId.toString() !== body.postId);
-        await user.save();
-      }
+      user = await this.userModel.findOneAndUpdate(
+        {
+          userId: userId,
+          'saved.title': body.title,
+        },
+        {
+          $pull: {
+            'saved.$.posts': { postId: body.postId },
+          },
+        },
+        { new: true },
+      );
       return user;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
@@ -274,9 +281,17 @@ export class UsersService {
   //function to update a saved post
   public async updateSavedPost(savedId: string, body: UserUpdateDTO): Promise<UserInterface> {
     try {
-      const savedPost = await this.userModel.findOne({ saved: { $elemMatch: { _id: savedId } } });
+      const savedPost = await this.userModel.findOneAndUpdate(
+        { 'saved._id': savedId },
+        {
+          $set: {
+            'saved.$.description': body.description,
+            'saved.$.title': body.title,
+          },
+        },
+        { new: true },
+      );
 
-      //If the saved _id is not found, throw an error.
       if (!savedPost) {
         throw new ErrorManager({
           type: 'NOT_FOUND',
@@ -284,11 +299,6 @@ export class UsersService {
         });
       }
 
-      //If the comment is found, find the comment and update it.
-      const saved = savedPost.saved.find((art) => art._id.toString() === savedId);
-      saved.description = body.description || saved.description;
-      saved.title = body.title || saved.title;
-      await savedPost.save();
       return savedPost;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);

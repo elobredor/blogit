@@ -79,6 +79,7 @@ export class UsersController {
   }
 
   //method to update savedPosts
+  @Roles('BASIC')
   @Put('updateSaved/:savedId')
   public async updateSaved(@Param('savedId', ParseObjectIdPipe) savedId: string, @Body() body: UserUpdateDTO) {
     const saved = await this.usersService.updateSavedPost(savedId, body);
