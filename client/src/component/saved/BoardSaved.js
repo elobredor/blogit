@@ -19,6 +19,7 @@ const BoardSaved = ({ item, setData }) => {
     Arimo_400Regular,
     Nunito_400Regular,
   });
+  const token = useSelector(state => state.token);
 
   const ids = item.posts.map((obj) => obj.postId);
   const lastArticles = ids.length < 2 ? ids.slice(-1) : ids.slice(-2);
@@ -31,9 +32,12 @@ const BoardSaved = ({ item, setData }) => {
     setVisible(!visible);
   };
   const deleteBoard = () => {
-    fetch(`http://${MY_IP}:4000/api/users/delete-folder/${item._id}`, {
+    fetch(`https://blogit.up.railway.app/api/users/delete-folder/${item._id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
+      },
     })
       .then((res) => {
         if (res.ok) {

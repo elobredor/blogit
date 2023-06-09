@@ -8,12 +8,11 @@ import {
   Keyboard,
   Image,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CardArticle from "../../../component/home/cardArticle/CardArticle";
 import { styles } from "./collectionStyles";
 import { iconsCard, iconsComments } from "../../../utils/iconOptions";
-import { MY_IP } from "react-native-dotenv";
 import { updateSaved } from "../../../redux/actions";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -26,6 +25,7 @@ const CollectionScreen = ({ route }) => {
   const savedArticles = useSelector((state) =>
     state.articles.filter((obj) => ids.includes(obj._id))
   );
+  const token = useSelector(state => state.token);
 
   const [showDots, setShowDots] = useState(false); //Show edit and delete icons
   const [visible, setVisible] = useState(false);
@@ -43,9 +43,12 @@ const CollectionScreen = ({ route }) => {
       const bodyEdit = {
         title: title,
       };
-      fetch(`http://${MY_IP}:4000/api/users/updateSaved/${data._id}`, {
+      fetch(`https://blogit.up.railway.app/api/users/updateSaved/${data._id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(bodyEdit),
       })
         .then((res) => {
@@ -136,9 +139,12 @@ const CollectionScreen = ({ route }) => {
   };
   //Delete FN
   const deleteBoard = () => {
-    fetch(`http://${MY_IP}:4000/api/users/delete-folder/${data._id}`, {
+    fetch(`https://blogit.up.railway.app/api/users/delete-folder/${data._id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
+      },
     })
       .then((res) => {
         if (res.ok) {

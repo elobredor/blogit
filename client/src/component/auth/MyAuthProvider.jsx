@@ -10,21 +10,15 @@ const MyAuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (user && !token) {
-      console.log('LOG_IN');
       dispatch(logIn(user));
     }
   }, [user]);
 
   useEffect(() => {
     if (token) {
-      console.log('LOG_TO_DB');
       dispatch(logToDb(user.sub))
     }
   }, [token])
-
-  useEffect(() => {
-    console.log('MyAuthProvider mounted!!');
-  }, []);
 
   return <>{children}</>;
 };

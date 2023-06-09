@@ -2,7 +2,7 @@ import { Modal, View, Text, TouchableOpacity, TextInput } from "react-native";
 import { styles } from "./createBoardStyles";
 import { iconsArticle } from "../../../utils/iconOptions";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateSaved } from "../../../redux/actions";
 import { MY_IP } from "react-native-dotenv";
 import { useFonts, Arimo_400Regular, Arimo_500Medium } from '@expo-google-fonts/arimo';
@@ -10,6 +10,7 @@ import { Nunito_400Regular } from '@expo-google-fonts/nunito';
 
 
 const CreateBoard = ({ showCreate, setShowCreate, data, setVisible }) => {
+  const token = useSelector(state => state.token);
   let [fontsLoaded] = useFonts({
     Arimo_400Regular,
     Nunito_400Regular,
@@ -30,7 +31,7 @@ const CreateBoard = ({ showCreate, setShowCreate, data, setVisible }) => {
   const handleSubmit = () => {
     if (title !== "") {
       if (descri.length > 50 || title.length > 30) {
-        console.log("Este espacio no es para escribir un nuevo libro sagrado."); // modal de aviso o texto debajo del respectivo input
+        // modal de aviso o texto debajo del respectivo input
       } else {
         const bodyBoard = {
           postId: data.postId,
@@ -40,10 +41,11 @@ const CreateBoard = ({ showCreate, setShowCreate, data, setVisible }) => {
             ? descri
             : "Aquí puedes añadir una breve descripción",
         };
-        fetch(`http://${MY_IP}:4000/api/users/saved/${data.userId}`, {
+        fetch(`https://blogit.up.railway.app/api/users/saved/${data.userId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify(bodyBoard),
         })

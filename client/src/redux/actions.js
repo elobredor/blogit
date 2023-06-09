@@ -14,15 +14,32 @@ export const LOG_OUT = "LOG_OUT";
 export const GET_CATEGORY = "GET_CATEGORY";
 export const UPDATE_SAVED = "UPDATE_SAVED";
 export const LOG_IN = 'LOG_IN';
+export const GET_FAVORITES = 'GET_FAVORITES';
 
 export const categoryBtn = () => {
-  fetch(`http://${MY_IP}:4000/api/blogs/category/No Code`);
+  fetch(`https://blogit.up.railway.app/api/blogs/category/No Code`);
 };
+
+export const getFavorites = (userId, token) => (dispatch) => {
+  fetch(`https://blogit.up.railway.app/api/posts/favorites/${userId}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error('Something went wrong');
+      console.log('FAVORITES')
+      return res.json();
+    })
+    .then((payload) => dispatch({ type: GET_FAVORITES, payload }))
+    .catch((error) => console.error(error));
+}
 
 // GET_ARTICLES
 export const getArticles = () => (dispatch) => {
   dispatch({ type: ARTICLES_PENDING });
-  fetch(`http://${MY_IP}:4000/api/posts/all/1`)
+  fetch(`https://blogit.up.railway.app/api/posts/all/1`)
     .then((res) => {
       if (!res.ok) throw new Error("Sin respuesta del servidor");
       return res.json();
@@ -38,7 +55,7 @@ export const getArticles = () => (dispatch) => {
 // GET_DETAILS
 export const getDetails = (articleId) => (dispatch) => {
   dispatch({ type: DETAILS_PENDING });
-  fetch(`http://${MY_IP}:4000/api/posts/${articleId}`)
+  fetch(`https://blogit.up.railway.app/api/posts/${articleId}`)
     .then((res) => {
       if (!res.ok) throw new Error("Sin respuesta del servidor");
       return res.json();
@@ -68,7 +85,7 @@ export const getCategory = (category) => {
 
 // LOG_TO_DB
 export const logToDb = (id) => (dispatch) => {
-  fetch(`http://${MY_IP}:4000/api/users/profile/${id}`)
+  fetch(`https://blogit.up.railway.app/api/users/profile/${id}`)
     .then((res) => {
       if (!res.ok) throw new Error("Sin respuesta del servidor");
       return res.json();
@@ -82,7 +99,7 @@ export const logToDb = (id) => (dispatch) => {
 
 //LOG_IN
 export const logIn = (user) => (dispatch) => {
-  fetch(`http://${MY_IP}:4000/api/auth/login`, {
+  fetch(`https://blogit.up.railway.app/api/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -95,14 +112,13 @@ export const logIn = (user) => (dispatch) => {
     })
     .then((data) => {
       if (!data.access_token) {
-        console.log('NEW_USER');
         const newUserBody = {
           userId: user.sub,
           userName: user.given_name ? user.given_name : user.nickname,
           email: user.email,
           profileImage: user.picture,
         };
-        fetch(`http://${MY_IP}:4000/api/users/create`, {
+        fetch(`https://blogit.up.railway.app/api/users/create`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -111,7 +127,7 @@ export const logIn = (user) => (dispatch) => {
         })
           .then((res) => {
             if (!res.ok) throw new Error("Sin respuesta del servidor");
-            fetch(`http://${MY_IP}:4000/api/auth/login`, {
+            fetch(`https://blogit.up.railway.app/api/auth/login`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -130,7 +146,6 @@ export const logIn = (user) => (dispatch) => {
           })
           .catch(error => console.error(error));
       } else {
-        console.log('FOUND_USER!!');
         return dispatch({ type: LOG_IN, payload: data.access_token });
       }
     })
@@ -139,13 +154,13 @@ export const logIn = (user) => (dispatch) => {
 
 // UPDATE_SAVED
 export const updateSaved = (id) => (dispatch) => {
-  fetch(`http://${MY_IP}:4000/api/users/profile/${id}`)
+  fetch(`https://blogit.up.railway.app/api/users/profile/${id}`)
     .then((res) => {
       if (!res.ok) throw new Error("Sin respuesta del servidor");
       return res.json();
     })
     .then((data) => {
-      dispatch({ type: UPDATE_SAVED, payload: data.usersProfile.saved });
+      dispatch({ type: UPDATE_SAVED, payload: data.saved });
     })
     .catch((error) => console.error(error));
 };

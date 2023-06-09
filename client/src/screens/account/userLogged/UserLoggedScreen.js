@@ -1,16 +1,18 @@
-import { View, Text, Image, TextInput, TouchableOpacity, Keyboard } from 'react-native';
-import { useEffect, useState } from 'react';
+import { View, Text, Image, TextInput, TouchableOpacity, Keyboard, Linking } from 'react-native';
+import { useEffect, useState, useRef } from 'react';
 import styles from './userLoggedScreen.styles';
 import { logOut, logToDb } from '../../../redux/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { iconsProfile } from '../../../utils/iconOptions';
 import { useNavigation } from '@react-navigation/native';
-import { MY_IP } from 'react-native-dotenv';
 import { useAuth0 } from 'react-native-auth0';
 import { useFonts, Arimo_400Regular, Arimo_700Bold } from '@expo-google-fonts/arimo';
 import { Nunito_400Regular } from '@expo-google-fonts/nunito';
+import socialMediaIconize from '../../../utils/socialMediaIconize';
 
 const UserLoggedScreen = () => {
+  const aboutInput = useRef(null);
+  const token = useSelector((state) => state.token);
   let [loadedFonts] = useFonts({
     Arimo_400Regular,
     Nunito_400Regular,
@@ -35,10 +37,11 @@ const UserLoggedScreen = () => {
     const aboutBody = {
       about,
     }
-    fetch(`http://${MY_IP}:4000/api/users/update/${loggedUser.userId}`, {
+    fetch(`https://blogit.up.railway.app/api/users/update/${loggedUser.userId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(aboutBody)
     })
@@ -58,18 +61,47 @@ const UserLoggedScreen = () => {
     dispatch(logOut());
   };
 
+  const handleEditAbout = () => {
+    setAbout(loggedUser.about);
+    setWithAbout(false);
+  };
+
+  useEffect(() => {
+    if (aboutInput.current) {
+      setTimeout(() => {
+        aboutInput.current.focus();
+      }, 10)
+    }
+  }, [withAbout])
+
   if (!loadedFonts) return null;
   return (
     <View style={styles.container}>
       <Image source={{ uri: loggedUser.profileImage }} style={styles.profileImage} />
       <Text style={styles.userName}>{`${loggedUser.userName[0].toUpperCase()}${loggedUser.userName.slice(1)}`}</Text>
-      {loggedUser.about &&
-        <View style={{width: '75%'}}>
-          <Text style={{ color: '#f5f5f5', marginTop: 30 }}>{loggedUser.about}</Text>
+      <View style={{ justifyContent: 'center', alignItems: 'center', gap: 10 }}>
+        {loggedUser.socialNetwork1 &&
+          <TouchableOpacity onPress={() => Linking.openURL(loggedUser.socialNetwork1)}>
+            {socialMediaIconize(loggedUser.socialNetwork1)}
+          </TouchableOpacity>}
+        {loggedUser.socialNetwork2 &&
+          <TouchableOpacity onPress={() => Linking.openURL(loggedUser.socialNetwork2)}>
+            {socialMediaIconize(loggedUser.socialNetwork2)}
+          </TouchableOpacity>}
+      </View>
+      {loggedUser.about && withAbout === true &&
+        <View style={styles.aboutContainer}>
+          <View style={styles.aboutSubContainer}>
+            <Text style={{ color: '#f5f5f5' }}>{loggedUser.about}</Text>
+            <TouchableOpacity onPress={handleEditAbout}>
+              {iconsProfile.edit}
+            </TouchableOpacity>
+          </View>
         </View>}
       <View style={styles.subContainer}>
         {!withAbout && <View style={styles.inputContainer}>
           <TextInput
+            ref={aboutInput}
             placeholderTextColor={'#f5f5f5'}
             placeholder='Habla de tí...' multiline
             style={styles.textInput}
@@ -77,22 +109,29 @@ const UserLoggedScreen = () => {
             onChangeText={handleAboutChange}
           />
           <TouchableOpacity onPress={handleAboutSubmit}>
-            {iconsProfile.submit}
+            {about.length ? <Image
+              source={require('../../../../assets/send-active.png')}
+              style={{ width: 22, height: 22, marginTop: 5, marginRight: 5 }}
+            /> :
+              <Image
+                source={require('../../../../assets/send-inactive.png')}
+                style={{ width: 22, height: 22, marginTop: 5, marginRight: 5 }}
+              />}
           </TouchableOpacity>
         </View>}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('socialMedia')}>
           <View style={styles.links}>
             {iconsProfile.plus}
             <Text style={styles.linksText}>Agrega tus enlaces</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('favoritesStack', loggedUser._id)}>
           <View style={styles.links}>
             {iconsProfile.heart}
             <Text style={styles.linksText}>Me gusta</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('savedTab')}>
           <View style={styles.links}>
             {iconsProfile.saved}
             <Text style={styles.linksText}>Guardados</Text>

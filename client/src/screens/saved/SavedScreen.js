@@ -11,13 +11,16 @@ import {
 } from "react-native";
 import { styles } from "./savedScreen.styles";
 import BoardSaved from "../../component/saved/BoardSaved.js";
-import { MY_IP } from "react-native-dotenv";
 import { useDispatch, useSelector } from "react-redux";
 import { ModalLogin } from "../../component/shared/ModalLogin";
 import { updateSaved } from "../../redux/actions";
 import { LinearGradient } from "expo-linear-gradient";
+import { useFonts, Arimo_400Regular, Arimo_700Bold } from '@expo-google-fonts/arimo';
+import { Nunito_400Regular } from '@expo-google-fonts/nunito';
+import { useAuth0 } from "react-native-auth0";
 
 const SavedScreen = () => {
+  const { authorize } = useAuth0();
   const initialState = {
     title: null,
     folderId: null,
@@ -29,6 +32,11 @@ const SavedScreen = () => {
   const hasLogged = useSelector((state) =>
     state.logged ? state.loggedUser : false
   );
+  const token = useSelector(state => state.token);
+  let [loadedFonts] = useFonts({
+    Arimo_400Regular,
+    Nunito_400Regular,
+  });
 
   const ContainerEdit = () => {
     const [title, setTitle] = useState(data.title);
@@ -40,9 +48,12 @@ const SavedScreen = () => {
       const bodyEdit = {
         title: title,
       };
-      fetch(`http://${MY_IP}:4000/api/users/updateSaved/${data.folderId}`, {
+      fetch(`https://blogit.up.railway.app/api/users/updateSaved/${data.folderId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(bodyEdit),
       })
         .then((res) => {
@@ -51,10 +62,11 @@ const SavedScreen = () => {
             console.log("Folder has been updated successfully");
           } else throw new Error("No response from server");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
       setData(initialState);
     };
 
+    if (!loadedFonts) return null;
     if (data.title !== null) {
       return (
         <View style={styles.containerEdit}>
@@ -66,7 +78,7 @@ const SavedScreen = () => {
               width: "95%",
             }}
           >
-            <Text style={{ color: "white", fontSize: 18 }}>
+            <Text style={{ color: "white", fontSize: 16, fontFamily: 'Arimo_400Regular' }}>
               Estás renombrando la carpeta:
             </Text>
 
@@ -75,14 +87,14 @@ const SavedScreen = () => {
                 Keyboard.dismiss();
                 setData(initialState);
               }}
-              style={{ fontSize: 28, color: "#f5f5f5" }}
+              style={{ fontSize: 20, color: "#f5f5f5" }}
             >
               x
             </Text>
           </View>
 
           <View
-            style={{ height: 1, width: "120%", backgroundColor: "white" }}
+            style={{ height: 1, width: "102%", backgroundColor: "#302962" }}
           ></View>
 
           <View
@@ -128,6 +140,24 @@ const SavedScreen = () => {
     }
   };
 
+  const handleLogin = async () => {
+    try {
+      await authorize(
+        { scope: 'openid profile email' },
+        { customScheme: 'blogit' }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (hasLogged && !hasLogged.saved.length) return (
+    <View style={{ flex: 1, backgroundColor: '#020123', alignItems: 'center', paddingTop: 150 }}>
+      <Text style={{ fontFamily: 'Arimo_400Regular', color: '#f5f5f5', fontSize: 18 }}>Aquí aparecerán tus carpetas</Text>
+      <Text style={{ fontFamily: 'Arimo_400Regular', color: '#f5f5f5', fontSize: 18 }}>cuando agregues una {'\n'}</Text>
+      <Text style={{ fontSize: 25 }}>🙃</Text>
+    </View>
+  );
   return (
     <View style={styles.savedContainer}>
       {hasLogged !== false ? (
@@ -153,12 +183,12 @@ const SavedScreen = () => {
             gap: 10,
           }}
         >
-          <Text style={{ color: "white", fontSize: 22, textAlign: "center" }}>
-            Oops! para guardar artículos aquí primero debes loguearte
+          <Text style={{ color: "#f5f5f5", fontSize: 20, textAlign: "center", fontFamily: 'Arimo_400Regular' }}>
+            Para guardar artículos aquí {'\n'} primero debes loguearte
           </Text>
           <Button
-            title="ingresar con Google"
-            onPress={() => setModalVisibility(true)}
+            title="Log In"
+            onPress={handleLogin}
           />
 
           <ModalLogin

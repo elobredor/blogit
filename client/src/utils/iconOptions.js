@@ -112,12 +112,30 @@ export const iconsProfile = {
   saved: <MaterialCommunityIcons color="#f5f5f5" size={24} name="bookmark-outline" />,
   logout: <Ionicons name="power" size={22} color="#f5f5f5" style={{ marginLeft: 2 }}/>,
   submit: <MaterialCommunityIcons name="send-circle-outline" size={24} color="#f5f5f5" style={{marginTop: 2, marginRight: 3}} />,
+  edit: <FontAwesome5 name="edit" size={12} color="#f5f5f5" />
 };
 
 export const iconsSearch = {
-  cross: <Feather name="x" size={24} color="#f5f5f5" />,  
+  cross: <Feather name="x" size={24} color="#f5f5f5" />,
+  noCross: <Feather name="x" size={24} color="#020123" />,
   glass: {
     default: <MaterialIcons name="search" size={20} color="#f5f5f5" style={{marginRight: 5}} />,
     shaded: <MaterialIcons name="search" size={20} color="#959595" style={{marginRight: 5}} />
   },
+};
+
+export const iconsSocialMedia = {
+  cross: <Feather name="x" size={24} color="#f5f5f5" style={{ marginTop: 5 }}/>,
+  check: <Feather name="check" size={24} color="#f5f5f5" style={{ marginTop: 5 }}/>,
+  linkedin: <AntDesign name="linkedin-square" size={24} color="#f5f5f5" />,
+  github: <AntDesign name="github" size={24} color="#f5f5f5" />,
+  behance: <AntDesign name="behance" size={24} color="#f5f5f5" />,
+  figma: <Feather name="figma" size={24} color="#f5f5f5" />,
+  facebook: <AntDesign name="facebook-square" size={24} color="#f5f5f5" />,
+  instagram: <AntDesign name="instagram" size={24} color="#f5f5f5" />,
+};
+
+export const iconsNotifications = {
+  like: <AntDesign name="like2" size={15} color="#f5f5f5" style={{ marginRight: 6, marginTop: 2 }} />,
+  comment: <FontAwesome5 name="comment" size={15} color="#f5f5f5" style={{ marginRight: 6, marginTop: 2 }} />
 }

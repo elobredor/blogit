@@ -10,7 +10,6 @@ import {
   Image,
   Modal,
   Dimensions,
-  Alert
 } from 'react-native';
 import { styles } from './CommentsScreen.styles';
 import { iconsComments } from '../../../utils/iconOptions';
@@ -18,7 +17,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getDetails } from '../../../redux/actions';
 import { timeLapse } from '../../../utils/timeLapse';
 import { LinearGradient } from 'expo-linear-gradient';
-import { MY_IP } from 'react-native-dotenv';
+import { useFonts, Arimo_700Bold, Arimo_500Medium } from '@expo-google-fonts/arimo';
+import { Nunito_400Regular } from '@expo-google-fonts/nunito';
 
 const replyInitialState = {
   status: false,
@@ -35,6 +35,11 @@ const editInitialState = {
 const { width } = Dimensions.get('window');
 
 export default function CommentsScreen() {
+  let [fontsLoaded] = useFonts({
+    Arimo_700Bold,
+    Arimo_500Medium,
+    Nunito_400Regular
+  });
   const dispatch = useDispatch();
   const { comments, _id } = useSelector((state) => state.details);
   const loggedUser = useSelector((state) => {
@@ -53,13 +58,6 @@ export default function CommentsScreen() {
   const [editing, setEditing] = useState(editInitialState);
   const token = useSelector(state => state.token);
 
-  // COMMENT_SCROLLING (EVALUATE)
-  useEffect(() => {
-    if (!repliesVisibility && comments.length > 0) {
-      commentListRef.current.scrollToEnd({ animated: true });
-    }
-  }, [comments]);
-
   // HANDLE_COMMENT_CHANGE
   const handleArticleCommentChange = (text) => {
     setArticleComment(text);
@@ -71,7 +69,7 @@ export default function CommentsScreen() {
       Keyboard.dismiss();
       const editBody = { comment: articleComment };
       setArticleComment('');
-      fetch(`http://${MY_IP}:4000/api/comments/update/${editing.editingId}`, {
+      fetch(`https://blogit.up.railway.app/api/comments/update/${editing.editingId}`, {
         method: 'PUT',
         headers: {
           'Content-Type':'application/json',
@@ -92,7 +90,7 @@ export default function CommentsScreen() {
       Keyboard.dismiss();
       const editBody = { comment: articleComment };
       setArticleComment('');
-      fetch(`http://${MY_IP}:4000/api/comments/reply-update/${editing.editingId}`, {
+      fetch(`https://blogit.up.railway.app/api/comments/reply-update/${editing.editingId}`, {
         method: 'PUT',
         headers: {
           'Content-Type':'application/json',
@@ -119,12 +117,11 @@ export default function CommentsScreen() {
         profileImage: loggedUser.profileImage,
       };
       setArticleComment('');
-      fetch(`http://${MY_IP}:4000/api/comments/create`, {
+      fetch(`https://blogit.up.railway.app/api/comments/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
-          // 'Authorization': `Bearer ${access_token}`
         },
         body: JSON.stringify(commentBody),
       })
@@ -142,7 +139,7 @@ export default function CommentsScreen() {
       userId: loggedUser._id,
       commentId,
     };
-    fetch(`http://${MY_IP}:4000/api/comments/like/${_id}`, {
+    fetch(`https://blogit.up.railway.app/api/comments/like/${_id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -164,7 +161,7 @@ export default function CommentsScreen() {
       replyCommentId,
     };
 
-    fetch(`http://${MY_IP}:4000/api/comments/reply/like/${commentId}`, {
+    fetch(`https://blogit.up.railway.app/api/comments/reply/like/${commentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -224,7 +221,7 @@ export default function CommentsScreen() {
       comment: reply,
       profileImage: loggedUser.profileImage,
     };
-    fetch(`http://${MY_IP}:4000/api/comments/reply/${replying.commentId}`, {
+    fetch(`https://blogit.up.railway.app/api/comments/reply/${replying.commentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -244,7 +241,7 @@ export default function CommentsScreen() {
   // DELETE_COMMENT/REPLY
   const deleteComment = () => {
     if (deletionType === 'comment') {
-      fetch(`http://${MY_IP}:4000/api/comments/delete/${editDelete}`, {
+      fetch(`https://blogit.up.railway.app/api/comments/delete/${editDelete}`, {
         method: 'DELETE',
         headers: {
           'Content-Type':'application/json',
@@ -256,7 +253,7 @@ export default function CommentsScreen() {
         })
         .catch(error => console.error(error));
     } else if (deletionType === 'reply') {
-      fetch(`http://${MY_IP}:4000/api/comments/reply-delete/${editDelete}`, {
+      fetch(`https://blogit.up.railway.app/api/comments/reply-delete/${editDelete}`, {
       method: 'DELETE',
       headers: {
         'Content-Type':'application/json',
@@ -284,6 +281,7 @@ export default function CommentsScreen() {
     inputRef.current.focus();
   }
 
+  if (!fontsLoaded) return <View style={{ backgroundColor: '#020123' }}></View>
   return (
     <View style={styles.container}>
       {!comments.length ? (
@@ -363,7 +361,7 @@ export default function CommentsScreen() {
                   </View>
                   <View style={styles.responseBtn}>
                     <TouchableOpacity onPress={() => handleReply(item)}>
-                      <Text style={{ color: '#f5f5f5' }}>Responder</Text>
+                      <Text style={{ color: '#f5f5f5', fontFamily: 'Arimo_500Medium' }}>Responder</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -534,16 +532,14 @@ export default function CommentsScreen() {
       <Modal visible={deteleVisibility} transparent>
         <View style={styles.modalDeleteBack}>
           <View style={styles.modalDeleteFront}>
-            <Text style={styles.modalDeleteText1}>¿Esta publicación</Text>
-            <Text style={styles.modalDeleteText1}>no te gusta?{'\n'}</Text>
-            <Text style={styles.modalDeleteText2}>¿Estás seguro que ya no</Text>
-            <Text style={styles.modalDeleteText2}>te gusta esta publicación?{'\n'}</Text>
+            <Text style={styles.modalDeleteText1}>¿Quieres borrar</Text>
+            <Text style={styles.modalDeleteText1}>este comentario?{'\n'}</Text>
             <View style={{alignItems: 'stretch', backgroundColor: '#37b4a1'}}>
               <TouchableOpacity onPress={deleteComment} activeOpacity={0.5} style={styles.modalDeleteBtn}>
-                <Text style={styles.modalDeleteText1}>Si</Text>
+                <Text style={styles.modalDeleteText2}>Eliminar</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setDeteleVisibility(false)} activeOpacity={0.5} style={styles.modalDeleteBtn}>
-                <Text style={styles.modalDeleteText1}>No</Text>
+                <Text style={styles.modalDeleteText2}>Cancelar</Text>
               </TouchableOpacity>
             </View>
           </View>

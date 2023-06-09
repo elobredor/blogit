@@ -6,19 +6,18 @@ import { ModalLogin } from "../../component/shared/ModalLogin";
 import React, { useEffect, useState } from "react";
 import { styles } from "./homeScreen.styles";
 import { useDispatch, useSelector } from "react-redux";
-import { getArticles, logToDb } from "../../redux/actions";
+import { getArticles } from "../../redux/actions";
 import { iconOptions } from "../../utils/iconOptions";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts, Arimo_700Bold } from '@expo-google-fonts/arimo';
-import { useAuth0 } from "react-native-auth0";
 import MyAuthProvider from "../../component/auth/MyAuthProvider";
 
 const HomeScreen = () => {
-  const { user } = useAuth0();
   const dispatch = useDispatch();
   const articles = useSelector((state) => state.articles);
   const filtered = useSelector((state) => state.filtered);
   const isLogged = useSelector((state) => state.logged);
+  const fetchStatus = useSelector((state) => state.articles_fetch);
   const img = useSelector((state) => state.loggedUser.profileImage);
   const [modalVisibility, setModalVisibility] = useState(false);
   const { navigate } = useNavigation();
@@ -30,7 +29,7 @@ const HomeScreen = () => {
     dispatch(getArticles());
   }, []);
 
-  if(!fontsLoaded) return <View style={{ backgroundColor: '#020123' }}></View>
+  if(fetchStatus.status === 'loading' || !fontsLoaded) return <View style={{flex: 1, backgroundColor: '#020123'}}></View>
   return (
     <MyAuthProvider>
       <View style={styles.container}>

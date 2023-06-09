@@ -86,7 +86,7 @@ export const SearchScreen = () => {
                   setSearch('');
                 }}
               >
-                {iconsSearch.cross}
+                {touched ? iconsSearch.cross : iconsSearch.noCross}
               </TouchableOpacity>
             </View>
           </LinearGradient>

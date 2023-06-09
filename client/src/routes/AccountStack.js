@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AccountScreen from '../screens/account/AccountScreen';
 import FavoritesScreen from '../screens/favorites/FavoritesScreen';
 import { useFonts, Arimo_500Medium } from '@expo-google-fonts/arimo';
+import SocialMediaScreen from '../screens/account/userLogged/socialMedia/SocialMediaScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,19 @@ const AccountStack = () => {
       <Stack.Screen
         name='favoritesStack'
         component={FavoritesScreen}
+        options={{
+          headerTintColor: '#f5f5f5',
+          headerStyle: {backgroundColor: '#020123'},
+          headerTitleStyle: { fontFamily: 'Arimo_500Medium', fontSize: 22 },
+          title: 'Me Gusta',
+        }}
+      />
+      <Stack.Screen
+        name='socialMedia'
+        component={SocialMediaScreen}
+        options={{
+          headerShown: false
+        }}
       />
     </Stack.Navigator>
   );
