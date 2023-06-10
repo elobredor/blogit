@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Post } from './posts.schema';
 import { User } from './users.schema';
+import { ReplyComment, ReplyCommentSchema } from './replyComments.schema';
 
 @Schema()
 export class Comment {
@@ -15,7 +16,10 @@ export class Comment {
   userName: string;
 
   @Prop({ required: true })
-  readonly comment: string;
+  profileImage: string;
+
+  @Prop({ required: true })
+  comment: string;
 
   @Prop({ default: Date.now })
   createdAt: Date;
@@ -28,5 +32,8 @@ export class Comment {
 
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }])
   commentLikes: User[];
+
+  @Prop([ReplyCommentSchema])
+  replyComment: ReplyComment[];
 }
 export const CommentSchema = SchemaFactory.createForClass(Comment);

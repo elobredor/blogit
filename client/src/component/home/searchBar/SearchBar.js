@@ -7,7 +7,7 @@ const SearchBar = () => {
     <View style={styles.containerSearch}>
       <TextInput
         style={styles.inputSearch}
-        placeholder="Blogs..."
+        placeholder="  Blogs..."
         placeholderTextColor="white"
       />
     </View>

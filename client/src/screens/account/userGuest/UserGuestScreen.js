@@ -10,7 +10,8 @@ import axios from 'axios';
 
 WebBrowser.maybeCompleteAuthSession();
 
-// http://localhost:4000/api/users/create
+import { useDispatch } from 'react-redux';
+import { logToDb } from '../../../redux/actions';
 
 const UserGuestScreen = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -89,21 +90,10 @@ const UserGuestScreen = () => {
 
   return (
     <View>
-      <Button onPress={handleFakeLogin} title='Log in' />
-      <View>
-        <Button
-          title='Log In With Google'
-          disabled={!request}
-          onPress={() => {
-            prompAsync();
-          }}
-        />
-
-        <Button
-          title='Log out'
-          onPress={async () => await AsyncStorage.removeItem('@user')}
-        />
-      </View>
+      <Button
+        onPress={() => dispatch(logToDb('abcdfg123456'))}
+        title='Log in'
+      />
     </View>
   );
 };

@@ -1,90 +1,195 @@
-import { View, Text, Image, Button, TouchableOpacity } from 'react-native';
-import { styles } from './userLoggedScreen.styles';
-import { useSelector } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux';
-import { toggleLogged } from '../../../redux/actions';
-import { useNavigation } from '@react-navigation/native';
 import {
-  Ionicons,
-  MaterialCommunityIcons,
-  AntDesign,
-} from '@expo/vector-icons';
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  Keyboard,
+  Linking,
+} from 'react-native';
+import { useEffect, useState, useRef } from 'react';
+import styles from './userLoggedScreen.styles';
+import { logOut, logToDb } from '../../../redux/actions';
+import { useSelector, useDispatch } from 'react-redux';
+import { iconsProfile } from '../../../utils/iconOptions';
+import { useNavigation } from '@react-navigation/native';
+import { useAuth0 } from 'react-native-auth0';
+import {
+  useFonts,
+  Arimo_400Regular,
+  Arimo_700Bold,
+} from '@expo-google-fonts/arimo';
+import { Nunito_400Regular } from '@expo-google-fonts/nunito';
+import socialMediaIconize from '../../../utils/socialMediaIconize';
 
 const UserLoggedScreen = () => {
-  const userInfo = useSelector((state) => state.users);
+  const aboutInput = useRef(null);
+  const token = useSelector((state) => state.token);
+  let [loadedFonts] = useFonts({
+    Arimo_400Regular,
+    Nunito_400Regular,
+    Arimo_700Bold,
+  });
   const dispatch = useDispatch();
+  const [about, setAbout] = useState('');
+  const [withAbout, setWithAbout] = useState(false);
+  const loggedUser = useSelector((state) => state.loggedUser);
   const navigation = useNavigation();
-  console.log(userInfo);
+  const { clearSession } = useAuth0();
 
-  const logout = async () => {
-    await AsyncStorage.removeItem('@user');
-    dispatch(toggleLogged());
+  useEffect(() => {
+    loggedUser.about && setWithAbout(true);
+  }, []);
+
+  const handleAboutChange = (text) => {
+    setAbout(text);
   };
 
+  const handleAboutSubmit = () => {
+    const aboutBody = {
+      about,
+    };
+    fetch(
+      `https://blogit.up.railway.app/api/users/update/${loggedUser.userId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(aboutBody),
+      }
+    )
+      .then((res) => {
+        if (!res.ok) throw new Error('Something went wrong');
+        dispatch(logToDb(loggedUser.userId));
+        setWithAbout(true);
+      })
+      .catch((error) => console.error(error));
+    setAbout('');
+    Keyboard.dismiss();
+  };
+
+  const handleLogOut = async () => {
+    await clearSession({ customScheme: 'blogit' });
+    navigation.goBack();
+    dispatch(logOut());
+  };
+
+  const handleEditAbout = () => {
+    setAbout(loggedUser.about);
+    setWithAbout(false);
+  };
+
+  useEffect(() => {
+    if (aboutInput.current) {
+      setTimeout(() => {
+        aboutInput.current.focus();
+      }, 10);
+    }
+  }, [withAbout]);
+
+  if (!loadedFonts) return null;
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-        <View>
-          {userInfo?.picture && (
-            <Image source={{ uri: userInfo?.picture }} style={styles.avatar} />
-          )}
-        </View>
-        <View>
-          <Text>Email: {userInfo?.email}</Text>
-          <Text>Name: {userInfo?.name}</Text>
-        </View>
-      </View>
-
-      <View style={styles.boxBtns}>
-        <View style={styles.btnBox}>
-          <AntDesign name='hearto' size={24} color='black' />
-          <Button color='black' title='Me Gusta' onPress={() => {}} />
-        </View>
-
-        <View style={styles.btnBox}>
-          <MaterialCommunityIcons
-            color='black'
-            size={24}
-            name='bookmark-outline'
-          />
-          <Button
-            color='black'
-            title='Guardados'
-            onPress={() => navigation.navigate('savedTab')}
-          />
-        </View>
-
-        <View style={styles.btnBox}>
-          <Ionicons name='power' size={24} color='red' />
-          <Button title='Cerrar Sesión' onPress={logout} color='red' />
-        </View>
-        <View style={styles.btnBox}>
+      <Image
+        source={{ uri: loggedUser.profileImage }}
+        style={styles.profileImage}
+      />
+      <Text
+        style={styles.userName}
+      >{`${loggedUser.userName[0].toUpperCase()}${loggedUser.userName.slice(
+        1
+      )}`}</Text>
+      <View style={{ justifyContent: 'center', alignItems: 'center', gap: 10 }}>
+        {loggedUser.socialNetwork1 && (
           <TouchableOpacity
-            onPress={logout}
-            activeOpacity={0.7}
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: 10,
-              backgroundColor: 'white',
-              paddingHorizontal: 30,
-              paddingVertical: 8,
-              borderRadius: 50,
-              elevation: 5,
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.25,
-              shadowRadius: 3,
-            }}
+            onPress={() => Linking.openURL(loggedUser.socialNetwork1)}
           >
-            <Ionicons name='power' size={24} color='red' />
-            <Text style={{ color: 'red', fontSize: 16, fontWeight: '600' }}>
-              Cerrar Sesión
-            </Text>
+            {socialMediaIconize(loggedUser.socialNetwork1)}
           </TouchableOpacity>
+        )}
+        {loggedUser.socialNetwork2 && (
+          <TouchableOpacity
+            onPress={() => Linking.openURL(loggedUser.socialNetwork2)}
+          >
+            {socialMediaIconize(loggedUser.socialNetwork2)}
+          </TouchableOpacity>
+        )}
+      </View>
+      {loggedUser.about && withAbout === true && (
+        <View style={styles.aboutContainer}>
+          <View style={styles.aboutSubContainer}>
+            <Text style={{ color: '#f5f5f5' }}>{loggedUser.about}</Text>
+            <TouchableOpacity onPress={handleEditAbout}>
+              {iconsProfile.edit}
+            </TouchableOpacity>
+          </View>
         </View>
+      )}
+      <View style={styles.subContainer}>
+        {!withAbout && (
+          <View style={styles.inputContainer}>
+            <TextInput
+              ref={aboutInput}
+              placeholderTextColor={'#f5f5f5'}
+              placeholder='Habla de tí...'
+              multiline
+              style={styles.textInput}
+              value={about}
+              onChangeText={handleAboutChange}
+            />
+            <TouchableOpacity onPress={handleAboutSubmit}>
+              {about.length ? (
+                <Image
+                  source={require('../../../../assets/send-active.png')}
+                  style={{
+                    width: 22,
+                    height: 22,
+                    marginTop: 5,
+                    marginRight: 5,
+                  }}
+                />
+              ) : (
+                <Image
+                  source={require('../../../../assets/send-inactive.png')}
+                  style={{
+                    width: 22,
+                    height: 22,
+                    marginTop: 5,
+                    marginRight: 5,
+                  }}
+                />
+              )}
+            </TouchableOpacity>
+          </View>
+        )}
+        <TouchableOpacity onPress={() => navigation.navigate('socialMedia')}>
+          <View style={styles.links}>
+            {iconsProfile.plus}
+            <Text style={styles.linksText}>Agrega tus enlaces</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('favoritesStack', loggedUser._id)}
+        >
+          <View style={styles.links}>
+            {iconsProfile.heart}
+            <Text style={styles.linksText}>Me gusta</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('savedTab')}>
+          <View style={styles.links}>
+            {iconsProfile.saved}
+            <Text style={styles.linksText}>Guardados</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleLogOut}>
+          <View style={styles.links}>
+            {iconsProfile.logout}
+            <Text style={styles.linksText}>Cerrar Sesión</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

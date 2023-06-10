@@ -15,8 +15,8 @@ export class Post {
   @Prop({ required: true })
   content: string;
 
-  @Prop([String])
-  images: string[];
+  @Prop({ type: String })
+  images: string;
 
   @Prop({ default: Date.now })
   createdAt: Date;

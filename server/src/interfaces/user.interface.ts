@@ -1,11 +1,23 @@
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
+import { ROLES } from 'src/constants/roles';
 
 export interface UserInterface extends Document {
-  readonly userId: string;
-  readonly userName: string;
-  readonly email: string;
-  readonly profileImage: string;
-  readonly role: string;
-  readonly status: number;
-  readonly createdAt: Date;
+  userId: string;
+  userName: string;
+  email: string;
+  profileImage: string;
+  role: ROLES;
+  status: number;
+  createdAt: Date;
+  about?: string;
+  socialNetwork1?: string;
+  socialNetwork2?: string;
+  saved: SavedPost[];
+}
+
+interface SavedPost {
+  _id: string;
+  description: string;
+  title: string;
+  posts: { postId: string; images: string; _id: mongoose.Types.ObjectId }[];
 }

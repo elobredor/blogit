@@ -1,13 +1,16 @@
 import { Document } from 'mongoose';
+import { ReplyCommentInterface } from './replyComment.interface';
 
 export interface CommentInterface extends Document {
-  readonly commentId: string;
-  readonly postId: string;
-  readonly userId: string;
-  readonly userName: string;
-  readonly comment: string;
+  commentId: string;
+  postId: string;
+  userId: string;
+  userName: string;
+  profileImage: string;
+  comment: string;
   commentLikes: string[];
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
-  readonly status: number;
+  createdAt: Date;
+  updatedAt: Date;
+  status: number;
+  replyComment: ReplyCommentInterface[];
 }

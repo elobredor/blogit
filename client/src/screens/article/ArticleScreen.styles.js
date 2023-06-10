@@ -1,50 +1,98 @@
 import { StyleSheet } from 'react-native';
 
+export const tagsStyles = {
+  h1: {
+    fontSize: '32px',
+    fontWeight: 'normal',
+    color: '#f5f5f5',
+    fontFamily: 'Arimo_700Bold',
+  },
+  h2: {
+    fontSize: '26px',
+    fontWeight: 'normal',
+    color: '#f5f5f5',
+    fontFamily: 'Nunito_500Medium',
+  },
+  p: {
+    lineHeight: '2.4rem',
+    fontSize: '22px',
+    color: '#f5f5f5',
+    fontFamily: 'Nunito_500Medium',
+  },
+  li: {
+    lineHeight: '2.4rem',
+    fontSize: '22px',
+    color: '#f5f5f5'
+  },
+  code: {
+    fontSize: '15px'
+  }
+};
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ccc',
-    paddingHorizontal: '3%'
+    backgroundColor: '#020123',
+    paddingHorizontal: 17,
   },
   headerView: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    marginTop: '3%'
+    backgroundColor: '#020123',
+    borderBottomWidth: 1,
+    borderBottomColor: '#102962',
+    paddingVertical: '2%',
   },
   authorView: {
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+  },
+  authorImage: {
+    marginTop: 6,
+    width: 40,
+    height: 40,
+    borderRadius: 30,
+    marginHorizontal: 17,
   },
   authorName: {
-    fontSize: 22,
+    fontFamily: 'Arimo_700Bold',
+    fontSize: 18,
+    color: '#f5f5f5',
   },
   timeDate: {
-    fontSize: 10
+    fontSize: 10,
+    color: '#f5f5f5',
   },
   icons: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    gap: 20,
+    paddingRight: 10,
+  },
+  iconCounters: {
+    color: '#f5f5f5',
+    marginTop: 5
   },
   title: {
     fontSize: 25,
-    marginBottom: '5%'
+    marginBottom: '5%',
   },
   imageView: {
     height: 180,
-    marginVertical: '5%'
+    marginVertical: '5%',
   },
   imageIcon: {
     alignItems: 'flex-end',
-    padding: '2%'
+    padding: '2%',
   },
   content: {
-    marginBottom: '10%'
+    marginBottom: '10%',
   },
   footModals: {
     position: 'absolute',
     top: '70%',
     bottom: '8%',
-    right: '5%' ,
+    right: '5%',
     padding: '3%',
     alignItems: 'center',
     justifyContent: 'flex-end'

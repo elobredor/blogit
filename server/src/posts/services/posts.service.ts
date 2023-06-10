@@ -1,17 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { PostsInterface } from 'src/interfaces/post.interface';
-import { CreatePostsDTO } from '../dto/posts.dto';
+import { CreatePostsDTO, CreateUpdatePostDTO } from '../dto/posts.dto';
 import { ErrorManager } from 'src/utils/error.manager';
 import { BlogInterface } from 'src/interfaces/blog.interface';
 import { CreatePostsLikesDTO } from '../dto/postLikes.dto';
+import { NotificationsService } from 'src/notification/services/notifications.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     @InjectModel('posts') private readonly postsModel: Model<PostsInterface>,
     @InjectModel('blogs') private readonly blogsModel: Model<BlogInterface>,
+    private readonly notificationsService: NotificationsService,
   ) {}
   //This function creates a new post in a database using the provided data and returns the created post.
   public async createPost(body: CreatePostsDTO): Promise<PostsInterface> {
@@ -35,20 +37,120 @@ export class PostsService {
   }
   //This function returns all the posts in a database ordered by the date of creation.
   public async getAllPosts(page: number): Promise<PostsInterface[]> {
-    //const page: number = 1;
-    const limit: number = 10;
+    const limit: number = 100;
     const skip: number = (page - 1) * limit;
-    const sortBy: object = { createdAt: -1 };
     try {
-      return await this.postsModel.find({}, null, { skip, limit, sort: sortBy });
+      const posts = await this.postsModel
+        .aggregate([
+          {
+            $match: {
+              status: 1,
+            },
+          },
+          {
+            $unwind: '$status',
+          },
+          {
+            $lookup: {
+              from: 'blogs',
+              localField: 'blogId',
+              foreignField: '_id',
+              as: 'blogs',
+            },
+          },
+          {
+            $unwind: '$blogs',
+          },
+          {
+            $sort: {
+              createdAt: -1,
+            },
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'blogs.userId',
+              foreignField: '_id',
+              as: 'users',
+            },
+          },
+          {
+            $unwind: '$users',
+          },
+          {
+            $group: {
+              _id: '$_id',
+              userId: { $first: '$users.userId' },
+              userName: { $first: '$users.userName' },
+              profileImage: { $first: '$users.profileImage' },
+              blogId: { $first: '$blogId' },
+              category: { $first: '$blogs.category' },
+              title: { $first: '$title' },
+              comments: { $first: '$comments' },
+              images: { $first: '$images' },
+              postLikes: { $first: '$postLikes' },
+              createdAt: { $first: '$createdAt' },
+            },
+          },
+        ])
+        .skip(skip)
+        .limit(limit);
+      return posts;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
   //This function returns a post with the provided ID.
-  public async getPostById(postId: string): Promise<PostsInterface> {
+  public async getPostById(postId: string): Promise<PostsInterface[]> {
     try {
-      const post = await this.postsModel.findById(postId);
+      //transform the postId to a mongoose ObjectId
+      const postObjectId = new Types.ObjectId(postId);
+
+      const post = await this.postsModel.aggregate([
+        {
+          $match: {
+            _id: postObjectId,
+          },
+        },
+        {
+          $lookup: {
+            from: 'blogs',
+            localField: 'blogId',
+            foreignField: '_id',
+            as: 'blogs',
+          },
+        },
+        {
+          $unwind: '$blogs',
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'blogs.userId',
+            foreignField: '_id',
+            as: 'users',
+          },
+        },
+        {
+          $unwind: '$users',
+        },
+        {
+          $group: {
+            _id: '$_id',
+            userId: { $first: '$users.userId' },
+            userName: { $first: '$users.userName' },
+            profileImage: { $first: '$users.profileImage' },
+            title: { $first: '$title' },
+            content: { $first: '$content' },
+            images: { $first: '$images' },
+            status: { $first: '$status' },
+            postLikes: { $first: '$postLikes' },
+            createdAt: { $first: '$createdAt' },
+            comments: { $first: '$comments' },
+            category: { $first: '$blogs.category' },
+          },
+        },
+      ]);
       //If the post is not found, throw an error.
       if (!post) {
         throw new ErrorManager({
@@ -56,7 +158,8 @@ export class PostsService {
           message: `Post with ID: ${postId} not found`,
         });
       }
-      return post;
+      console.log(post[0]);
+      return post[0];
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
@@ -77,11 +180,193 @@ export class PostsService {
       if (!post.postLikes.includes(userId)) {
         post.postLikes.push(userId);
         await post.save();
+
+        //create a notification for the user that liked the post
+        await this.notificationsService.createNotification({
+          postId: postId,
+          content: 'le gusta tu artículo',
+          recipient: '',
+          origin: userId,
+          notificationType: 'like',
+        });
+
         return;
       } else {
         await this.postsModel.findByIdAndUpdate({ _id: postId }, { $pull: { postLikes: userId } });
         return;
       }
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //Get posts by keyword
+  public async getPostsByKeyword(keyword: string): Promise<PostsInterface[]> {
+    try {
+      //find posts by title and keyword
+      const posts = await this.postsModel.aggregate([
+        {
+          $match: {
+            title: { $regex: keyword, $options: 'i' },
+          },
+        },
+        {
+          $unwind: '$title',
+        },
+        {
+          $lookup: {
+            from: 'blogs',
+            localField: 'blogId',
+            foreignField: '_id',
+            as: 'blogs',
+          },
+        },
+        {
+          $unwind: '$blogs',
+        },
+        {
+          $sort: {
+            createdAt: -1,
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'blogs.userId',
+            foreignField: '_id',
+            as: 'users',
+          },
+        },
+        {
+          $unwind: '$users',
+        },
+        {
+          $group: {
+            _id: '$_id',
+            userId: { $first: '$users.userId' },
+            userName: { $first: '$users.userName' },
+            profileImage: { $first: '$users.profileImage' },
+            blogId: { $first: '$blogId' },
+            category: { $first: '$blogs.category' },
+            title: { $first: '$title' },
+            comments: { $first: '$comments' },
+            images: { $first: '$images' },
+            postLikes: { $first: '$postLikes' },
+            createdAt: { $first: '$createdAt' },
+          },
+        },
+      ]);
+
+      return posts;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //function change status of post to 0
+  public async changeStatus(postId: string): Promise<PostsInterface> {
+    try {
+      const post = await this.postsModel.findOneAndUpdate({ _id: postId }, { status: 0 });
+      //If the post is not found, throw an error.
+      if (!post) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Post with ID: ${postId} not found`,
+        });
+      }
+      return;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //function change status of post to 1 (enable)
+  public async enablePost(postId: string): Promise<PostsInterface> {
+    try {
+      const post = await this.postsModel.findOneAndUpdate({ _id: postId }, { status: 1 });
+      //If the post is not found, throw an error.
+      if (!post) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Post with ID: ${postId} not found`,
+        });
+      }
+      return;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  //function to update post
+  public async updatePost(postId: string, body: CreateUpdatePostDTO): Promise<PostsInterface> {
+    try {
+      const post = await this.postsModel.findByIdAndUpdate({ _id: postId }, body);
+      //If the post is not found, throw an error.
+      if (!post) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `Post with ID: ${postId} not found`,
+        });
+      }
+      return;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  //function to get all liked posts of a user
+  public async getLikedPosts(user_Id: string): Promise<PostsInterface[]> {
+    try {
+      //transform the postId to a mongoose ObjectId
+      const userObjectId = new Types.ObjectId(user_Id);
+
+      const posts = await this.postsModel.aggregate([
+        {
+          $match: {
+            postLikes: { $in: [userObjectId] },
+          },
+        },
+        {
+          $lookup: {
+            from: 'blogs',
+            localField: 'blogId',
+            foreignField: '_id',
+            as: 'blogs',
+          },
+        },
+        {
+          $unwind: '$blogs',
+        },
+        {
+          $sort: {
+            createdAt: -1,
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'blogs.userId',
+            foreignField: '_id',
+            as: 'users',
+          },
+        },
+        {
+          $unwind: '$users',
+        },
+        {
+          $group: {
+            _id: '$_id',
+            userId: { $first: '$users.userId' },
+            userName: { $first: '$users.userName' },
+            profileImage: { $first: '$users.profileImage' },
+            blogId: { $first: '$blogId' },
+            category: { $first: '$blogs.category' },
+            title: { $first: '$title' },
+            comments: { $first: '$comments' },
+            images: { $first: '$images' },
+            postLikes: { $first: '$postLikes' },
+            createdAt: { $first: '$createdAt' },
+          },
+        },
+      ]);
+
+      return posts;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

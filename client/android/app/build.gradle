@@ -113,9 +113,12 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.notcountry.blogit'
+    namespace 'com.zoranbow.client'
     defaultConfig {
-        applicationId 'com.notcountry.blogit'
+// @generated begin react-native-auth0-manifest-placeholder - expo prebuild (DO NOT MODIFY) sync-f98a375edd01e21621c546ea62ba99c0c419695e
+manifestPlaceholders = [auth0Domain: "blog-it.us.auth0.com", auth0Scheme: "blogit"]
+// @generated end react-native-auth0-manifest-placeholder
+        applicationId 'com.zoranbow.client'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

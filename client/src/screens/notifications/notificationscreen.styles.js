@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#020123',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -22,17 +23,18 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: 'gray',
+    borderColor: '#f5f5f5',
     padding: 10,
   },
   title: {
+    color: '#f5f5f5',
     fontSize: 18,
     padding: 10,
-    fontWeight: '300',
+    fontFamily: 'Arimo_700Bold'
   },
   divider: {
     height: 1,
-    backgroundColor: 'gray',
+    backgroundColor: '#f5f5f5',
     marginBottom: 20,
   },
   box: {
@@ -40,11 +42,28 @@ export const styles = StyleSheet.create({
     gap: 20,
     alignSelf: 'center',
   },
+  notificationContainer: {
+    marginBottom: 20
+  },
   description: {
+    color: '#f5f5f5',
     fontSize: 14,
     marginBottom: 5,
+    fontFamily: 'Nunito_400Regular',
   },
-  span: {
-    fontWeight: '600',
+  user: {
+    color: '#f5f5f5',
+    fontSize: 14,
+    marginBottom: 5,
+    fontFamily: 'Arimo_700Bold',
   },
+  remitent: {
+    flexDirection: 'row',
+  },
+  avatar: {
+    width: 20,
+    height: 20,
+    borderRadius: 20,
+    marginRight: 5
+  }
 });
