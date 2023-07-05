@@ -2,11 +2,21 @@ import { Modal, View, Text, TouchableOpacity, TextInput } from "react-native";
 import { styles } from "./createBoardStyles";
 import { iconsArticle } from "../../../utils/iconOptions";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { logToDb } from "../../../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { updateSaved } from "../../../redux/actions";
 import { MY_IP } from "react-native-dotenv";
+import { useFonts, Arimo_400Regular, Arimo_500Medium } from '@expo-google-fonts/arimo';
+import { Nunito_400Regular } from '@expo-google-fonts/nunito';
 
-const CreateBoard = ({ showCreate, setShowCreate, data }) => {
+
+const CreateBoard = ({ showCreate, setShowCreate, data, setVisible }) => {
+  const token = useSelector(state => state.token);
+  let [fontsLoaded] = useFonts({
+    Arimo_400Regular,
+    Nunito_400Regular,
+    Arimo_500Medium
+  });
+
   const dispacth = useDispatch();
   const [title, setTitle] = useState("");
   const [descri, setDescri] = useState("");
@@ -21,7 +31,7 @@ const CreateBoard = ({ showCreate, setShowCreate, data }) => {
   const handleSubmit = () => {
     if (title !== "") {
       if (descri.length > 50 || title.length > 30) {
-        console.log("Este espacio no es para escribir un nuevo libro sagrado."); // modal de aviso o texto debajo del respectivo input
+        // modal de aviso o texto debajo del respectivo input
       } else {
         const bodyBoard = {
           postId: data.postId,
@@ -31,30 +41,34 @@ const CreateBoard = ({ showCreate, setShowCreate, data }) => {
             ? descri
             : "Aquí puedes añadir una breve descripción",
         };
-        fetch(`http://${MY_IP}:4000/api/users/saved/${data.userId}`, {
+        fetch(`https://blogit.up.railway.app/api/users/saved/${data.userId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify(bodyBoard),
         })
           .then((res) => {
             if (res.ok) {
               console.log(`la carpeta ${title} ha sido creada exitosamente`);
-              dispacth(logToDb(data.userId));
+              dispacth(updateSaved(data.userId));
+              setVisible(false);
               setShowCreate(false);
             } else {
               throw new Error("something went wrong");
             }
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.error(err));
       }
     } else {
       console.log("Olvidaste poner el nombre de la carpeta");
     }
   };
+
+  if (!fontsLoaded) return null;
   return (
-    <Modal visible={showCreate} transparent animationType="fade">
+    <Modal visible={showCreate} transparent animationType="slide">
       <View style={styles.modalBg}>
         <View style={styles.modalContainer}>
           {/* See Later Board */}
@@ -68,13 +82,14 @@ const CreateBoard = ({ showCreate, setShowCreate, data }) => {
 
             <Text
               onPress={handleSubmit}
-              style={{ color: "#3B79BE", fontSize: 22 }}
+              style={{ color: "#37B4A1", fontSize: 20, marginRight: 10, fontFamily: 'Arimo_500Medium' }}
             >
               Crear
             </Text>
           </View>
 
           <TextInput
+            autoFocus
             style={title.length < 30 ? styles.input : styles.inputError}
             placeholder="Nombre de la coleccion"
             placeholderTextColor="white"

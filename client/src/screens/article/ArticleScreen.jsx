@@ -16,14 +16,19 @@ import { useNavigation } from '@react-navigation/native';
 import RenderHtml, { defaultSystemFonts } from 'react-native-render-html';
 import { formatDate, setReadingTime } from '../../utils/formatData';
 import { useSelector, useDispatch } from 'react-redux';
-import { getDetails, setArticleLike, getArticles, logToDb } from '../../redux/actions';
+// import { getDetails, setArticleLike, getArticles, updateSaved } from '../../redux/actions';
+import { getDetails, setArticleLike, getArticles, updateSaved } from '../../redux/actions';
 import { useFonts, Nunito_500Medium, Nunito_700Bold } from '@expo-google-fonts/nunito';
 import { Arimo_700Bold } from '@expo-google-fonts/arimo';
+import { OpenSans_500Medium } from '@expo-google-fonts/open-sans';
+import { Raleway_700Bold } from '@expo-google-fonts/raleway';
 const systemFonts = [
   ...defaultSystemFonts,
   'Nunito_500Medium',
   'Nunito_700Bold',
-  'Arimo_700Bold'
+  'Arimo_700Bold',
+  'OpenSans_500Medium',
+  'Raleway_700Bold'
 ];
 //SAVED_IMPORTS
 import ModalSave from '../../component/home/ModalSave/ModalSave.js';
@@ -32,7 +37,9 @@ export default function ArticleScreen({ route }) {
   let [fontsLoaded] = useFonts({
     Nunito_500Medium,
     Nunito_700Bold,
-    Arimo_700Bold
+    Arimo_700Bold,
+    OpenSans_500Medium,
+    Raleway_700Bold
   });
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -44,6 +51,7 @@ export default function ArticleScreen({ route }) {
   const loggedUser = useSelector((state) => {
     return state.logged ? state.loggedUser : null;
   });
+  const token = useSelector(state => state.token);
   //SAVED_STATES
   const [alert, setAlert] = useState(false);
   const data = useSelector((state) => {
@@ -86,10 +94,11 @@ export default function ArticleScreen({ route }) {
       setModalVisibility(true);
     } else {
       const body = { userId: loggedUser._id };
-      fetch(`http://${MY_IP}:4000/api/posts/like/${article._id}`, {
+      fetch(`https://blogit.up.railway.app/api/posts/like/${article._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(body),
       }).then((res) => {
@@ -110,16 +119,17 @@ export default function ArticleScreen({ route }) {
         images: article.images,
       };
 
-      fetch(`http://${MY_IP}:4000/api/users/saved/${loggedUser.userId}`, {
+      fetch(`https://blogit.up.railway.app/api/users/saved/${loggedUser.userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(savedBody),
       })
         .then((res) => {
           if (res.ok) {
-            dispatch(logToDb(loggedUser.userId));
+            dispatch(updateSaved(loggedUser.userId));
             setAlert(true); //Mostrar el modal alert
             setSaved(true); // Rellenar el ícono
             console.log("Se ha agregado a Leer mas tarde");
@@ -148,7 +158,7 @@ export default function ArticleScreen({ route }) {
       <View
         style={{
           paddingTop: 150,
-          backgroundColor: '#090841',
+          backgroundColor: '#020123',
           alignItems: 'center',
           flex: 1,
         }}
@@ -159,7 +169,7 @@ export default function ArticleScreen({ route }) {
     return (
       <View
         style={{
-          backgroundColor: '#090841',
+          backgroundColor: '#020123',
           justifyContent: 'center',
           alignItems: 'center',
           flex: 1,
@@ -188,16 +198,17 @@ export default function ArticleScreen({ route }) {
         title: folder,
       };
   
-      fetch(`http://${MY_IP}:4000/api/users/delete-saved/${loggedUser.userId}`, {
+      fetch(`https://blogit.up.railway.app/api/users/delete-saved/${loggedUser.userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(deleteBody),
       })
         .then((res) => {
           if (res.ok) {
-            dispatch(logToDb(loggedUser.userId));
+            dispatch(updateSaved(loggedUser.userId));
             setSaved(false); //Vaciar el ícono
             console.log("fue eliminado correctamente de " + folder);
           } else {
@@ -252,7 +263,7 @@ export default function ArticleScreen({ route }) {
           <View style={styles.imageView}>
             <ImageBackground
               source={{ uri: article.images }}
-              imageStyle={{ borderRadius: 10, height: 156 }}
+              imageStyle={{ borderRadius: 10, height: 180 }}
             ></ImageBackground>
           </View>
           <RenderHtml

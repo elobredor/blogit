@@ -15,37 +15,51 @@ const styles = StyleSheet.create({
   },
   userName: {
     color: '#f5f5f5',
-    fontSize: 22,
-    fontWeight: 'bold'
+    fontSize: 20,
+    fontFamily: 'Arimo_700Bold'
   },
   subContainer: {
-    marginTop: 60,
     width: '70%',
+    gap: 10
+  },
+  aboutContainer: {
+    width: '60%',
+    marginBottom: 30
+  },
+  aboutSubContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     gap: 10
   },
   inputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-start',
     width: '85%',
-    borderWidth: 1,
-    borderColor: '#f5f5f5',
+    height: 120,
     marginBottom: 30,
+    backgroundColor: '#3A3969',
+    borderRadius: 12
   },
   textInput: {
     width: '85%',
-    // borderWidth: 1,
-    // borderColor: '#f5f5f5',
-    // marginBottom: 30,
     color: '#f5f5f5',
+    fontFamily: 'Nunito_400Regular',
+    fontSize: 16,
+    height: 120,
+    paddingTop: 5,
+    textAlignVertical: 'top',
     paddingHorizontal: 10,
   },
   links: {
     flexDirection: 'row',
-    gap: 10
+    gap: 10,
+    marginVertical: 5,
   },
   linksText: {
     color: '#f5f5f5',
-    fontSize: 20
+    fontSize: 16,
+    fontFamily: 'Nunito_400Regular',
   }
 });
 

@@ -1,30 +1,196 @@
-import { useState, useEffect } from "react";
-import { View, FlatList } from "react-native";
+import { useState } from "react";
+import {
+  View,
+  FlatList,
+  Text,
+  Button,
+  TextInput,
+  Keyboard,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { styles } from "./savedScreen.styles";
-import { ModalLogin } from "../../component/shared/ModalLogin";
 import BoardSaved from "../../component/saved/BoardSaved.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ModalLogin } from "../../component/shared/ModalLogin";
+import { updateSaved } from "../../redux/actions";
+import { LinearGradient } from "expo-linear-gradient";
+import { useFonts, Arimo_400Regular, Arimo_700Bold } from '@expo-google-fonts/arimo';
+import { Nunito_400Regular } from '@expo-google-fonts/nunito';
+import { useAuth0 } from "react-native-auth0";
+
 const SavedScreen = () => {
+  const { authorize } = useAuth0();
+  const initialState = {
+    title: null,
+    folderId: null,
+  };
+  const [data, setData] = useState(initialState); // nombre del folder
+  const userId = useSelector((state) => state.loggedUser.userId);
+  const dispatch = useDispatch();
   const [modalVisibility, setModalVisibility] = useState(false);
   const hasLogged = useSelector((state) =>
     state.logged ? state.loggedUser : false
   );
+  const token = useSelector(state => state.token);
+  let [loadedFonts] = useFonts({
+    Arimo_400Regular,
+    Nunito_400Regular,
+  });
 
-  useEffect(() => {
-    if (!hasLogged && !modalVisibility) setModalVisibility(true);
-  }, [hasLogged, modalVisibility]);
+  const ContainerEdit = () => {
+    const [title, setTitle] = useState(data.title);
+    const handleChange = (text) => {
+      setTitle(text);
+    };
 
+    const handleSubmit = () => {
+      const bodyEdit = {
+        title: title,
+      };
+      fetch(`https://blogit.up.railway.app/api/users/updateSaved/${data.folderId}`, {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(bodyEdit),
+      })
+        .then((res) => {
+          if (res.ok) {
+            dispatch(updateSaved(userId));
+            console.log("Folder has been updated successfully");
+          } else throw new Error("No response from server");
+        })
+        .catch((err) => console.error(err));
+      setData(initialState);
+    };
+
+    if (!loadedFonts) return null;
+    if (data.title !== null) {
+      return (
+        <View style={styles.containerEdit}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "95%",
+            }}
+          >
+            <Text style={{ color: "white", fontSize: 16, fontFamily: 'Arimo_400Regular' }}>
+              Estás renombrando la carpeta:
+            </Text>
+
+            <Text
+              onPress={() => {
+                Keyboard.dismiss();
+                setData(initialState);
+              }}
+              style={{ fontSize: 20, color: "#f5f5f5" }}
+            >
+              x
+            </Text>
+          </View>
+
+          <View
+            style={{ height: 1, width: "102%", backgroundColor: "#302962" }}
+          ></View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "95%",
+              marginVertical: 5,
+            }}
+          >
+            <LinearGradient
+              colors={["#34aba6", "#131af8", "#9344ca"]}
+              start={[0, 0]}
+              end={[1, 0]}
+              locations={[0, 0.5, 1]}
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 10,
+                maxWidth: "80%",
+              }}
+            >
+              <TextInput
+                value={title}
+                onChangeText={handleChange}
+                style={styles.inputEdit}
+                autoFocus
+              />
+            </LinearGradient>
+
+            <TouchableOpacity onPress={handleSubmit}>
+              <Image
+                source={require("../../../assets/send-active.png")}
+                style={{ width: 40, height: 40 }}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  const handleLogin = async () => {
+    try {
+      await authorize(
+        { scope: 'openid profile email' },
+        { customScheme: 'blogit' }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (hasLogged && !hasLogged.saved.length) return (
+    <View style={{ flex: 1, backgroundColor: '#020123', alignItems: 'center', paddingTop: 150 }}>
+      <Text style={{ fontFamily: 'Arimo_400Regular', color: '#f5f5f5', fontSize: 18 }}>Aquí aparecerán tus carpetas</Text>
+      <Text style={{ fontFamily: 'Arimo_400Regular', color: '#f5f5f5', fontSize: 18 }}>cuando agregues una {'\n'}</Text>
+      <Text style={{ fontSize: 25 }}>🙃</Text>
+    </View>
+  );
   return (
     <View style={styles.savedContainer}>
       {hasLogged !== false ? (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item._id.toString()}
-          data={hasLogged.saved}
-          renderItem={({ item }) => <BoardSaved item={item} />}
-        />
+        <>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item) => item._id.toString()}
+            data={hasLogged.saved}
+            renderItem={({ item }) => (
+              <BoardSaved item={item} setData={setData} />
+            )}
+          />
+
+          <ContainerEdit />
+        </>
       ) : (
-        <View>
+        //NO LOGIN
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            width: "90%",
+            gap: 10,
+          }}
+        >
+          <Text style={{ color: "#f5f5f5", fontSize: 20, textAlign: "center", fontFamily: 'Arimo_400Regular' }}>
+            Para guardar artículos aquí {'\n'} primero debes loguearte
+          </Text>
+          <Button
+            title="Log In"
+            onPress={handleLogin}
+          />
+
           <ModalLogin
             modalVisibility={modalVisibility}
             setModalVisibility={setModalVisibility}

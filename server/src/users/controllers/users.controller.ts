@@ -86,6 +86,7 @@ export class UsersController {
   }
 
   //method to update savedPosts
+  @Roles('BASIC')
   @Put('updateSaved/:savedId')
   public async updateSaved(
     @Res() response: Response,

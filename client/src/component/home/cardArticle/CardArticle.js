@@ -11,11 +11,11 @@ import { styles } from "./cardArticleStyles";
 import { iconsCard } from "client/src/utils/iconOptions.js";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
-import { logToDb, setArticleLike2 } from "../../../redux/actions";
+import { setArticleLike2, updateSaved } from "../../../redux/actions";
 import { MY_IP } from "react-native-dotenv";
 import ModalSave from "../ModalSave/ModalSave";
 import { LinearGradient } from "expo-linear-gradient";
-import { useFonts, Arimo_700Bold } from '@expo-google-fonts/arimo';
+import { useFonts, Arimo_700Bold } from "@expo-google-fonts/arimo";
 
 const CardArticle = ({ item, setModalVisibility }) => {
   let [fontsLoaded] = useFonts({ Arimo_700Bold });
@@ -25,7 +25,17 @@ const CardArticle = ({ item, setModalVisibility }) => {
   const hasLogged = useSelector((state) =>
     state.logged ? state.loggedUser : false
   );
+  const token = useSelector(state => state.token);
   const dispatch = useDispatch();
+  //data importante para los modales de creacion de tableros
+  const data = useSelector((state) => {
+    return {
+      userId: state.loggedUser.userId,
+      postId: item._id,
+      images: item.images,
+      saved: state.loggedUser.saved,
+    };
+  });
 
   const navigation = useNavigation();
 
@@ -42,11 +52,11 @@ const CardArticle = ({ item, setModalVisibility }) => {
     const favoriteBody = {
       userId: hasLogged._id,
     };
-
-    fetch(`http://${MY_IP}:4000/api/posts/like/${item._id}`, {
+    fetch(`https://blogit.up.railway.app/api/posts/like/${item._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(favoriteBody),
     })
@@ -54,7 +64,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
         if (res.ok) {
           dispatch(setArticleLike2(hasLogged._id, item._id));
         } else {
-          throw new Error("ha habido un error");
+          throw new Error("Ha habido un error");
         }
       })
       .catch((err) => console.error(err));
@@ -76,17 +86,17 @@ const CardArticle = ({ item, setModalVisibility }) => {
         title: "Leer más tarde",
         images: item.images,
       };
-
-      fetch(`http://${MY_IP}:4000/api/users/saved/${hasLogged.userId}`, {
+      fetch(`https://blogit.up.railway.app/api/users/saved/${hasLogged.userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(savedBody),
       })
         .then((res) => {
           if (res.ok) {
-            dispatch(logToDb(hasLogged.userId));
+            dispatch(updateSaved(hasLogged.userId));
             setAlert(true); //Mostrar el modal alert
             setSaved(true); // Rellenar el ícono
             console.log("Se ha agregado a Leer mas tarde");
@@ -99,6 +109,7 @@ const CardArticle = ({ item, setModalVisibility }) => {
       deleteSaved(item._id);
     }
   };
+
   const getFolderName = (postId) => {
     let folderName = null;
     hasLogged.saved.forEach((folder) => {
@@ -117,16 +128,17 @@ const CardArticle = ({ item, setModalVisibility }) => {
       title: folder,
     };
 
-    fetch(`http://${MY_IP}:4000/api/users/delete-saved/${hasLogged.userId}`, {
+    fetch(`https://blogit.up.railway.app/api/users/delete-saved/${hasLogged.userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(deleteBody),
     })
       .then((res) => {
         if (res.ok) {
-          dispatch(logToDb(hasLogged.userId));
+          dispatch(updateSaved(hasLogged.userId));
           setSaved(false); //Vaciar el ícono
           console.log("fue eliminado correctamente de " + folder);
         } else {
@@ -135,15 +147,8 @@ const CardArticle = ({ item, setModalVisibility }) => {
       })
       .catch((err) => console.error(err));
   };
-  //data importante para los modales de creacion de tableros
-  const data = {
-    userId: hasLogged.userId,
-    postId: item._id,
-    images: item.images,
-    saved: hasLogged.saved,
-  };
 
-  if(!fontsLoaded) return null;
+  if (!fontsLoaded) return null;
   return (
     <>
       <TouchableWithoutFeedback
@@ -168,7 +173,6 @@ const CardArticle = ({ item, setModalVisibility }) => {
                   >
                     <Text style={styles.btnFilter}>{item.category}</Text>
                   </View>
-
                   <View>
                     <Text style={styles.title}>{item.title}</Text>
                     <View
@@ -192,8 +196,8 @@ const CardArticle = ({ item, setModalVisibility }) => {
                     }
                     style={styles.favorite}
                   >
-                    {favorite ? iconsCard.heart.empty : iconsCard.heart.filled}
-                    <Text style={{ color: "white", fontSize: 18 }}>
+                    {favorite ? iconsCard.heart.filled : iconsCard.heart.empty}
+                    <Text style={{ color: "#f5f5f5", fontSize: 14 }}>
                       {item.postLikes.length}
                     </Text>
                   </TouchableOpacity>

@@ -37,7 +37,7 @@ export const PrevArticleFill = ({ n = 0, articles }) => {
       <ImageBackground
         style={styles.prevArticle}
         source={{ uri: articles[n].images }}
-        imageStyle={{ borderRadius: 14 }}
+        imageStyle={{ borderRadius: 8 }}
       ></ImageBackground>
     </TouchableOpacity>
   );

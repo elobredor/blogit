@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     paddingHorizontal: 17,
+    paddingVertical: 10
   },
   header: {
     marginTop: 24,
@@ -24,8 +25,9 @@ export const styles = StyleSheet.create({
     borderColor: "white",
   },
   logo: {
-    fontSize: 26,
-    marginLeft: "33%",
+    fontSize: 28,
+    fontFamily: 'Arimo_700Bold',
+    marginLeft: "30%",
     color: '#f5f5f5',
   },
 });

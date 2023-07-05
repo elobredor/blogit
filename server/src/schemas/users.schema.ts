@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 import { ROLES } from 'src/constants/roles';
 
 @Schema()
@@ -33,7 +34,9 @@ export class User {
   @Prop({ type: String })
   socialNetwork2: string;
 
-  @Prop([{ title: String, description: String, posts: [{ postId: String, images: String }] }])
+  @Prop([
+    { title: String, description: String, posts: [{ postId: String, images: String, _id: mongoose.Types.ObjectId }] },
+  ])
   saved: { title: string; description: string; posts: object[] }[];
 }
 
